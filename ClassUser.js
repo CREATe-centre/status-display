@@ -143,6 +143,8 @@ function User(){
 
 }
 
+
+
 //status object
 function Status(parsedObj){
 
