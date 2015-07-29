@@ -1,10 +1,3 @@
-//set default username, initialize variables
-var username = 'isatvofficial';
-document.getElementById("username").value = username;
-var currentUser='';
-//load the default user's info
-reloadUser();
-
 //load new user, called when need to change main user
 function loadNewUser(){
     username = document.getElementById("username").value;

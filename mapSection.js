@@ -1,35 +1,3 @@
-//initialize a temporary map just for testing and placeholder
-var tempMap = [new User(), new User(), new User(),
-            new User(), new User(), new User(),
-            new User(), new User(), new User(),
-            new User(), new User()];
-tempMap[0].location='University of Nottingham';
-tempMap[1].location='University of West of England';
-tempMap[2].location='London';
-tempMap[3].location='York United Kingdom';
-tempMap[4].location='York University United Kingdom';
-tempMap[5].location='Birmingham United Kingdom';
-tempMap[6].location='Bath United Kingdom';
-tempMap[7].location='London University';
-tempMap[8].location='Nottingham Trent University';
-tempMap[9].location='Wales United Kingdom';
-tempMap[10].location='Oxford';
-
-//init variables
-var heatT=false, markerT=false;
-var mapOptions = {
-  zoom: 5,
-  center: new google.maps.LatLng(-34.397, 150.644),
-  //mapTypeId: google.maps.MapTypeId.SATELLITE
-}
-var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions); 
-var geocoder = new google.maps.Geocoder();
-
-var coorsList = [];
-var markers = [];
-var heatmap='';
-var latlngbounds = new google.maps.LatLngBounds();
-
 //clear data related to the map
 function clearMapData(){
     setDataMap(null);
@@ -38,10 +6,7 @@ function clearMapData(){
     latlngbounds = new google.maps.LatLngBounds();
     coorsList = [];
 }
-//load temp data to the map
-loadMapData(tempMap);
 
-var processedLocationCount = 0;
 function loadMapData(data){
     processedLocationCount = 0;
     for (var i=0; i<data.length; i++){

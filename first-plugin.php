@@ -24,7 +24,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with {Plugin Name}. If not, see {License URI}.
 */
-add_action('twitter_plugin','hello_world',1);
+add_action('wp_footer','hello_world',1);
 
 function hello_world(){
 //fetch current user profile and timeline
@@ -39,6 +39,12 @@ function hello_world(){
 <script type="text/javascript" src="/wordpress/wp-content/plugins/first-plugin/ClassUser.js">
 </script>
 <script type="text/javascript" src="/wordpress/wp-content/plugins/first-plugin/display.js">
+</script>
+<script type="text/javascript" src="/wordpress/wp-content/plugins/first-plugin/userInfoSection.js">
+</script>
+<script type="text/javascript" src="/wordpress/wp-content/plugins/first-plugin/mapSection.js">
+</script>
+<script type="text/javascript" src="/wordpress/wp-content/plugins/first-plugin/chartSection.js">
 </script>
 
 <table border="2">
@@ -89,52 +95,133 @@ function hello_world(){
 
 
 <script type="text/javascript">
-document.getElementById("displayContainer").style.visibility='hidden';
-function loadUser(){
-    document.getElementById("displayContainer").style.visibility='visible';
-    document.getElementById("loadUser").style.display='none';
-}
-
-//send request to getdata.php to get the required data, callback function will be called once there is a response, just a placeholder
-function getData(type, id, username, user_id, callback){
-    jQuery(function ($) {
-        $.get("wp-content/plugins/first-plugin/getdata.php", {'type': type, 'username': username, 'id':id, 'userID':user_id}, function(data){
-            callback(data);
+    //send request to getdata.php to get the required data, callback function will be called once there is a response
+    function getData(type, id, username, user_id, callback){
+        jQuery(function ($) {
+            $.get("wp-content/plugins/first-plugin/getdata.php", {'type': type, 'username': username, 'id':id, 'userID':user_id}, function(data){
+                callback(data);
+            });
+        
         });
+    }
+
+
+    //USER INFO SECTION
+    document.getElementById("displayContainer").style.visibility='hidden';
+    function loadUser(){
+        document.getElementById("displayContainer").style.visibility='visible';
+        document.getElementById("loadUser").style.display='none';
+    }
+    //set default username, initialize variables
+    var username = 'isatvofficial';
+    document.getElementById("username").value = username;
+    var currentUser='';
+    //load the default user's info
+    reloadUser();
+
+
     
-    });
-}
-
-</script>
-
-<script type="text/javascript" src="/wordpress/wp-content/plugins/first-plugin/userInfoSection.js">
-</script>
-
-<script type="text/javascript">
-document.getElementById("mapContainer").style.visibility='hidden';
-function loadMap(){
-    document.getElementById("mapContainer").style.visibility='visible';
-    document.getElementById("loadMap").style.display='none';
-}
-  //google.maps.event.addDomListener(window, 'load', initialize);
-</script>
-
-<script type="text/javascript" src="/wordpress/wp-content/plugins/first-plugin/mapSection.js">
-</script>
-  
-  
-<!-- chart drawing test area -->
+    //MAP SECTION
+    document.getElementById("mapContainer").style.visibility='hidden';
+    function loadMap(){
+        document.getElementById("mapContainer").style.visibility='visible';
+        document.getElementById("loadMap").style.display='none';
+    }
+    //google.maps.event.addDomListener(window, 'load', initialize);
 
 
-<script type="text/javascript">
-document.getElementById("chartContainer").style.visibility='hidden';
-function loadChart(){
-    document.getElementById("chartContainer").style.visibility='visible';
-    document.getElementById("loadChart").style.display='none';
-}
-</script>
+    //initialize a temporary map just for testing and placeholder
+    var tempMap = [new User(), new User(), new User(),
+                new User(), new User(), new User(),
+                new User(), new User(), new User(),
+                new User(), new User()];
+    tempMap[0].location='University of Nottingham';
+    tempMap[1].location='University of West of England';
+    tempMap[2].location='London';
+    tempMap[3].location='York United Kingdom';
+    tempMap[4].location='York University United Kingdom';
+    tempMap[5].location='Birmingham United Kingdom';
+    tempMap[6].location='Bath United Kingdom';
+    tempMap[7].location='London University';
+    tempMap[8].location='Nottingham Trent University';
+    tempMap[9].location='Wales United Kingdom';
+    tempMap[10].location='Oxford';
 
-<script type="text/javascript" src="/wordpress/wp-content/plugins/first-plugin/chartSection.js">
+    //init variables
+    var heatT=false, markerT=false;
+    var mapOptions = {
+      zoom: 5,
+      center: new google.maps.LatLng(-34.397, 150.644),
+      //mapTypeId: google.maps.MapTypeId.SATELLITE
+    }
+    var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions); 
+    var geocoder = new google.maps.Geocoder();
+
+    var coorsList = [];
+    var markers = [];
+    var heatmap='';
+    var latlngbounds = new google.maps.LatLngBounds();
+
+    //load temp data to the map
+    loadMapData(tempMap);
+
+    var processedLocationCount = 0;
+
+    
+
+    //CHART SECTION
+    document.getElementById("chartContainer").style.visibility='hidden';
+    function loadChart(){
+        document.getElementById("chartContainer").style.visibility='visible';
+        document.getElementById("loadChart").style.display='none';
+    }
+
+
+    //initialize temp retweet data for testing and placeholder
+    tempRetweet = [new Status(''),new Status(''),new Status(''),
+                new Status(''),new Status(''),new Status(''),
+                new Status(''),new Status(''),new Status(''),
+                new Status(''),new Status('')];
+    tempRetweet[0].createdAt='Mon Jul 20 14:13:14 +0000 2015';
+    tempRetweet[0].user.name='user1';
+    tempRetweet[1].createdAt='Mon Jul 20 14:18:14 +0000 2015';
+    tempRetweet[1].user.name='user2';
+    tempRetweet[2].createdAt='Mon Jul 20 14:20:14 +0000 2015';
+    tempRetweet[2].user.name='user3';
+    tempRetweet[3].createdAt='Mon Jul 20 14:50:14 +0000 2015';
+    tempRetweet[3].user.name='user4';
+    tempRetweet[4].createdAt='Mon Jul 20 15:13:14 +0000 2015';
+    tempRetweet[4].user.name='user5';
+    tempRetweet[5].createdAt='Mon Jul 20 15:40:14 +0000 2015';
+    tempRetweet[5].user.name='user6';
+    tempRetweet[6].createdAt='Mon Jul 20 15:53:14 +0000 2015';
+    tempRetweet[6].user.name='user7';
+    tempRetweet[7].createdAt='Mon Jul 20 15:58:14 +0000 2015';
+    tempRetweet[7].user.name='user8';
+    tempRetweet[8].createdAt='Mon Jul 20 17:20:14 +0000 2015';
+    tempRetweet[8].user.name='user9';
+    tempRetweet[9].createdAt='Mon Jul 20 17:23:14 +0000 2015';
+    tempRetweet[9].user.name='user10';
+    tempRetweet[10].createdAt='Mon Jul 20 17:43:14 +0000 2015';
+    tempRetweet[10].user.name='user11';
+              
+    //get current time
+    var now = new Date().getTime();
+    //get time of temp origin tweet
+    var tempOriginTweet = new Status('');
+    tempOriginTweet.createdAt = 'Mon Jul 20 11:00:00 +0000 2015';
+
+    //set time period = 10 minutes
+    var unit = 10;
+    var unitInMilliSec = 60000*unit;
+    var plots=[];
+    //load temp data for chart
+    loadChartData(tempOriginTweet, tempRetweet);
+
+    // Load the Visualization API library
+    google.load('visualization', '1.0', {'packages':['corechart']});
+    //when finished loading, draw the chart
+    google.setOnLoadCallback(drawChart);
 </script>
 
 <?php

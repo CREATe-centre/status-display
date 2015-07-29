@@ -1,44 +1,3 @@
-//initialize temp retweet data for testing and placeholder
-tempRetweet = [new Status(''),new Status(''),new Status(''),
-            new Status(''),new Status(''),new Status(''),
-            new Status(''),new Status(''),new Status(''),
-            new Status(''),new Status('')];
-tempRetweet[0].createdAt='Mon Jul 20 14:13:14 +0000 2015';
-tempRetweet[0].user.name='user1';
-tempRetweet[1].createdAt='Mon Jul 20 14:18:14 +0000 2015';
-tempRetweet[1].user.name='user2';
-tempRetweet[2].createdAt='Mon Jul 20 14:20:14 +0000 2015';
-tempRetweet[2].user.name='user3';
-tempRetweet[3].createdAt='Mon Jul 20 14:50:14 +0000 2015';
-tempRetweet[3].user.name='user4';
-tempRetweet[4].createdAt='Mon Jul 20 15:13:14 +0000 2015';
-tempRetweet[4].user.name='user5';
-tempRetweet[5].createdAt='Mon Jul 20 15:40:14 +0000 2015';
-tempRetweet[5].user.name='user6';
-tempRetweet[6].createdAt='Mon Jul 20 15:53:14 +0000 2015';
-tempRetweet[6].user.name='user7';
-tempRetweet[7].createdAt='Mon Jul 20 15:58:14 +0000 2015';
-tempRetweet[7].user.name='user8';
-tempRetweet[8].createdAt='Mon Jul 20 17:20:14 +0000 2015';
-tempRetweet[8].user.name='user9';
-tempRetweet[9].createdAt='Mon Jul 20 17:23:14 +0000 2015';
-tempRetweet[9].user.name='user10';
-tempRetweet[10].createdAt='Mon Jul 20 17:43:14 +0000 2015';
-tempRetweet[10].user.name='user11';
-          
-//get current time
-var now = new Date().getTime();
-//get time of temp origin tweet
-var tempOriginTweet = new Status('');
-tempOriginTweet.createdAt = 'Mon Jul 20 11:00:00 +0000 2015';
-
-//set time period = 10 minutes
-var unit = 10;
-var unitInMilliSec = 60000*unit;
-var plots=[];
-//load temp data for chart
-loadChartData(tempOriginTweet, tempRetweet);
-
 //clear chart related data
 function clearChartData(){
     plots=[];
@@ -62,10 +21,6 @@ function loadChartData(origin, retweetList){
         } else plots[slot]=[retweetList[i].user.name];
     }
 }
-// Load the Visualization API library
-google.load('visualization', '1.0', {'packages':['corechart']});
-//when finished loading, draw the chart
-google.setOnLoadCallback(drawChart);
 
 //draw the chart
 function drawChart() {
