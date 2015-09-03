@@ -32,30 +32,31 @@ $aid = isset($_POST['id']) ? $_POST['id'] : '';
     if(isset($_GET['id']) && $aid!=null && $aid!='') $params['id'] = $aid;
     $params['id_str'] = $aid;
     if(isset($_GET['userID']) && $userId!=null && $userId!='') $params['user_id'] = $userId;
-
-    //call appropriate function depend on variable 'type'
-    switch ($type){
-    case "user":
-        $data = (array) $cb->users_show($params);
-        break;
-    case "timeline":
-        $data = (array) $cb->statuses_userTimeline($params);
-        break;
-    case "follower":
-        $data = (array) $cb->followers_ids($params);
-        break;
-    case "retweets":
-        $data = (array) $cb->statuses_retweets_ID($params);
-        break;
-    case "status":
-    
-        $data = (array) $cb->statuses_show_ID($params);
-        break;
-}
-    unset($data['httpstatus']);
-    unset($data['rate']);
-    
-    //print_r ($data);
-    echo json_encode($data);
+    if ($aid != 0) {
+        //call appropriate function depend on variable 'type'
+        switch ($type){
+        case "user":
+            $data = (array) $cb->users_show($params);
+            break;
+        case "timeline":
+            $data = (array) $cb->statuses_userTimeline($params);
+            break;
+        case "follower":
+            $data = (array) $cb->followers_ids($params);
+            break;
+        case "retweets":
+            $data = (array) $cb->statuses_retweets_ID($params);
+            break;
+        case "status":
+        
+            $data = (array) $cb->statuses_show_ID($params);
+            break;
+        }
+        unset($data['httpstatus']);
+        unset($data['rate']);
+        
+        //print_r ($data);
+        echo json_encode($data);
+    } else echo "";
 
 ?>
