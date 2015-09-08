@@ -15,7 +15,7 @@ require_once ('codebird.php');
 
 $cb = \Codebird\Codebird::getInstance();
 
-// assign access token on each page load
+// assign access token and access token secret on each page load
 $cb->setToken('1350787526-IVNzzWWmKI7EcVERihizltEOtSacum8EDKSo32e', 'f1Xt4dVJKmN7dehx78Itgy3Njx158S1Ye7C4HMoAFLD7N');
 
 

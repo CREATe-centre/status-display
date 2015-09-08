@@ -24,8 +24,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with {Plugin Name}. If not, see {License URI}.
 */
-add_action('wp_footer','hello_world3',1);
-function hello_world3(){
+add_action('wp_footer','hello_world',1);
+function hello_world(){
     ?>
 	<link rel="stylesheet" type="text/css" href="/wordpress/wp-content/plugins/first-plugin/page.css" />
 	
@@ -48,14 +48,14 @@ function hello_world3(){
 			<td id="recordedTweetsContainer" >
 				<div class="center"><b>RECENT RELATED TWEETS</b></div>
 				<select id="select">
-                    <option></option>
-                    <option value="All" onClick="getRelatedTweetsTree(1)">All</option>
-					<option value="1 day" onClick="getRelatedTweetsTree(2)">1 day</option>
-                    <option value="1 week" onClick="getRelatedTweetsTree(3)">1 week</option>
-                    <option value="2 week" onClick="getRelatedTweetsTree(4)">2 week</option>
-					<option value="3 week" onClick="getRelatedTweetsTree(5)">3 week</option>
-					<option value="1 month" onClick="getRelatedTweetsTree(6)">1 month</option>
-                </select>
+					<option selected="selected"></option>
+					<option onClick="getRelatedTweetsTree(1)">All</option>
+					<option onClick="getRelatedTweetsTree(2)">1 day</option>
+					<option onClick="getRelatedTweetsTree(3)">1 week</option>
+					<option onClick="getRelatedTweetsTree(4)">2 week</option>
+					<option onClick="getRelatedTweetsTree(5)">3 week</option>
+					<option onClick="getRelatedTweetsTree(6)">1 month</option>
+				</select>
 				<div id="recordedTweets" style="max-height: 600px; overflow: scroll"></div>
 				
 			</td>
@@ -93,6 +93,47 @@ function hello_world3(){
 	
 	<script type="text/javascript">
 	
+
+	
+	var currentUser = null;
+	var all=[];
+	
+	//initial display user's profile and list all the related tweets
+	reloadUser();
+	//getRelatedTweetsTree(1);
+	
+	//initialize map and chart
+	//MAP SECTION
+	var map = new MapClass("map-canvas", "information");
+	
+	//CHART SECTION
+	var chart = new ChartClass('curve_chart', 'information');
+	
+	
+	/*
+		Function: reloadUser
+
+		get the user profile and display it
+		used function getDataFromRestApis to get user profile
+		
+		See also:
+			<getDataFromRestApis>
+	*/
+	function reloadUser(){
+		getDataFromRestApis("user", "21439144", null, null, function(data){
+			data = JSON.parse(data);
+			currentUser = new User(data);
+			var content = "<ul><b>Current User</b>";
+			content+= "<li>@"+currentUser.screenName+"</li>"+
+						"<li>following: "+currentUser.friendsCount+"</li>"+
+						"<li>follower: "+currentUser.followersCount+"</li>"+
+						"<li>favorites: "+currentUser.favoritesCount+"</li>"+
+						"</ul>";
+			  
+			document.getElementById("mainProfile").innerHTML=content;
+		});
+	}
+	
 	/*
 		Function: getDataFromRestApis
 
@@ -120,44 +161,56 @@ function hello_world3(){
         });
     }
 	
-	var currentUser = null;
-	var all=[];
-	
-	//initial display user's profile and list all the related tweets
-	reloadUser();
-	getRelatedTweetsTree(1);
-	
 	/*
-		Function: reloadUser
+		Function: getRelatedTweetsTree
 
-		get the user profile and display it
-		used function getDataFromRestApis to get user profile
+		call to php file to get all related tweets after a specific time
+		the returned data is then pushed on to other functions to populate the array and display
 		
+		Parameters:
+			options - choose which range of time to get the related tweets:
+				1 - all the tweets
+				2 - 1 day
+				3 - 1 week
+				4 - 2 weeks
+				5 - 3 weeks
+				6 - 1 month
+				
 		See also:
-			<getDataFromRestApis>
+			<populateData>
+			<display>
 	*/
-	function reloadUser(){
-		getDataFromRestApis("user", "21439144", null, null, function(data){
-			data = JSON.parse(data);
-			currentUser = new User(data);
-			var content = "<ul><b>Current User</b>";
-			content+= "<li>@"+currentUser.screenName+"</li>"+
-						"<li>following: "+currentUser.friendsCount+"</li>"+
-						"<li>follower: "+currentUser.followersCount+"</li>"+
-						"<li>favorites: "+currentUser.favoritesCount+"</li>"+
-						"</ul>";
-			  
-			document.getElementById("mainProfile").innerHTML=content;
+    function getRelatedTweetsTree(options){
+		document.getElementById("recordedTweets").innerHTML = "";
+		all = [];
+		
+		var date = '';
+		var dateObj = '';
+		if (options == 2) {
+			dateObj = new Date((new Date()).getTime() - 24 * 60 * 60 * 1000);
+		} else if (options == 3){
+			dateObj = new Date((new Date()).getTime() - 7 * 24 * 60 * 60 * 1000);
+		} else if (options == 4){
+			dateObj = new Date((new Date()).getTime() - 14 * 24 * 60 * 60 * 1000);
+		} else if (options == 5){
+			dateObj = new Date((new Date()).getTime() - 21 * 24 * 60 * 60 * 1000);
+		} else if (options == 6){
+			dateObj = new Date((new Date()).getTime() - 30 * 24 * 60 * 60 * 1000);
+		}
+		if (dateObj!='') date = dateObj.toUTCString();
+        jQuery(function ($) {
+			//
+			$.get("wp-content/plugins/first-plugin/analyseStream.php", {'date':date}, function(data){
+				
+				data = JSON.parse(data);
+				
+				populateData(data);
+
+				display();
+			});
+		
 		});
 	}
-	
-	//initialize map and chart
-	
-	//MAP SECTION
-	var map = new MapClass("map-canvas", "information");
-	
-	//CHART SECTION
-	var chart = new ChartClass('curve_chart', 'information');
 	
 	/*
 		Function: populateData
@@ -212,57 +265,6 @@ function hello_world3(){
 	}
 	
 	/*
-		Function: getRelatedTweetsTree
-
-		call to php file to get all related tweets after a specific time
-		the returned data is then pushed on to other functions to populate the array and display
-		
-		Parameters:
-			options - choose which range of time to get the related tweets:
-				1 - all the tweets
-				2 - 1 day
-				3 - 1 week
-				4 - 2 weeks
-				5 - 3 weeks
-				6 - 1 month
-				
-		See also:
-			<populateArray>
-			<display>
-	*/
-    function getRelatedTweetsTree(options){
-		document.getElementById("recordedTweets").innerHTML = "";
-		all = [];
-		
-		var date = '';
-		var dateObj = '';
-		if (options == 2) {
-			dateObj = new Date((new Date()).getTime() - 24 * 60 * 60 * 1000);
-		} else if (options == 3){
-			dateObj = new Date((new Date()).getTime() - 7 * 24 * 60 * 60 * 1000);
-		} else if (options == 4){
-			dateObj = new Date((new Date()).getTime() - 14 * 24 * 60 * 60 * 1000);
-		} else if (options == 5){
-			dateObj = new Date((new Date()).getTime() - 21 * 24 * 60 * 60 * 1000);
-		} else if (options == 6){
-			dateObj = new Date((new Date()).getTime() - 30 * 24 * 60 * 60 * 1000);
-		}
-		if (dateObj!='') date = dateObj.toUTCString();
-        jQuery(function ($) {
-			//
-			$.get("wp-content/plugins/first-plugin/analyseStream.php", {'date':date}, function(data){
-				
-				data = JSON.parse(data);
-				
-				populateData(data);
-
-				display();
-			});
-		
-		});
-	}
-	
-	/*
 		Function: display
 
 		call a recursive function to display the data stored in `all` array
@@ -287,7 +289,7 @@ function hello_world3(){
 		
 		Parameters:
 			array - the array to search
-			stack - this is where the location String is created, each object will have different string indicate where it is in the array
+			stack - used to track the location String for each tweet
 	*/
 	function recursiveList(array, stack="-1"){
 		var result="<ul>";
@@ -304,7 +306,8 @@ function hello_world3(){
 			var status = array[i]["status"];
 			result+="<li ";
 			
-			if (array[i]["children"]){
+			//continue to recursive deeper if still have children
+			if (array[i]["children"].length>0){
 				result+="><div id=\""+status.id+"\" onClick=\"displayCurrentStatus(\'"+pos.toString()+"\')\"><button><b>"+status.user.screenName+":</b> "+status.text+"</div>"+recursiveList(array[i]["children"],pos.toString())+"</button>";
 			} else {
 				result+="id=\""+status.id+"\" onClick=\"displayCurrentStatus(\'"+pos.toString()+"\')\"><button><b>"+status.user.screenName+":</b> "+status.text+"</button>";
