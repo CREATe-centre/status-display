@@ -27,15 +27,12 @@ along with {Plugin Name}. If not, see {License URI}.
 add_action('wp_footer','hello_world3',1);
 function hello_world3(){
     ?>
-	<script type="text/javascript" src="/wordpress/wp-content/plugins/first-plugin/ClassUserBasic.js"></script>
-<!--
-    <script type="text/javascript"
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCg5pnU_tylzyc_53vAg5IqlSj9U4sjRL4&libraries=visualization&sensor=true_or_false">
-</script>
--->
 	<link rel="stylesheet" type="text/css" href="/wordpress/wp-content/plugins/first-plugin/page.css" />
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=visualization&sensor=true_or_false"></script>
+	
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=visualization&sensor=true_or_false"></script>
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	
+	<script type="text/javascript" src="/wordpress/wp-content/plugins/first-plugin/ClassUserBasic.js"></script>
 	<script type="text/javascript" src="/wordpress/wp-content/plugins/first-plugin/ClassChart.js"></script>
 	<script type="text/javascript" src="/wordpress/wp-content/plugins/first-plugin/ClassMap.js"></script>
 	
@@ -52,9 +49,12 @@ function hello_world3(){
 				<div class="center"><b>RECENT RELATED TWEETS</b></div>
 				<select id="select">
                     <option></option>
-                    <option value="1 hour" onClick="">1 hour</option>
-                    <option value="1 day" onClick="">1 day</option>
-                    <option value="1 week" onClick="">1 week</option>
+                    <option value="All" onClick="getRelatedTweetsTree(1)">All</option>
+					<option value="1 day" onClick="getRelatedTweetsTree(2)">1 day</option>
+                    <option value="1 week" onClick="getRelatedTweetsTree(3)">1 week</option>
+                    <option value="2 week" onClick="getRelatedTweetsTree(4)">2 week</option>
+					<option value="3 week" onClick="getRelatedTweetsTree(5)">3 week</option>
+					<option value="1 month" onClick="getRelatedTweetsTree(6)">1 month</option>
                 </select>
 				<div id="recordedTweets" style="max-height: 600px; overflow: scroll"></div>
 				
@@ -92,8 +92,26 @@ function hello_world3(){
 	</table>
 	
 	<script type="text/javascript">
+	
+	/*
+		Function: getDataFromRestApis
+
+		a general purpose function to get data from twitter rest apis
+
+		Parameters:
+			type - type of query to call. Currently, there are 5 type of query:
+				"user" - get user profile
+				"timeline" - get user tweets
+				"follower" - get list of followers
+				"retweets" - get list of retweets of a tweet
+				"status" - get information on a tweet
+			id - tweet id
+			username - user screen name
+			user_id - user id
+			callback - callback function will be called after the data is returned
+	*/
 	//send request to getdata.php to get the required data, callback function will be called once there is a response
-    function getData(type, id, username, user_id, callback){
+    function getDataFromRestApis(type, id, username, user_id, callback){
         jQuery(function ($) {
             $.get("wp-content/plugins/first-plugin/getdata.php", {'type': type, 'username': username, 'id':id, 'userID':user_id}, function(data){
                 callback(data);
@@ -107,59 +125,85 @@ function hello_world3(){
 	
 	//initial display user's profile and list all the related tweets
 	reloadUser();
-	getTweetsTree();
+	getRelatedTweetsTree(1);
 	
-	//reload the user profile display when call
+	/*
+		Function: reloadUser
+
+		get the user profile and display it
+		used function getDataFromRestApis to get user profile
+		
+		See also:
+			<getDataFromRestApis>
+	*/
 	function reloadUser(){
-		getData("user", "21439144", null, null, function(data){
+		getDataFromRestApis("user", "21439144", null, null, function(data){
 			data = JSON.parse(data);
-			currentUser = new User();
-			currentUser.loadBasicData(data);
+			currentUser = new User(data);
 			var content = "<ul><b>Current User</b>";
 			content+= "<li>@"+currentUser.screenName+"</li>"+
-			  "<li>following: "+currentUser.friendsCount+"</li>"+
-			  "<li>follower: "+currentUser.followersCount+"</li>"+
-			  "<li>favorites: "+currentUser.favoritesCount+"</li>"+
-			  "</ul>";
+						"<li>following: "+currentUser.friendsCount+"</li>"+
+						"<li>follower: "+currentUser.followersCount+"</li>"+
+						"<li>favorites: "+currentUser.favoritesCount+"</li>"+
+						"</ul>";
 			  
 			document.getElementById("mainProfile").innerHTML=content;
 		});
 	}
 	
 	//initialize map and chart
+	
 	//MAP SECTION
 	var map = new MapClass("map-canvas", "information");
+	
 	//CHART SECTION
 	var chart = new ChartClass('curve_chart', 'information');
 	
-	//populate data into the large array
+	/*
+		Function: populateData
+
+		get the returned data, convert from json to status object, and put into a big array, structured like a tree
+		
+		Parameters:
+			data - the returned array of tweet information formatted as json
+		
+		See also:
+			<convertJsonIntoStatusObj>
+	*/
 	function populateData(data){
 		for (i in data){
 			if (i==0){
 				var arr = data[i];
 				
 				for (j in arr){
-					all.push(getObj(arr[j]));
+					all.push(convertJsonIntoStatusObj(arr[j]));
 				}
 				
 			} else {
 				var obj = [];
 				obj["json"] = JSON.stringify(JSON.parse(data[i][0]["json"]).retweeted_status);
-				obj["childs"] = data[i];
-				all.push(getObj(obj));
+				obj["children"] = data[i];
+				all.push(convertJsonIntoStatusObj(obj));
 			}
 		}
 	}
 	
-	//recursively convert current data and all its children into obj
-	function getObj(ar){
+	/*
+		Function: convertJsonIntoStatusObj
+
+		recursively convert the json component of this object and its children into Status
+		
+		Parameters:
+			original - the original object with json component
+	*/
+	function convertJsonIntoStatusObj(original){
 		
 		var obj = [];
-		obj ["status"] = new Status(JSON.parse(ar["json"]));
-		obj["childs"] = [];
-		if (ar["childs"]) {
-			for (i in ar["childs"]){
-				obj["childs"].push(getObj(ar["childs"][i]));
+		obj ["status"] = new Status(JSON.parse(original["json"]));
+		obj["children"] = [];
+		if (original["children"]) {
+			for (i in original["children"]){
+				obj["children"].push(convertJsonIntoStatusObj(original["children"][i]));
 			}
 			
 		}
@@ -167,120 +211,210 @@ function hello_world3(){
 		
 	}
 	
-	//call to server to get all related tweets
-    function getTweetsTree(){
+	/*
+		Function: getRelatedTweetsTree
+
+		call to php file to get all related tweets after a specific time
+		the returned data is then pushed on to other functions to populate the array and display
+		
+		Parameters:
+			options - choose which range of time to get the related tweets:
+				1 - all the tweets
+				2 - 1 day
+				3 - 1 week
+				4 - 2 weeks
+				5 - 3 weeks
+				6 - 1 month
+				
+		See also:
+			<populateArray>
+			<display>
+	*/
+    function getRelatedTweetsTree(options){
+		document.getElementById("recordedTweets").innerHTML = "";
+		all = [];
+		
+		var date = '';
+		var dateObj = '';
+		if (options == 2) {
+			dateObj = new Date((new Date()).getTime() - 24 * 60 * 60 * 1000);
+		} else if (options == 3){
+			dateObj = new Date((new Date()).getTime() - 7 * 24 * 60 * 60 * 1000);
+		} else if (options == 4){
+			dateObj = new Date((new Date()).getTime() - 14 * 24 * 60 * 60 * 1000);
+		} else if (options == 5){
+			dateObj = new Date((new Date()).getTime() - 21 * 24 * 60 * 60 * 1000);
+		} else if (options == 6){
+			dateObj = new Date((new Date()).getTime() - 30 * 24 * 60 * 60 * 1000);
+		}
+		if (dateObj!='') date = dateObj.toUTCString();
         jQuery(function ($) {
-            $.get("wp-content/plugins/first-plugin/analyseStream.php", function(data){
-                
-                data = JSON.parse(data);
+			//
+			$.get("wp-content/plugins/first-plugin/analyseStream.php", {'date':date}, function(data){
+				
+				data = JSON.parse(data);
 				
 				populateData(data);
 
-                display();
-            });
-        
-        });
-    }
-	
-	//call to display all the related tweets
-	function display(){
-        //-----
-        if (all.length>0){
-			
-            document.getElementById("recordedTweets").innerHTML = recursiveList(all);
-        }
+				display();
+			});
 		
-		
-    }
+		});
+	}
 	
-	//recursively traverse all the tweets and display them accordingly
-	function recursiveList(array, stack="-1"){
-        var result="<ul>";
-        var stackArr = [];
-        if (stack!=-1) {
-            stackArr = stack.split(",");
-        }
-        
-        for (var i=0; i<array.length; i++){
-            var pos = [];
-            if (stack!=-1) pos = stackArr.slice();
-            pos.push(i);
-			
-            var status = array[i]["status"];
-            result+="<li ";
-            
-            if (array[i]["childs"]){
-                result+="><div id=\""+status.id+"\" onClick=\"displayCurrentStatus(\'"+pos.toString()+"\')\"><button><b>"+status.user.screenName+":</b> "+status.text+"</div>"+recursiveList(array[i]["childs"],pos.toString())+"</button>";
-            } else {
-                result+="id=\""+status.id+"\" onClick=\"displayCurrentStatus(\'"+pos.toString()+"\')\"><button><b>"+status.user.screenName+":</b> "+status.text+"</button>";
-                //loadItem(array[i]["order"], array[i]["id"]);
-            }
-            result+="</li>";
-            
-        }
-        result +="</ul>";
-        return result;
-        
-    }
+	/*
+		Function: display
 
-	//display the information, location, and chart of current status
-	function displayCurrentStatus(locationString){
-        var obj = getObjFromLocation(locationString);
+		call a recursive function to display the data stored in `all` array
+				
+		See also:
+			<recursiveList>
+	*/
+	function display(){
+		//-----
+		if (all.length>0){
+			
+			document.getElementById("recordedTweets").innerHTML = recursiveList(all);
+		}
 		
-        map.clearMapData();
-        map.loadMapData(obj, locationString);
-        
+		
+    }
+	
+	/*
+		Function: recursiveList
+
+		recursively search all the object and display as an html list
+		
+		Parameters:
+			array - the array to search
+			stack - this is where the location String is created, each object will have different string indicate where it is in the array
+	*/
+	function recursiveList(array, stack="-1"){
+		var result="<ul>";
+		var stackArr = [];
+		if (stack!=-1) {
+			stackArr = stack.split(",");
+		}
+		
+		for (var i=0; i<array.length; i++){
+			var pos = [];
+			if (stack!=-1) pos = stackArr.slice();
+			pos.push(i);
+			
+			var status = array[i]["status"];
+			result+="<li ";
+			
+			if (array[i]["children"]){
+				result+="><div id=\""+status.id+"\" onClick=\"displayCurrentStatus(\'"+pos.toString()+"\')\"><button><b>"+status.user.screenName+":</b> "+status.text+"</div>"+recursiveList(array[i]["children"],pos.toString())+"</button>";
+			} else {
+				result+="id=\""+status.id+"\" onClick=\"displayCurrentStatus(\'"+pos.toString()+"\')\"><button><b>"+status.user.screenName+":</b> "+status.text+"</button>";
+				//loadItem(array[i]["order"], array[i]["id"]);
+			}
+			result+="</li>";
+			
+		}
+		result +="</ul>";
+		return result;
+		
+	}
+
+	/*
+		Function: displayCurrentStatus
+
+		display information of a status, show any related information on the map and the chart
+		is called when an item is clicked from the related tweet list
+		
+		Parameters:
+			locationString - indicates the status location in the array
+	*/
+	function displayCurrentStatus(locationString){
+		var obj = getObjFromString(locationString);
+		
+		map.clearMapData();
+		map.loadMapData(obj, locationString);
+		
 		chart.clearChartData();        
-        chart.loadChartData(obj, locationString, false);
-        chart.drawChart();
+		chart.loadChartData(obj, locationString, false);
+		chart.drawChart();
 		
 		document.getElementById("information").innerHTML =generateInformationTable([locationString]);
-		
-		//displayStatusInformation(arr);
-        //map.updateMap();
-    }
+	}
 	
-	//get obj at the location string
-	function getObjFromLocation(locationString){
-		//var status = '';
+	/*
+		Function: getObjFromString
+
+		retrieve the object in the array from locationString
+		is called by many functions
 		
+		Parameters:
+			locationString - indicates the status location in the array
+	*/
+	function getObjFromString(locationString){
+
 		var arr = all;
 		var locationArr = locationString.split(",");
 		for (var i=0; i<locationArr.length; i++) {
 			arr=arr[locationArr[i]];
 			if (i+1<locationArr.length)
-				arr = arr["childs"];
+				arr = arr["children"];
 		}
 		
-		//if (arr) status = arr["status"];
 		if (arr) return arr;
 		else return null;
 	}
-    
-    //generate info of a status from a location string
-    function generateStatusInfo(locationString){
-		var status = getObjFromLocation(locationString)["status"];
-        return generateStatusInfo2(status);
-    }
+
+	/*
+		Function: generateStatusInfoFromString
+
+		get status from location string then pass to another function to generate html string containing information of the status
+		
+		Parameters:
+			locationString - indicates the status location in the array
+			
+		Returns:
+			the html string containing information of the status
+			
+		See also:
+			<getObjFromString>
+			<generateStatusInfoFromStatus>
+	*/
+	function generateStatusInfoFromString(locationString){
+		var status = getObjFromString(locationString)["status"];
+		return generateStatusInfoFromStatus(status);
+	}
 	
-	//generate info of a status from the status obj
-	 function generateStatusInfo2(status){
+	/*
+		Function: generateStatusInfoFromString
+
+		generate status information in the form of html
+		
+		Parameters:
+			status - the status object to analyse
+			
+		Returns:
+			the html string containing information of the status
+	*/
+	 function generateStatusInfoFromStatus(status){
 		var response = "<ul><b>Poster info</b>";
-        response += "<li>screen name: "+status.user.screenName+"</li>" +
+		response += "<li>screen name: "+status.user.screenName+"</li>" +
 					"<li>following: "+status.user.friendsCount+"</li>"+
 					"<li>follower: "+status.user.followersCount+"</li></ul><ul><b>Tweet info</b>"+
-                    "<li>tweet time: "+status.createdAt +"</li>";
-        if (status.location)
-            response += "<li>status location: "+status.location+"</li>";
-        if (status.coordinates)
-            response += "<li>status coordinates: "+status.coordinates[0]+", "+status.coordinates[1]+"</li>";
-        if (status.user.location)
-            response += "<li>user location: "+status.user.location+"</li>";
-        response += "<li>tweet text: "+status.text+"</li></ul>";
-        return response;
-	 }
+					"<li>tweet time: "+status.createdAt +"</li>";
+		if (status.location)
+			response += "<li>status location: "+status.location+"</li>";
+		if (status.coordinates)
+			response += "<li>status coordinates: "+status.coordinates[0]+", "+status.coordinates[1]+"</li>";
+		if (status.user.location)
+			response += "<li>user location: "+status.user.location+"</li>";
+		response += "<li>tweet text: "+status.text+"</li></ul>";
+		return response;
+	}
 	
-	//load map and chart for all the tweets
+	/*
+		Function: displayAll
+
+		display all the tweets stored in the array to both the map and the chart
+	*/
 	function displayAll(){
 
 		map.clearMapData();
@@ -292,7 +426,18 @@ function hello_world3(){
 		
 	}
 	
-	//TODO: fix table display, optimize
+	/*
+		Function: generateInformationTable
+
+		Find all status from the location String array
+		then generate information on all of them and put into a table
+		
+		Parameters:
+			array - array of location String
+			
+		Returns:
+			the html string containing information on all the requested statuses
+	*/
 	function generateInformationTable(array){
 		var table = [];
 		//group all the tweets that has the same origin
@@ -305,41 +450,49 @@ function hello_world3(){
 			}
 		}
 		
+		
 		var retweetsContent="<tr><th class=\"center\">retweets</th><th class=\"center\">originate from</th></tr>";
 		var originContent="<tr><th class=\"center\">origin tweets</th><th class=\"center\">has direct retweets</th></tr>";
 		var originLength=0;
 		var retweetsLength=0;
+		//search in each group having the same origin
 		for (var i=0; i<table.length; i++){
 			if (table[i]) {
+				
 				var showOrigin = false;
 				var hasNewRetweets = false;
 				var hasNewOrigin = false;
 				for(var j=0; j<table[i].length; j++){
+					//if a true original tweet
 					if (table[i][j].split(",").length==1) {
 						originLength++;
 						hasNewOrigin = true;
 						var rowspan = 1;
-						if (all[i]["childs"].length > 0)
-							var rowspan = all[i]["childs"].length;
+						if (all[i]["children"].length > 0)
+							var rowspan = all[i]["children"].length;
 						
-						originContent += "<tr><td rowspan=\""+rowspan+"\" valign=\"top\">"+generateStatusInfo(table[i][j])+"</td>";
-						if (all[i]["childs"]) {
-							for(var k=0; k<all[i]["childs"].length; k++){
-								if (k!=0) originContent +="<tr>";
-								originContent += "<td>"+generateStatusInfo2(all[i]["childs"][k]["status"])+"</td></tr>";
-							}
+						originContent += "<tr><td rowspan=\""+rowspan+"\" valign=\"top\">"+generateStatusInfoFromString(table[i][j])+"</td>";
+						
+						//list all the retweets if available
+						for(var k=0; k<all[i]["children"].length; k++){
+							if (k!=0) originContent +="<tr>";
+							originContent += "<td>"+generateStatusInfoFromStatus(all[i]["children"][k]["status"])+"</td></tr>";
 						}
+						
 					} else {
+						//if a retweet
 						retweetsLength++;
 						hasNewRetweets = true;
-						retweetsContent+="<tr><td>"+generateStatusInfo(table[i][j])+"</td>";
+						retweetsContent+="<tr><td>"+generateStatusInfoFromString(table[i][j])+"</td>";
+						//if has not show parent tweet, show it one time then stop
 						if (!showOrigin) {
-							retweetsContent+="<td rowspan=\""+table[i].length+"\" valign=\"top\">"+generateStatusInfo(i.toString())+"</td>";
+							retweetsContent+="<td rowspan=\""+table[i].length+"\" valign=\"top\">"+generateStatusInfoFromString(i.toString())+"</td>";
 							showOrigin = true;
 						}
 						retweetsContent += "</tr>";
 					}
 				}
+				//separator between each tweets
 				if (hasNewRetweets)
 					retweetsContent += "<tr><td colspan=\"2\"  class=\"center\">---------------</td></tr>";
 				if (hasNewOrigin)
@@ -392,29 +545,30 @@ if ( is_admin() ){
 function hello_world_html_page() {
 ?>
 <div>
-<h2>Hello World Options</h2>
+	<h2>Hello World Options</h2>
 
-<form method="post" action="options.php">
-<?php wp_nonce_field('update-options'); ?>
+	<form method="post" action="options.php">
+		<?php wp_nonce_field('update-options'); ?>
 
-<table width="510">
-<tr valign="top">
-<th width="92" scope="row">Enter Text</th>
-<td width="406">
-<input name="hello_world_data" type="text" id="hello_world_data"
-value="<?php echo get_option('hello_world_data'); ?>" />
-(ex. Hello World)</td>
-</tr>
-</table>
+		<table width="510">
+			<tr valign="top">
+				<th width="92" scope="row">Enter Text</th>
+				<td width="406">
+					<input name="hello_world_data" type="text" id="hello_world_data"
+					value="<?php echo get_option('hello_world_data'); ?>" />
+					(ex. Hello World)
+				</td>
+			</tr>
+		</table>
 
-<input type="hidden" name="action" value="update" />
-<input type="hidden" name="page_options" value="hello_world_data" />
+		<input type="hidden" name="action" value="update" />
+		<input type="hidden" name="page_options" value="hello_world_data" />
 
-<p>
-<input type="submit" value="<?php _e('Save Changes') ?>" />
-</p>
+		<p>
+			<input type="submit" value="<?php _e('Save Changes') ?>" />
+		</p>
 
-</form>
+	</form>
 </div>
 <?php
 }

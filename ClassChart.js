@@ -1,29 +1,39 @@
-function ChartClass(tagChartContainer, tagSelection){
-    //set time period = 10 minutes
-    this.unit = 10;
-    this.unitInMilliSec = 60000*this.unit;
-    this.plots=[];
-    this.tagSelection=tagSelection;
-    
-    this.tagChartContainer=tagChartContainer;
-    var self = this;
-    // Load the Visualization API library
-    google.load('visualization', '1.0', {'packages':['corechart']});
-    //when finished loading, draw the chart
-    this.longest = 0;
-	this.chart = '';
-    this.tempTable = '';
+/*
+	Class: ChartClass
 	
-	//setup chart when loading is done
+	handle the display of google chart
+*/
+function ChartClass(tagChartContainer, tagSelection){
+	//set time period = 10 minutes
+	this.unit = 10;
+	this.unitInMilliSec = 60000*this.unit;
+	this.plots=[];
+	this.tagSelection=tagSelection;
+
+	this.tagChartContainer=tagChartContainer;
+	var self = this;
+	// Load the Visualization API library
+	google.load('visualization', '1.0', {'packages':['corechart']});
+
+	this.longest = 0;
+	this.chart = '';
+	this.tempTable = '';
+	
+	/*
+		Function: setupChart
+
+		Setup the chart after finished loading library
+	*/
 	this.setupChart = function (){
-	        //set chart display location
-        self.chart = new google.visualization.LineChart(document.getElementById(self.tagChartContainer));
-        
-        //initialize listener function, when a point is selected, show the list of users who retweet at the select time
-        function selectHandler() {
-            var selectedItem = self.chart.getSelection()[0];
-            if (selectedItem) {
-				//get all location string at the selected location and pass it on to be display
+		//set chart display location on the web
+		self.chart = new google.visualization.LineChart(document.getElementById(self.tagChartContainer));
+		
+		//initialize listener function, when a point is selected, show the list of users who retweet at the selected time
+		function selectHandler() {
+			//get the selected item
+			var selectedItem = self.chart.getSelection()[0];
+			if (selectedItem) {
+				//get all location string at the selected position and pass it on to be display
 				var arr = [];
 				for (var i=0; i<self.plots.length; i++){
 					if (self.plots[i][selectedItem.row]) {
@@ -35,30 +45,44 @@ function ChartClass(tagChartContainer, tagSelection){
 				
 				
 				document.getElementById(self.tagSelection).innerHTML = generateInformationTable(arr);
-            }
-        }
-        
-        //add listener for interaction
-        google.visualization.events.addListener(self.chart, 'select', selectHandler); 
+			}
+		}
+		
+		//add listener for interaction
+		google.visualization.events.addListener(self.chart, 'select', selectHandler); 
 	}
+	
+	//when finished loading the library, setup the chart
 	google.setOnLoadCallback(self.setupChart);
-    //clear chart related data
-    this.clearChartData = function(){
-        self.plots=[];
-    }
+	
+	/*
+		Function: clearChartData
+
+		Clear chart data
+	*/
+	this.clearChartData = function(){
+		self.plots=[];
+	}
 	
 	this.origin='';
 	
-	//populate data array
+	/*
+		Function: loadChartData
+
+		load chart data from the provided tweet object or array of tweet objects
+		call another function to recursively find and add data
+		
+		Parameters:
+			tweetArray - the tweet object or array of tweet objects that will be analyzed
+			locationString - the location String of the tweet object or the first element of the array of tweet objects
+	*/
 	this.loadChartData = function(tweetArray, locationString){
-        //the chart will go from the time of the original tweet to current time
-        self.plots = [];
-        
+		//the chart will go from the time of the original tweet to the last retweet
+		self.plots = [];
+		
 		var currentArray = [];
 		if (!tweetArray.length) {
 			currentArray = [tweetArray];
-			
-			
 		} else {
 			currentArray = tweetArray.slice();
 		}
@@ -67,7 +91,7 @@ function ChartClass(tagChartContainer, tagSelection){
 		for (var i=0; i<currentArray.length; i++){
 			self.origin = currentArray[i]["status"];
 			self.plots[i] = [];
-			//self.plots[i][0] = [(parseInt(locationString)+i).toString()]; 
+			
 			self.addChartData(currentArray[i], (parseInt(locationString)+i).toString(), i);
 			
 			//record longest array length
@@ -75,33 +99,47 @@ function ChartClass(tagChartContainer, tagSelection){
 			if (self.plots[i].length>self.longest) self.longest = self.plots[i].length;
 		}
 		
-    }
+	}
 	
-	//recursively add the current obj data and all its children
+	/*
+		Function: addChartData
+
+		recursively search and save data to an array
+		
+		Parameters:
+			obj - tweet object to analyse
+			locationString - the location String of the current object
+			plotNumber - in case of multiple plot on the same chart, need this number to differentiate between plots
+	*/
 	this.addChartData = function(obj, locationString, plotNumber){
-		for (var i=0; i<obj["childs"].length; i++){
-			var current = new Date(Date.parse(obj["childs"][i]["status"].createdAt));
+		for (var i=0; i<obj["children"].length; i++){
+			var current = new Date(Date.parse(obj["children"][i]["status"].createdAt));
 			var slot = Math.floor((current - (new Date(Date.parse(self.origin.createdAt))))/self.unitInMilliSec)+1;
 			//extend plot array length
 			if (slot>self.plots[plotNumber].length){
 				self.plots[plotNumber] = self.plots[plotNumber].concat(new Array(slot-self.plots[plotNumber].length));
 			}
+			
 			var location = locationString+","+i;
 			if (self.plots[plotNumber][slot]) {
 				self.plots[plotNumber][slot].push(location);
 			} else self.plots[plotNumber][slot] = [location];
 			
-			self.addChartData(obj["childs"][i], location, plotNumber);
+			self.addChartData(obj["children"][i], location, plotNumber);
 		}
 		
 	}
 	
-	//draw the chart
-    this.drawChart = function() {
-        var data = new google.visualization.DataTable();
-        //add plot column
-        data.addColumn('number','minutes');
-        
+	/*
+		Function: drawChart
+
+		add row, column, and draw the chart based on the data
+	*/
+	this.drawChart = function() {
+		var data = new google.visualization.DataTable();
+		//add plot column
+		data.addColumn('number','minutes');
+		
 		//add data rows
         var table = [];
 		for (var i=0; i<self.longest; i++){
@@ -112,7 +150,7 @@ function ChartClass(tagChartContainer, tagSelection){
 		}
 		
 		//add a column for each plot line
-        for(var i=0; i<self.plots.length; i++){
+		for(var i=0; i<self.plots.length; i++){
 			
 			data.addColumn('number','retweet numbers');
 			for (var j=0; j<self.plots[i].length; j++) {
@@ -123,23 +161,23 @@ function ChartClass(tagChartContainer, tagSelection){
 				table[j][i+1] = num;
 			}
 			
-        }
+		}
 		
 		//start add the table array into the chart data
 		for (var i = 0; i<table.length; i++){
 			data.addRow(table[i]);
 		}
 		self.tempTable = table;
-        
-        //set options for chart
-        var options = {
-            title: 'retweets number',
-            //curveType: 'function',
-            legend: { position: 'bottom' }
-        };
+		
+		//set options for chart
+		var options = {
+			title: 'retweets number',
+			//curveType: 'function',
+			legend: { position: 'bottom' }
+		};
 
-   
-        //start drawing chart
-        self.chart.draw(data, options);
-    }
+
+		//start drawing chart
+		self.chart.draw(data, options);
+	}
 }

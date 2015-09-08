@@ -1,33 +1,44 @@
+/*
+	Class: MapClass
+	
+	handle the display of google map
+*/
 function MapClass(elementID, tagSelection){
-    this.processedLocationCount = 0;
-    this.queryLocationCount = 0;
-    this.markers =[];
-    this.coorsList = [];
-    this.locationStringList = [];
-    this.heatMap = '';
-    this.tagSelection = tagSelection;
-    this.latlngbounds = new google.maps.LatLngBounds();
-    var self = this;
-    this.heatStatus=false;
-    this.markerStatus=false;
-    this.originCoor=[];
+	var self = this;
 	
-	this.failedLocations=[];
-	
+	this.markers =[];
+	this.coorsList = [];
 	this.flightPathList = [];
+	this.locationStringList = [];
+
+	this.heatMap = '';
+	this.tagSelection = tagSelection;
+	this.latlngbounds = new google.maps.LatLngBounds();
+
+	this.heatStatus=false;
+	this.markerStatus=false;
+	this.flightPathStatus=false;
+
+	//variable counting the number of data streams being processed
+	this.beingProcessed = 0;
 	
-    var mapOptions = {
-      zoom: 5,
-      center: new google.maps.LatLng(0, 0),
-      //mapTypeId: google.maps.MapTypeId.SATELLITE
-    }
-    //initialize map and geocoder
-    this.map = new google.maps.Map(document.getElementById(elementID), mapOptions); 
-    this.geocoder = new google.maps.Geocoder();
-    
-    //clear data related to the map
-    this.clearMapData = function(){
-        self.showMap(false);
+	var mapOptions = {
+		zoom: 5,
+		center: new google.maps.LatLng(0, 0),
+		//mapTypeId: google.maps.MapTypeId.SATELLITE
+	}
+	//initialize map and geocoder
+	this.map = new google.maps.Map(document.getElementById(elementID), mapOptions); 
+	this.geocoder = new google.maps.Geocoder();
+
+	/*
+		Function: clearMapData
+
+		Clear all data used to displaying on the map:
+			all markers array, heat map, location String array, lat lng bound, coordinates array, flight path array.
+	*/
+	this.clearMapData = function(){
+		self.showMap(false);
 		for (var i=0; i<self.markers.length; i++){
 			self.markers[i].setMap(null);
 			delete self.markers[i];
@@ -35,10 +46,10 @@ function MapClass(elementID, tagSelection){
 			i--;
 		}
 		
-        self.locationStringList = [];
-        self.heatMap='';
-        self.latlngbounds = new google.maps.LatLngBounds();
-        self.coorsList = [];
+		self.locationStringList = [];
+		self.heatMap='';
+		self.latlngbounds = new google.maps.LatLngBounds();
+		self.coorsList = [];
 		
 		for (var i =0; i<self.flightPathList.length; i++){
 			self.flightPathList[i].setMap(null);
@@ -48,51 +59,76 @@ function MapClass(elementID, tagSelection){
 		}
     }
 	
-	//fix this, find a way to know when everything is finished
-	this.queryData = -1;
-	this.count=-1;
-	//load data from obj array
-	this.loadMapData = function(data, locationString) {
-		if (self.count==-1 && self.queryData==-1){
+	/*
+		Function: loadMapData
+		
+		Pass the input data into CoordinateClass for retrieving the coordinates of each tweet.
+		A callback function 'putDataToMap' is passed into the CoordinateClass so the coordinates will be returned here after retrieved.
+		
+		Parameters:
+			data - either a tweet object ( array of ['status', 'children']) or an array of tweet objects
+			locationString - location string of the 'data' object or the first element of 'data' array
 			
-			self.count = 0;
+		See also:
+			<putDataToMap>
+	*/
+	this.loadMapData = function(data, locationString) {
+		if (self.beingProcessed <= 0)
+		{
+			self.finshed=false;
 			//if obj is an array
-			if (data.length) {
-				self.queryData = data.length;
-				for(var i=0; i<data.length; i++){
+			if (!data.length) {
+				data = [data];
+			}
+			self.beingProcessed = data.length;
+			for(var i=0; i<data.length; i++){
 				
-					var coorClass = new CoordinateClass(data[i], (parseInt(locationString)+i).toString(), self.geocoder, self.putDataToMap);
-					coorClass.startProcess();
-				}
-			} else {
-				//if not an array
-				self.queryData = 1;
-				var coorClass = new CoordinateClass(data, locationString, self.geocoder, self.putDataToMap);
+				var coorClass = new CoordinateClass(data[i], (parseInt(locationString)+i).toString(), self.geocoder, self.putDataToMap);
 				coorClass.startProcess();
 			}
 		}
     }
 	
-	//is called when finished getting location, now start adding data to map
-	this.putDataToMap = function(sourceCoor, coorList){
-		self.count++;
-		//console.log(self.count);
-		//alert("yes");
+	/*
+		Function: putDataToMap
+
+		This is a callback function. It will be called when the coordinates are successfully retrieved.
+		This function pass the coordinates onto different functions to stored and display
+
+		Parameters:
+			sourceCoor - the coordinates of the source Tweet
+			coorList - the coordinates of the retweets of the source Tweet
+			finished - is the current class finished with finding coordinate of all the tweets
+		
+		See also:
+			<saveCoordinates>
+			<saveFlightPath>
+	*/
+	this.putDataToMap = function(sourceCoor, coorList, finished = false){
+		if (finished) {
+			self.beingProcessed--;
+		}
+		
 		if (sourceCoor.length>0)
-			self.pushCoorToMap(sourceCoor, sourceCoor[2], true);
+			self.saveCoordinates(sourceCoor, sourceCoor[2], true);
 		for (var i=0; i<coorList.length; i++) {
-			self.pushCoorToMap(coorList[i], coorList[i][2], false);
+			self.saveCoordinates(coorList[i], coorList[i][2], false);
 		}
-		if (sourceCoor.length>0 && coorList.length>0) self.drawArrow(sourceCoor, coorList);
-		self.updateMap();
-		if (self.count >= self.queryData) {
-			self.count=-1;
-			self.queryData=-1;
-		}
+		if (sourceCoor.length>0 && coorList.length>0) self.saveFlightPath(sourceCoor, coorList);
+		if (self.beingProcessed <= 0) self.updateMap();
 	}
 	
-	//draw arrow from source to the childs
-	this.drawArrow = function(sourceCoor, coorList){
+	/*
+		Function: saveFlightPath
+
+		From the input, store the flight path drawing from the source to the retweets
+		This is then put into the flight path array for displaying later.
+
+		Parameters:
+			sourceCoor - the coordinates of the source Tweet
+			coorList - the coordinates of the retweets of the source Tweet
+	*/
+	this.saveFlightPath = function(sourceCoor, coorList){
 		for (var i=0; i<coorList.length; i++){
 			if (sourceCoor[0] != coorList[i][0] && sourceCoor[1] != coorList[i][1]) {
 				var flightPlanCoordinates = [
@@ -117,22 +153,34 @@ function MapClass(elementID, tagSelection){
 					strokeWeight: 2
 				});
 				
-				flightPath.setMap(self.map);
 				self.flightPathList.push(flightPath);
 				
 			}
 		}
 	}
 	
-	//push coordinate to map
-	this.pushCoorToMap = function(coordinate, locationString, source){
+	/*
+		Function: saveCoordinates
 
-		
+		save coordinates into a coordinates array
+		save location String to a location String array
+		create a marker at the coordinates and save it to markers array
+			set a click listener to the marker, display the content of all the tweets at that location
+		All of these arrays will be used to display informations on the map
+
+		Parameters:
+			coordinate - the coordinates of this tweet
+			locationString - the location string of this tweet
+	*/
+	this.saveCoordinates = function(coordinate, locationString){
+
         var found =false;
         //if (coorsList
-		 var currLatLng = new google.maps.LatLng(coordinate[0], coordinate[1]);
+		var currLatLng = new google.maps.LatLng(coordinate[0], coordinate[1]);
         for(var i=0; i<self.coorsList.length; i++){
+			
             if (self.coorsList[i].G ==currLatLng.G && self.coorsList[i].K ==currLatLng.K){
+				//will not add to location string list when there is any duplication with current string
                 var found2=false;
 				for (var j=0; j<self.locationStringList[i].length; j++){
 					if (self.locationStringList[i][j] == locationString) {
@@ -146,70 +194,108 @@ function MapClass(elementID, tagSelection){
                 break;
             }
         }
+		//add new marker and coordinates if not already in the arrays
         if(!found){
             self.coorsList.push(currLatLng);
             self.locationStringList.push([locationString]);
             
-			//http://maps.google.com/mapfiles/ms/icons/green-dot.png
-            var marker = new google.maps.Marker({
+			var marker = new google.maps.Marker({
                 position: currLatLng
             });
-			/*
-			if (source){
-				marker.setIcon("http://maps.google.com/mapfiles/ms/icons/green-dot.png");
-			} else {
-				marker.setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
-			}*/
+			
             marker.addListener('click', function() {
-				
-				
-				
 				document.getElementById(self.tagSelection).innerHTML = generateInformationTable(self.locationStringList[this.order]);
-				
-				
-                
-            }.bind({order:self.locationStringList.length-1}));
-            self.markers.push(marker);
-            //add coordinate to bound for display purpose
+			}.bind({order:self.locationStringList.length-1}));
+            
+			self.markers.push(marker);
+            //readjust coordinate bound for display purpose
             self.latlngbounds.extend(currLatLng);
         }
-		
-		//draw arrow
 	}
 	
-	
-	
-	
-    //update map view: focus on the markers, load heatMap data, and show
+	/*
+		Function: updateMap
+
+		focus map on the region containing all the coordinates
+		set heat map and set all components to display: heat map, markers, flight path
+	*/
     this.updateMap = function(){
 		
-		
-        self.mapFocus();
+		self.mapFocus();
         if (self.heatMap=='' || !self.heatMap) {
             self.heatMap = new google.maps.visualization.HeatmapLayer({
                 data: self.coorsList
             });
         }
-
+		
         self.showMap(true);
     }
-	
-	this.removeArrow = function(){
-		self.flightPathList.setMap(null);
-	}
 
-    //make map focus on markers points
+	/*
+		Function: mapFocus
+
+		set center of the map and the bound of the map
+	*/
     this.mapFocus = function(){
         self.map.setCenter(self.latlngbounds.getCenter());
         self.map.fitBounds(self.latlngbounds);
     }
+	
+	/*
+		Function: showMap
 
-    //set display map for heatMap and markers
+		show all components on the map or not
+
+		Parameters:
+			bool - show flight path on the map or not
+		
+		See also:
+			<showFlightPath>
+			<showHeatMap>
+			<showMarker>
+	*/
     this.showMap = function(bool){
+		self.showFlightPath(bool);
         self.showHeatMap(bool);
         self.showMarker(bool);
     }
-    //set display map for heatMap
+	
+	/*
+		Function: showFlightPath
+
+		show flight path component on the map or not
+
+		Parameters:
+			bool - show flight path on the map or not
+		
+		See also:
+			<showMap>
+			<showHeatMap>
+			<showMarker>
+	*/
+	this.showFlightPath = function(bool) {
+		self.flightPathStatus = bool;
+		for (var i=0; i<self.flightPathList.length; i++) {
+			if (bool)
+				self.flightPathList[i].setMap(self.map);
+			else self.flightPathList[i].setMap(null);
+		}
+		self.mapFocus();
+	}
+    
+	/*
+		Function: showHeatMap
+
+		show heat map component on the map or not
+
+		Parameters:
+			bool - show heat map on the map or not
+			
+		See also:
+			<showMap>
+			<showFlightPath>
+			<showMarker>
+	*/
     this.showHeatMap = function(bool){
         if (self.heatMap == '') return;
         self.heatStatus = bool;
@@ -218,7 +304,20 @@ function MapClass(elementID, tagSelection){
         else self.heatMap.setMap(null);
         self.mapFocus();
     }
-    //set display map for markers
+    
+	/*
+		Function: showMarker
+
+		show marker component on the map or not
+
+		Parameters:
+			bool - show marker on the map or not
+			
+		See also:
+			<showMap>
+			<showHeatMap>
+			<showFlightPath>
+	*/
     this.showMarker = function(bool){
         self.markerStatus = bool;
         for (var i=0; i<self.markers.length; i++){
@@ -229,50 +328,120 @@ function MapClass(elementID, tagSelection){
         self.mapFocus();
     }
     
+	/*
+		Function: toogleAll
+
+		Toogle on or off the display of all components on the map
+		
+		See also:
+			<toogleHeatMap>
+			<toogleMarker>
+			<toogleFlightPath>
+	*/
     this.toogleAll = function(){
         var bool = true;
-        if (self.heatStatus && self.markerStatus){
+        if (self.heatStatus && self.markerStatus && self.flightPathStatus){
             bool = false;   
         }
-        self.showHeatMap(bool);
-        self.showMarker(bool);
+		self.showMap(bool);
     }
-    
+
+	/*
+		Function: toogleHeatMap
+
+		Toogle on or off the display of heat map component on the map
+		
+		See also:
+			<toogleAll>
+			<toogleMarker>
+			<toogleFlightPath>
+	*/    
     this.toogleHeatMap = function(){
         if (self.heatStatus)
             self.showHeatMap(false);
         else self.showHeatMap(true);
     }
     
+	/*
+		Function: toogleMarker
+
+		Toogle on or off the display of marker component on the map
+		
+		See also:
+			<toogleAll>
+			<toogleHeatMap>
+			<toogleFlightPath>
+	*/
     this.toogleMarker = function(){
         if (self.markerStatus)
             self.showMarker(false);
         else self.showMarker(true);
     }
+
+	/*
+		Function: toogleFlightPath
+
+		Toogle on or off the display of flight path component on the map
+		
+		See also:
+			<toogleAll>
+			<toogleHeatMap>
+			<toogleMarker>
+	*/
+	this.toogleFlightPath = function(){
+        if (self.flightPathStatus)
+            self.showFlightPath(false);
+        else self.showFlightPath(true);
+    }
 }
 
-//class that handle each stream of tweet
+/*
+	Class: CoordinateClass
+	
+	handle retrieving coordinates of each stream of tweets
+*/
 function CoordinateClass(obj, locationString, geocoder, callback){
 	this.locationString = locationString;
-	this.coorList = [];
+	this.childList = [];
 	var self=this;
-	this.sourceCoor = [];
+	this.coorList = [];
 	this.geocoder = geocoder;
 	this.source = obj;
 	this.failedLocations=[];
 	this.processedLocations = 0;
 	this.callback = callback;
 	this.totalObj =  0;
+	
+	/*
+		Function: countObj
+
+		recursively count all object in the provided tree
+		
+		Parameters:
+			obj - the tweet object that will be analyzed
+	*/
 	this.countObj = function(obj){
 		self.totalObj++;
-		for (var i=0; i<obj["childs"].length; i++){
-			self.countObj(obj["childs"][i]);
+		for (var i=0; i<obj["children"].length; i++){
+			self.countObj(obj["children"][i]);
 		}
 	}
 	
 	this.countObj(obj);
 	
-	//find location of the current object
+	/*
+		Function: findLocation
+
+		find location of the tweet through the status object stored in the tweet object
+		Only analyse one layer
+		save any object that failed to retrieved coordinates due to over query limit
+		when coordinates are retrieved, they are pushed on to another function for saving
+		call another function for resend the request for failed query
+		
+		Parameters:
+			obj - the tweet object that will be analyzed
+			loc - location String of the object
+	*/
 	this.findLocation = function(obj, loc){
 		
 		var status = obj["status"];
@@ -310,27 +479,39 @@ function CoordinateClass(obj, locationString, geocoder, callback){
 			
 		}
 		self.resendFailed();
-		
 	}
 	
-	//save coordinate of current object and its source
+	/*
+		Function: saveCoor
+		
+		save coordinates with the location String into coorList array
+		also save this tweet into childList array based on its location String
+		
+		
+		Parameters:
+			lat - latitude of the tweet
+			lng - longitude of the tweet
+			loc - location String of the object
+	*/
 	this.saveCoor = function(lat, lng, loc){
-		
-		
-			self.sourceCoor[loc] = [];
-			self.sourceCoor[loc].push(lat);
-			self.sourceCoor[loc].push(lng);
-			self.sourceCoor[loc].push(loc);
-		
-			//get substring of location until before the last comma
-			if (self.coorList[loc.substring(0, loc.lastIndexOf(","))]) 
-				self.coorList[loc.substring(0, loc.lastIndexOf(","))].push([lat, lng, loc]);
-			else self.coorList[loc.substring(0, loc.lastIndexOf(","))] = [[lat, lng, loc]];
+		self.coorList[loc] = [];
+		self.coorList[loc].push(lat);
+		self.coorList[loc].push(lng);
+		self.coorList[loc].push(loc);
+	
+		//get substring of location until before the last comma
+		if (self.childList[loc.substring(0, loc.lastIndexOf(","))]) 
+			self.childList[loc.substring(0, loc.lastIndexOf(","))].push([lat, lng, loc]);
+		else self.childList[loc.substring(0, loc.lastIndexOf(","))] = [[lat, lng, loc]];
 			
 	}
 	
-	//check if there are any failed because of limited cap, then resend after a short time
-	//if all finsihed, then call the callback function
+	/*
+		Function: resendFailed
+		
+		resend any tweet that failed because of query limit
+		if all finished then send data back to the call back function to analyse and display on map
+	*/
 	this.resendFailed = function(){
 		if (self.processedLocations + self.failedLocations.length >= self.totalObj) {
 			var tempLocations = self.failedLocations;
@@ -339,50 +520,80 @@ function CoordinateClass(obj, locationString, geocoder, callback){
 				
 				for (var i=0; i<tempLocations.length; i++){
 					setTimeout(function(){
-						self.findLocation(self.getObj(tempLocations[i]), tempLocations[i]);
+						self.findLocation(self.getStoredObjFromString(tempLocations[i]), tempLocations[i]);
 					}.bind({i:i, tempLocations:tempLocations}), 300);
 					
 				}
 			} else {
 				//console.log("source: "+self.sourceCoor[0]+","+self.sourceCoor[1]+"\n");
-				for (var loc in self.sourceCoor){
-					if (self.coorList[loc]) {
-						self.callback(self.sourceCoor[loc], self.coorList[loc]);
-					} else self.callback([], [self.sourceCoor[loc]]);
+				for (var loc in self.coorList){
+					
+					if (self.childList[loc]) {
+						self.callback(self.coorList[loc], self.childList[loc]);
+					} else self.callback([], [self.coorList[loc]]);
 				}
 				
+				self.callback([], [], true);
 			}
 		}
-		//console.log((self.processedLocations + self.failedLocations.length) +","+ (self.childs.length + 1));
+		//console.log((self.processedLocations + self.failedLocations.length) +","+ (self.children.length + 1));
 	}
 	
-	//get obj saved at the specified location in the array
-	this.getObj = function(location){
+	/*
+		Function: getStoredObjFromString
 		
-		var arr = self.source["childs"];
+		get the tweet object based on the location String
+		
+		Parameters:
+			location - location String of the object
+			
+		Returns:
+			the located tweet object
+	*/
+	this.getStoredObjFromString = function(location){
+		
+		
 		var locationArr = locationString.split(",");
 		
 		if (locationArr.length==1) return self.source;
-		
+		var arr = self.source["children"];
 		for (var i=1; i<locationArr.length; i++) {
 			arr=arr[locationArr[i]];
 			if (i+1<locationArr.length)
-				arr = arr["childs"];
+				arr = arr["children"];
 		}
 		return arr;
 	}
 	
-	//start the finding process
+	/*
+		Function: startProcess
+		
+		start the analysing process
+		
+		See also:
+			<sendAll>
+	*/
 	this.startProcess = function(){
 		this.sendAll(self.source, self.locationString);
 		
 	}
 	
-	//recursively find coordinate of current obj and its children
+	/*
+		Function: sendAll
+		
+		recursively find all object and send them all over to locate their coordinates
+		
+		Parameters:
+			obj - the current object to send and search
+			location - location String of the object
+		
+		See also:
+			<findLocation>
+	*/
 	this.sendAll = function(obj, location){
 		self.findLocation(obj, location);
-		for (var i=0; i<obj["childs"].length; i++){
-			self.sendAll(obj["childs"][i], location+","+i);
+		for (var i=0; i<obj["children"].length; i++){
+			self.sendAll(obj["children"][i], location+","+i);
 		}
 	}
 }

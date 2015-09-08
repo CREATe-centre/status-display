@@ -7,82 +7,118 @@ $data='';
 $count = 0;
 $tempResult = '';
 $json = '';
-//
+$date = isset($_GET['date']) ? $_GET['date'] : '';
 
-function storeTweet2($json){
-    global $result;
-    $tweetID = $json->{"id_str"};
-    if (property_exists($json, "retweeted_status")) {
-        $originID = $json->{"retweeted_status"}->{"id_str"};
-        //$result[] = array('id' => $tweetID, 'parent_id' => $originID, 'order' => $order);
-        $result[] = array('id' => $tweetID, 'parent_id' => $originID, 'json' => json_encode($json));
-        //$count++;
-        //echo $id;
-    } else {
-        //$result[] = array('id' => $tweetID, 'parent_id' => 0, 'order' => $order);
-        $result[] = array('id' => $tweetID, 'parent_id' => 0, 'json' => json_encode($json));
-    }
+/*
+	Function: storeTweet
+
+	store the json of the tweet into an array, as a form of ['tweet id', 'parent id', 'json']
+
+	Parameters:
+		json - json representation of the tweet
+*/
+function storeTweet($json){
+	global $result;
+	$tweetID = $json->{"id_str"};
+	if (property_exists($json, "retweeted_status")) {
+		$originID = $json->{"retweeted_status"}->{"id_str"};
+		$result[] = array('id' => $tweetID, 'parent_id' => $originID, 'json' => json_encode($json));
+	} else {
+		$result[] = array('id' => $tweetID, 'parent_id' => 0, 'json' => json_encode($json));
+	}
 }
 
 //make a reference tree from object and array
 function buildTree($items) {
 
-    $childs = array();
-	$another = array();
-    $delete1 = array();
-	$delete2 = array();
+	$children = array();
+	$delete = array();
 
-    foreach($items as &$item) {
+	foreach($items as &$item) {
+		
+		//add pointer to list
+		$children[$item['parent_id']][] = &$item;
+	}
+	unset($item);
+
+	foreach($items as &$item) {
+		//point the child to the parent
+		if (isset($children[$item['id']])) {
+			$item['children'] = $children[$item['id']];
+			$delete1[]=$item['id'];
+		}
+	}
+
+	//delete all the child which has been assigned to parents
+	foreach($delete as $del){
+		unset($children[$del]);
+	}
+
+	//unset unnecessary property
+	foreach($items as &$item) {
+		unset($item["id"]);
+		unset($item["parent_id"]);
+	}
+
+	//return $children;
+
+	return $another;
+}
+
+/*
+	Function: buildTree2
+
+	reorder the array list of tweets into a tree with retweets as children of original tweet
+
+	Parameters:
+		items - the list of all the tweets
+*/
+function buildTree2($items){
+
+	$children = array();
+	$another = array();
+	$delete = array();
+
+
+	foreach($items as &$item) {
 		
 		//mock multi level list, choose a random element that has the same parent as current tweet as a fake parent
-		if (rand(1, 100) <= 50 && array_key_exists($item['parent_id'], $childs) && count($another[$item['parent_id']])>0 && $item['parent_id']!=0) {
-			$another[$childs[$item['parent_id']][rand(0, count($childs[$item['parent_id']])-1)]["id"]][] = &$item;
+		if (rand(1, 100) <= 50 && array_key_exists($item['parent_id'], $children) && count($another[$item['parent_id']])>0 && $item['parent_id']!=0) {
+			$another[$children[$item['parent_id']][rand(0, count($children[$item['parent_id']])-1)]["id"]][] = &$item;
 		} else {
 			$another[$item['parent_id']][] =&$item;
 		}
 		
 		//add pointer to list
-		$childs[$item['parent_id']][] = &$item;
+		$children[$item['parent_id']][] = &$item;
 	}
-    unset($item);
+	unset($item);
 
-    foreach($items as &$item) {
-        //point the child to the parent
-		if (isset($childs[$item['id']])) {
-            $item['childs'][] = $childs[$item['id']];
-            $delete1[]=$item['id'];
-        }
-		
-		
-		//same as normal array
+	foreach($items as &$item) {
+		//point the child to the parent
 		if (isset($another[$item['id']])) {
-            $item['childs'][] = $another[$item['id']];
-            $delete2[]=$item['id'];
-        }
-    }
-    
+			$item['children'] = $another[$item['id']];
+			$delete[]=$item['id'];
+		}
+	}
+
 	//delete all the child which has been assigned to parents
-    foreach($delete1 as $del){
-        unset($childs[$del]);
-    }
-	
-	
-	foreach($delete2 as $del){
-        unset($another[$del]);
-    }
-    
+	foreach($delete as $del){
+		unset($another[$del]);
+	}
+
 	//unset unnecessary property
-    foreach($items as &$item) {
-        unset($item["id"]);
-        unset($item["parent_id"]);
-    }
-    
-    //return $childs;
-	
+	foreach($items as &$item) {
+		unset($item["id"]);
+		unset($item["parent_id"]);
+	}
+
+	//return $children;
+
 	return $another;
 }
 
-
+//set up parameters to access the database
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -95,49 +131,42 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+//setup sql command
 $sql = "SELECT * FROM data";
-$result1 = $conn->query($sql);
-/*
-if ($result1->num_rows > 0) {
-    // output data of each row
-    while($row = $result1->fetch_assoc()) {
-        echo "id: " . $row["id"]. " - Name: " . $row["firstname"]. " " . $row["lastname"]. "<br>";
-    }
-} else {
-    echo "0 results";
-}*/
-$conn->close();
-
-
-//gradually read ten million words at a time, get json for each status, then store in current array
-while(true){
-    
-    $data = file_get_contents("twitter/data.json",false,null,$nextOffset,10000000);
-    if ($data==='') {
-        //echo "end of file";
-        break;
-    }
-    preg_match_all("#\*\*\*\*\*\n(?!New listener|\n)(\{.+\})\n\*\*\*\*\*#", $data, $tempResult);
-    
-    for($i=0; $i<count($tempResult[1]); $i++) {
-        $json = json_decode($tempResult[1][$i]);
-        //make sure the json is that of a tweet and the either the poster is KTHopkins or have tag KTHopkins
-        if (property_exists($json, "created_at") && ($json->{"user"}->{"id"}==21439144 || strpos($json->{"text"},"@KTHopkins")))
-		{
-            storeTweet2($json);
-		}
-    }
-    
-    $nextOffset += strrpos($data, "*****");
-    if (strrpos($data, "*****")<=5) break;
+if ($date!='') {
+	
+	$timestamp = strtotime($date);
+	$date = date("Y-m-d", $timestamp);
+	$sql .= " WHERE Date>= '".$date."'";
+	
 }
 
-echo json_encode(buildTree($result));
+//send sql command to database
+$resultdb = $conn->query($sql);
 
-
-
-
-
-
-
+if ($resultdb) {
+	
+	while($row = $resultdb->fetch_assoc()) {
+		//gradually read each row
+		$data = $row["data"];
+		
+		//get json for each status, then store in current array
+		preg_match_all("#\*\*\*\*\*\r?\n(?!New listener|\r?\n)(\{.+\})\r?\n\*\*\*\*\*#", $data, $tempResult);
+		
+		for($i=0; $i<count($tempResult[1]); $i++) {
+			$json = json_decode($tempResult[1][$i]);
+			//make sure the json is that of a tweet and the either the poster is KTHopkins or have tag KTHopkins
+			// && ($json->{"user"}->{"id"}==21439144 || strpos($json->{"text"},"@KTHopkins"))
+			if (property_exists($json, "created_at"))
+			{
+				storeTweet($json);
+			}
+		}
+		
+	}
+}
+//close connection
+$conn->close();
+//return the tree of the tweets
+echo json_encode(buildTree2($result));
 ?>
