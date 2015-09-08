@@ -1,5 +1,5 @@
 ##How to use
-* To install plugin, navigate to \wp-content\plugins in side wordpress directory.
+* To install plugin, navigate to **\wp-content\plugins** in side wordpress directory.
 * Create a new folder and name it first-plugin (the same as the main file first-plugin.php). If needed, the names can be changed, make sure the folder name is the same as the main php file name.
 * Move all the files in this repository into the newly created folder.
 * Modify the comments in the first-plugin.php to provide basic information of the plugin such as: plugin name, plugin uri, description, version, author,….
