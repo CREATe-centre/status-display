@@ -1,121 +1,57 @@
 <?php
 //session_start();
-set_time_limit (0);
+//set_time_limit (0);
 $result = array();
-$nextOffset = -1;
 $data='';
-$count = 0;
 $tempResult = '';
 $json = '';
 $date = isset($_GET['date']) ? $_GET['date'] : '';
+$userID = isset($_GET['userID']) ? $_GET['userID'] : '';
+$page = isset($_GET['page']) ? $_GET['page'] : 1;
+$originPerPage = 10;
+
+$origin = array();
 
 /*
 	Function: storeTweet
 
-	store the json of the tweet into an array, as a form of ['tweet id', 'parent id', 'json']
-
+	store item in an orderly manner, retweets will become children of origin tweet
+	
 	Parameters:
 		json - json representation of the tweet
 */
 function storeTweet($json){
 	global $result;
+	global $origin;
 	$tweetID = $json->{"id_str"};
+	$newItem = array('json' => json_encode($json), 'children'=>array());
+	
+	//if have parent, become to the children of that parent
 	if (property_exists($json, "retweeted_status")) {
 		$originID = $json->{"retweeted_status"}->{"id_str"};
-		$result[] = array('id' => $tweetID, 'parent_id' => $originID, 'json' => json_encode($json));
-	} else {
-		$result[] = array('id' => $tweetID, 'parent_id' => 0, 'json' => json_encode($json));
-	}
-}
-
-//make a reference tree from object and array
-function buildTree($items) {
-
-	$children = array();
-	$delete = array();
-
-	foreach($items as &$item) {
 		
-		//add pointer to list
-		$children[$item['parent_id']][] = &$item;
-	}
-	unset($item);
-
-	foreach($items as &$item) {
-		//point the child to the parent
-		if (isset($children[$item['id']])) {
-			$item['children'] = $children[$item['id']];
-			$delete1[]=$item['id'];
-		}
-	}
-
-	//delete all the child which has been assigned to parents
-	foreach($delete as $del){
-		unset($children[$del]);
-	}
-
-	//unset unnecessary property
-	foreach($items as &$item) {
-		unset($item["id"]);
-		unset($item["parent_id"]);
-	}
-
-	//return $children;
-
-	return $another;
-}
-
-/*
-	Function: buildTree2
-
-	reorder the array list of tweets into a tree with retweets as children of original tweet
-
-	Parameters:
-		items - the list of all the tweets
-*/
-function buildTree2($items){
-
-	$children = array();
-	$another = array();
-	$delete = array();
-
-
-	foreach($items as &$item) {
-		
-		//mock multi level list, choose a random element that has the same parent as current tweet as a fake parent
-		if (rand(1, 100) <= 50 && array_key_exists($item['parent_id'], $children) && count($another[$item['parent_id']])>0 && $item['parent_id']!=0) {
-			$another[$children[$item['parent_id']][rand(0, count($children[$item['parent_id']])-1)]["id"]][] = &$item;
+		//$result[] = array('id' => $tweetID, 'parent_id' => $originID, 'json' => json_encode($json));
+		//TODO: make random lower level child: recursive loop here until no more children or decided to stay child at that level
+		//if parent not stored yet, make new item represent the parent and store
+		if (!isset($origin[$originID])) {
+			$tempItem = array('json' => json_encode($json->{"retweeted_status"}), 'children'=>array());
+			$result[] = &$tempItem;
+			$origin[$originID] = &$tempItem;
 		} else {
-			$another[$item['parent_id']][] =&$item;
+			//if parent exist, randomly have a chance to become a child of its children
+			
 		}
+		//add reference of the tweet to its parent
+		$parent = &$origin[$originID];
+		$parent['children'][]= &$newItem;
 		
-		//add pointer to list
-		$children[$item['parent_id']][] = &$item;
+	} else {
+		//add reference of the tweet to the result array if have no parent
+		$result[] = &$newItem;
+		
 	}
-	unset($item);
-
-	foreach($items as &$item) {
-		//point the child to the parent
-		if (isset($another[$item['id']])) {
-			$item['children'] = $another[$item['id']];
-			$delete[]=$item['id'];
-		}
-	}
-
-	//delete all the child which has been assigned to parents
-	foreach($delete as $del){
-		unset($another[$del]);
-	}
-
-	//unset unnecessary property
-	foreach($items as &$item) {
-		unset($item["id"]);
-		unset($item["parent_id"]);
-	}
-
-	//return $children;
-
-	return $another;
+	//add reference of current tweet to the list of origin (for ease of search, assuming any tweet can have children)
+	$origin[$tweetID] = &$newItem;
 }
 
 //set up parameters to access the database
@@ -167,6 +103,9 @@ if ($resultdb) {
 }
 //close connection
 $conn->close();
+
+$arrayPage = array_slice($result, $originPerPage*($page-1), $originPerPage);
+$totalPage = ceil( count($result) / $originPerPage);
 //return the tree of the tweets
-echo json_encode(buildTree2($result));
+echo json_encode(array_merge([$totalPage],$arrayPage));
 ?>

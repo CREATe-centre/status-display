@@ -45,18 +45,23 @@ function hello_world(){
 					
 				</div>
 			</td>
-			<td id="recordedTweetsContainer" >
+			<td id="recordedTweetsContainer" style="height: 700px" valign="top">
 				<div class="center"><b>RECENT RELATED TWEETS</b></div>
 				<select id="select">
 					<option selected="selected"></option>
-					<option onClick="getRelatedTweetsTree(1)">All</option>
-					<option onClick="getRelatedTweetsTree(2)">1 day</option>
-					<option onClick="getRelatedTweetsTree(3)">1 week</option>
-					<option onClick="getRelatedTweetsTree(4)">2 week</option>
-					<option onClick="getRelatedTweetsTree(5)">3 week</option>
-					<option onClick="getRelatedTweetsTree(6)">1 month</option>
+					<option onClick="getRelatedTweetsTree(1,1)">All</option>
+					<option onClick="getRelatedTweetsTree(2,1)">1 day</option>
+					<option onClick="getRelatedTweetsTree(3,1)">1 week</option>
+					<option onClick="getRelatedTweetsTree(4,1)">2 week</option>
+					<option onClick="getRelatedTweetsTree(5,1)">3 week</option>
+					<option onClick="getRelatedTweetsTree(6,1)">1 month</option>
 				</select>
-				<div id="recordedTweets" style="max-height: 600px; overflow: scroll"></div>
+				<div>
+				<button id="prevPage" type="button" onClick="getRelatedTweetsTree(currentOption, currentPage-1)"><=</button>
+				<b id="p">--</b>
+				<button id="nextPage" type="button" onClick="getRelatedTweetsTree(currentOption, currentPage+1)">=></button>
+				</div>
+				<div id="recordedTweets" style="height: 600px; overflow: scroll"></div>
 				
 			</td>
 		</tr>
@@ -93,11 +98,12 @@ function hello_world(){
 	
 	<script type="text/javascript">
 	
-
-	
+	var currentOption = 0;
+	var totalPage = -1;
 	var currentUser = null;
+	var currentPage = 1;
 	var all=[];
-	
+	updatePageNavigation();
 	//initial display user's profile and list all the related tweets
 	reloadUser();
 	//getRelatedTweetsTree(1);
@@ -165,80 +171,115 @@ function hello_world(){
 		Function: getRelatedTweetsTree
 
 		call to php file to get all related tweets after a specific time
-		the returned data is then pushed on to other functions to populate the array and display
+		the returned data is then used to populate an array to stored for future use
+		the data is then display on the website
 		
 		Parameters:
-			options - choose which range of time to get the related tweets:
+			option - choose which range of time to get the related tweets:
 				1 - all the tweets
 				2 - 1 day
 				3 - 1 week
 				4 - 2 weeks
 				5 - 3 weeks
 				6 - 1 month
-				
-		See also:
-			<populateData>
-			<display>
+			page - page number of the dataset that we will retrieve, only 10 main tweet per page
+
 	*/
-    function getRelatedTweetsTree(options){
+    function getRelatedTweetsTree(option, page){
+		currentOption = option;
 		document.getElementById("recordedTweets").innerHTML = "";
 		all = [];
 		
 		var date = '';
 		var dateObj = '';
-		if (options == 2) {
+		if (option == 2) {
 			dateObj = new Date((new Date()).getTime() - 24 * 60 * 60 * 1000);
-		} else if (options == 3){
+		} else if (option == 3){
 			dateObj = new Date((new Date()).getTime() - 7 * 24 * 60 * 60 * 1000);
-		} else if (options == 4){
+		} else if (option == 4){
 			dateObj = new Date((new Date()).getTime() - 14 * 24 * 60 * 60 * 1000);
-		} else if (options == 5){
+		} else if (option == 5){
 			dateObj = new Date((new Date()).getTime() - 21 * 24 * 60 * 60 * 1000);
-		} else if (options == 6){
+		} else if (option == 6){
 			dateObj = new Date((new Date()).getTime() - 30 * 24 * 60 * 60 * 1000);
 		}
 		if (dateObj!='') date = dateObj.toUTCString();
+		
+		currentPage = page;
+		
+		if (currentOption!=option) {
+			totalPage = -1;
+			currentPage = 1;
+		} else {
+			if (currentPage>totalPage) currentPage = totalPage;
+			if (currentPage<1) currentPage = 1;
+		}
+		
+		
+		
         jQuery(function ($) {
 			//
-			$.get("wp-content/plugins/first-plugin/analyseStream.php", {'date':date}, function(data){
+			$.get("wp-content/plugins/first-plugin/analyseStream.php", {'date':date, 'userID':currentUser.id, 'page':currentPage}, function(data){
 				
 				data = JSON.parse(data);
 				
-				populateData(data);
-
-				display();
+				totalPage = data[0];
+				
+				delete data[0];
+				
+				if (currentPage>totalPage) {
+					currentPage = totalPage;
+				}
+				
+				//update navigation display, next page button, previous page button, page number
+				updatePageNavigation();
+				
+				//populate array with newly returned data for future use
+				for (var i in data) {
+					all.push(convertJsonIntoStatusObj(data[i]));
+				}
+				//displaying the data
+				if (all.length>0){
+					document.getElementById("recordedTweets").innerHTML = recursiveList(all);
+				}
+				
 			});
 		
 		});
 	}
 	
 	/*
-		Function: populateData
+		Function: updatePageNavigation
 
-		get the returned data, convert from json to status object, and put into a big array, structured like a tree
+		update the navigation display of the page to the newest state
+		action includes: 
+			-disable, enable navigation buttons
+			-update page number
 		
-		Parameters:
-			data - the returned array of tweet information formatted as json
-		
-		See also:
-			<convertJsonIntoStatusObj>
 	*/
-	function populateData(data){
-		for (i in data){
-			if (i==0){
-				var arr = data[i];
-				
-				for (j in arr){
-					all.push(convertJsonIntoStatusObj(arr[j]));
+	function updatePageNavigation(){
+		jQuery(function ($) {
+			var prevBtn = $('#prevPage');
+			var nextBtn = $('#nextPage');
+			
+			if (totalPage>0) {
+				prevBtn.prop('disabled', false);
+				nextBtn.prop('disabled', false);
+				if (currentPage == 1) {
+					//disable back button
+					prevBtn.prop('disabled', true);
 				}
-				
+				if (currentPage == totalPage) {
+					//disable next button
+					nextBtn.prop('disabled', true);
+				}
+				document.getElementById("p").innerHTML = currentPage+"/"+totalPage;
 			} else {
-				var obj = [];
-				obj["json"] = JSON.stringify(JSON.parse(data[i][0]["json"]).retweeted_status);
-				obj["children"] = data[i];
-				all.push(convertJsonIntoStatusObj(obj));
+				prevBtn.prop('disabled', true);
+				nextBtn.prop('disabled', true);
+				document.getElementById("p").innerHTML = "--";
 			}
-		}
+		});
 	}
 	
 	/*
@@ -263,24 +304,6 @@ function hello_world(){
 		return obj;
 		
 	}
-	
-	/*
-		Function: display
-
-		call a recursive function to display the data stored in `all` array
-				
-		See also:
-			<recursiveList>
-	*/
-	function display(){
-		//-----
-		if (all.length>0){
-			
-			document.getElementById("recordedTweets").innerHTML = recursiveList(all);
-		}
-		
-		
-    }
 	
 	/*
 		Function: recursiveList
