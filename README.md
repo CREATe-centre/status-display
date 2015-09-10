@@ -6,8 +6,10 @@
 * For now, in order for this plugin to run on a different environment, some modifications have to be made in:
   - Mysql login and sql command in analyseStream.php
   - Consumer key, consumer secret, access token, and access token secret in getdata.php
+* Currently, this application is using database with table named *'data'*, having 2 columns named *'Date'* and *'data'*.
 
 ##Information about each file
+*These are just general information about each files. More information about each classes and functions is provided as comments in the code of each file.*
 ####codebird.php
 *This is an implementation of Twitter library in PHP, used for connecting to the REST and Streaming API.*
 In this context, this is temporarily being used to get main user’s profile.

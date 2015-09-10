@@ -18,7 +18,7 @@ $origin = array();
 	store item in an orderly manner, retweets will become children of origin tweet
 	
 	Parameters:
-		json - json representation of the tweet
+		$json - json representation of the tweet
 */
 function storeTweet($json){
 	global $result;
@@ -30,20 +30,19 @@ function storeTweet($json){
 	if (property_exists($json, "retweeted_status")) {
 		$originID = $json->{"retweeted_status"}->{"id_str"};
 		
-		//$result[] = array('id' => $tweetID, 'parent_id' => $originID, 'json' => json_encode($json));
-		//TODO: make random lower level child: recursive loop here until no more children or decided to stay child at that level
 		//if parent not stored yet, make new item represent the parent and store
 		if (!isset($origin[$originID])) {
-			$tempItem = array('json' => json_encode($json->{"retweeted_status"}), 'children'=>array());
+			//because this tweet is not originally recorded in the database, therefore property 'notRecored' was added to mark this
+			$tempItem = array('notRecorded'=>true, 'json' => json_encode($json->{"retweeted_status"}), 'children'=>array());
+			$tempItem['children'][]= &$newItem;
 			$result[] = &$tempItem;
 			$origin[$originID] = &$tempItem;
 		} else {
 			//if parent exist, randomly have a chance to become a child of its children
-			
+			recursivelyAssignChildren($origin[$originID], $newItem);
 		}
 		//add reference of the tweet to its parent
-		$parent = &$origin[$originID];
-		$parent['children'][]= &$newItem;
+		
 		
 	} else {
 		//add reference of the tweet to the result array if have no parent
@@ -52,6 +51,27 @@ function storeTweet($json){
 	}
 	//add reference of current tweet to the list of origin (for ease of search, assuming any tweet can have children)
 	$origin[$tweetID] = &$newItem;
+}
+
+/*
+	Function: recursivelyAssignChildren
+
+	currently, multi level retweet has not been implemented yet, this is a temporary solution for testing and displaying
+	recursively go deeper and deeper and random assign current child to a level of the parent
+	there is a 50% chance that the child will be assign for each level
+	
+	Parameters:
+		&$parentReference - reference to parent tweet array
+		&$childReference - reference to child tweet array
+*/
+function recursivelyAssignChildren(&$parentReference, &$childReference){
+	if (count($parentReference["children"]) > 0 && rand(1, 100) <= 50) {
+		//randomly choose a children to continue the search process
+		recursivelyAssignChildren($parentReference["children"][rand(0, count($parentReference["children"])-1)], $childReference);
+	} else {
+		//assign to this level
+		$parentReference["children"][] = &$childReference;
+	}
 }
 
 //set up parameters to access the database

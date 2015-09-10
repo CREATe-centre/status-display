@@ -7,12 +7,16 @@ table.border th, tr, td  {
 	text-align: center;
 }
 
-button {
-
+button, button:active{
+	border-color: #fff;
 }
 
 button[disabled] { 
 	background: #aaa;
 	box-shadow:inset -1px -1px 1px rgba(white,.2);
 	text-shadow:0 -1px 0 rgba(white,.2);
+}
+
+button.not-rec{
+	background: #E9967A;
 }

@@ -9,7 +9,7 @@ function User(parsedObj){
 		this.name = parsedObj.name;
 		this.screenName = parsedObj.screen_name;
 		this.id = parsedObj.id_str;
-		this.followersCount = 0;
+		this.followersCount = parsedObj.followers_count;
 		
 		this.friendsCount = parsedObj.friends_count;
 		this.createdAt = parsedObj.created_at;

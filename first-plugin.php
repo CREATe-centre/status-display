@@ -289,6 +289,9 @@ function hello_world(){
 		
 		Parameters:
 			original - the original object with json component
+			
+		Returns:
+			return the final converted object
 	*/
 	function convertJsonIntoStatusObj(original){
 		
@@ -300,6 +303,10 @@ function hello_world(){
 				obj["children"].push(convertJsonIntoStatusObj(original["children"][i]));
 			}
 			
+		}
+		//make a mark if the tweet is not originally recorded in the database
+		if (original["notRecorded"]) {
+			obj["notRecorded"] = true;
 		}
 		return obj;
 		
@@ -313,6 +320,9 @@ function hello_world(){
 		Parameters:
 			array - the array to search
 			stack - used to track the location String for each tweet
+			
+		Returns:
+			return the html representation of the tweets array tree
 	*/
 	function recursiveList(array, stack="-1"){
 		var result="<ul>";
@@ -327,13 +337,19 @@ function hello_world(){
 			pos.push(i);
 			
 			var status = array[i]["status"];
-			result+="<li ";
 			
+			//change display of tweets that are not originally recorded in the database
+			var classHtml ="";
+			if (array[i]["notRecorded"]) {
+				classHtml = "class='not-rec'";
+			}
+			
+			result+="<li ";
 			//continue to recursive deeper if still have children
 			if (array[i]["children"].length>0){
-				result+="><div id=\""+status.id+"\" onClick=\"displayCurrentStatus(\'"+pos.toString()+"\')\"><button><b>"+status.user.screenName+":</b> "+status.text+"</div>"+recursiveList(array[i]["children"],pos.toString())+"</button>";
+				result+="><div id=\""+status.id+"\" onClick=\"displayCurrentStatus(\'"+pos.toString()+"\')\"><button " +classHtml+"><b>"+status.user.screenName+":</b> "+status.text+"</div>"+recursiveList(array[i]["children"],pos.toString())+"</button>";
 			} else {
-				result+="id=\""+status.id+"\" onClick=\"displayCurrentStatus(\'"+pos.toString()+"\')\"><button><b>"+status.user.screenName+":</b> "+status.text+"</button>";
+				result+="id=\""+status.id+"\" onClick=\"displayCurrentStatus(\'"+pos.toString()+"\')\"><button " +classHtml+"><b>"+status.user.screenName+":</b> "+status.text+"</button>";
 				//loadItem(array[i]["order"], array[i]["id"]);
 			}
 			result+="</li>";
@@ -374,6 +390,9 @@ function hello_world(){
 		
 		Parameters:
 			locationString - indicates the status location in the array
+			
+		Returns:
+			return the object found from the location String
 	*/
 	function getObjFromString(locationString){
 
