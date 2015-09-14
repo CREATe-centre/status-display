@@ -1,0 +1,19 @@
+mysql:
+  container_name: mysql
+  image: mysql:5.7
+  environment:
+    MYSQL_ROOT_PASSWORD: password
+    
+wordpress:
+  build: .
+  container_name: wordpress
+  ports:
+    - "80:80"
+  links:
+    - mysql:mysql
+  environment:
+    WORDPRESS_URL: localhost
+    WORDPRESS_TITLE: Status
+    WORDPRESS_ADMIN_USER: admin
+    WORDPRESS_ADMIN_PASSWORD: password
+    WORDPRESS_ADMIN_EMAIL: root@localhost.localdomain

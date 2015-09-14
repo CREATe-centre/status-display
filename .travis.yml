@@ -1,0 +1,33 @@
+language: php
+
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.0
+  - hhvm
+  
+env:
+  - WORDPRESS_VERSION=4.3
+  
+matrix:
+  allow_failures:
+    - php: 7.0
+    - php: hhvm
+
+before_script:
+  - composer create-project wp-coding-standards/wpcs:dev-master --no-dev
+  - export PATH="$(pwd)/wpcs/vendor/bin":$PATH
+  - curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+  - chmod a+x wp-cli.phar
+  - mysql -e 'CREATE DATABASE wordpress;' -uroot
+  - curl -O https://wordpress.org/wordpress-${WORDPRESS_VERSION}.tar.gz
+  - tar -zxf wordpress-${WORDPRESS_VERSION}.tar.gz
+  - cd wordpress
+  - ../wp-cli.phar core config --dbname=wordpress --dbuser=root
+  - cd ..
+  - echo "<?php require_once '$(pwd)/wordpress/wp-config.php'; ?>" > tests/bootstrap.php
+
+script:
+  - ./tests.sh
