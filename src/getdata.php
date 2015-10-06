@@ -1,56 +1,56 @@
 <?php
-//this is just a temporary setup for querying data using twitter rest apis
-session_start();
+/**
+ * This is just a temporary setup for querying data using twitter rest apis
+ * @package status
+ */
 
-//$_SESSION['timestamp']=time();
-$type = $_GET['type'];
-$username = isset($_GET['username']) ? $_GET['username'] : '';
-$tweetid = isset($_GET['id']) ? $_GET['id'] : '';
-$userId = isset($_GET['userID']) ? $_GET['userID'] : '';
+require_once 'util.php';
 
-require_once ('codebird.php');
-//session_start();
-//assign consumer key and consumer secret
-\Codebird\Codebird::setConsumerKey('IZlUGqzt0S6H8SvKGMxOjVddi', 'BYAfnN0a4XcqySyq46FCnCTRkUlxAdUmvjcXZ6eGQy6jD2tbMj'); // static, see 'Using multiple Codebird instances'
+$type = get_param( 'type' );
+$username = get_param( 'username' );
+$tweetid = get_param( 'id' );
+$userId = get_param( 'userID' );
 
+$consumer_key = 'IZlUGqzt0S6H8SvKGMxOjVddi';
+$consumer_secret = 'BYAfnN0a4XcqySyq46FCnCTRkUlxAdUmvjcXZ6eGQy6jD2tbMj';
+$access_token = '1350787526-IVNzzWWmKI7EcVERihizltEOtSacum8EDKSo32e';
+$access_token_secret = 'f1Xt4dVJKmN7dehx78Itgy3Njx158S1Ye7C4HMoAFLD7N';
+require_once 'codebird.php';
+\Codebird\Codebird::setConsumerKey( $consumer_key, $consumer_secret );
 $cb = \Codebird\Codebird::getInstance();
-
-// assign access token and access token secret on each page load
-$cb->setToken('1350787526-IVNzzWWmKI7EcVERihizltEOtSacum8EDKSo32e', 'f1Xt4dVJKmN7dehx78Itgy3Njx158S1Ye7C4HMoAFLD7N');
-
+$cb->setToken( $access_token, $access_token_secret );
 
 $params['stringify_ids'] = true;
-if(isset($_GET['username']) && $username!=null && $username!='') $params['screen_name'] = $username; // App owner - the app has read access 
-$params['include_rts'] =  true;
-//$params['count'] = 20;
-if(isset($_GET['id']) && $tweetid!=null && $tweetid!='') $params['id'] = $tweetid;
-$params['id_str'] = $tweetid;
-if(isset($_GET['userID']) && $userId!=null && $userId!='') $params['user_id'] = $userId;
-
-//call appropriate function depend on variable 'type'
-switch ($type){
-case "user":
-	$data = (array) $cb->users_show($params);
-	break;
-case "timeline":
-	$data = (array) $cb->statuses_userTimeline($params);
-	break;
-case "follower":
-	$data = (array) $cb->followers_ids($params);
-	break;
-case "retweets":
-	$data = (array) $cb->statuses_retweets_ID($params);
-	break;
-case "status":
-
-	$data = (array) $cb->statuses_show_ID($params);
-	break;
+if ( ! empty( $username ) ) {
+	$params['screen_name'] = $username;
 }
-unset($data['httpstatus']);
-unset($data['rate']);
+$params['include_rts'] = true;
+if ( ! empty( $tweetid ) ) {
+	$params['id'] = $tweetid;
+}
+$params['id_str'] = $tweetid;
+if ( ! empty( $userId ) ) {
+	$params['user_id'] = $userId;
+}
 
-//print_r ($data);
-echo json_encode($data);
-    
-
+switch ( $type ) {
+	case 'user':
+		$data = (array) $cb->users_show( $params );
+		break;
+	case 'timeline':
+		$data = (array) $cb->statuses_userTimeline( $params );
+		break;
+	case 'follower':
+		$data = (array) $cb->followers_ids( $params );
+		break;
+	case 'retweets':
+		$data = (array) $cb->statuses_retweets_ID( $params );
+		break;
+	case 'status':
+		$data = (array) $cb->statuses_show_ID( $params );
+		break;
+}
+unset( $data['httpstatus'] );
+unset( $data['rate'] );
+echo json_encode( $data );
 ?>

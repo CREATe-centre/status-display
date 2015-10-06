@@ -94,6 +94,9 @@ if ! $($WP_CLI core is-installed); then
     --admin_email="$WORDPRESS_ADMIN_EMAIL"
       
   $WP_CLI plugin activate status
+  $WP_CLI plugin install \
+      https://downloads.wordpress.org/plugin/disable-wordpress-updates.zip --activate
+  $WP_CLI plugin delete $($WP_CLI plugin list --status=inactive --field=name)
 fi
 
 exec "$@"

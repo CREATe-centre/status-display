@@ -5,7 +5,7 @@ require "./vagrant-config.rb"
 
 Vagrant.configure(2) do |config|
   
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "ubuntu/vivid64"
   
   config.vm.network "private_network", ip: DevEnv::IP
   
@@ -15,6 +15,7 @@ Vagrant.configure(2) do |config|
   
   config.vm.provision "shell", inline: <<-SHELL
     
+    apt-get update
     apt-get install -y php5-cli php-pear php5-mysql git
     if [ ! -e "/usr/local/bin/phpunit" ]; then
       curl -sSL -O https://phar.phpunit.de/phpunit.phar
@@ -28,6 +29,14 @@ Vagrant.configure(2) do |config|
         wpcs
     fi
     phpcs --config-set installed_paths $(pwd)/wpcs
+    if [ ! -e /var/www/html ]; then
+      mkdir -p /var/www/html
+      cd /tmp \
+        && curl -o wordpress.tar.gz -sSL https://wordpress.org/wordpress-4.3.tar.gz \
+        && tar --strip-components=1 -C /var/www/html/ -xzf wordpress.tar.gz wordpress/ \
+        && rm wordpress.tar.gz \
+        && chown -R www-data:www-data /var/www/html
+    fi
     
   SHELL
   
@@ -68,17 +77,8 @@ Vagrant.configure(2) do |config|
       
     FS_ROOT=$(docker info | grep "Root Dir" | /bin/sed -e 's/^.*:\\s*\\(\\S*\\)\\s*/\\1/')
     WP_CON_ID=$(docker inspect --format='{{.Id}}' wordpress)
-    if [ -e "/var/www/html" ]; then
-      if [ -L "/var/www/html" ]; then
-        rm -f /var/www/html
-        ln -s "$FS_ROOT/mnt/$WP_CON_ID/var/www/html" /var/www/html
-      else
-        echo "Warning: cannot create symlink at /var/www/html"
-      fi
-    else
-      mkdir -p /var/www
-      ln -s "$FS_ROOT/mnt/$WP_CON_ID/var/www/html" /var/www/html
-    fi
+    rm -f /var/www/html/wp-config.php
+    cp -f "$FS_ROOT/diff/$WP_CON_ID/var/www/html/wp-config.php" /var/www/html/wp-config.php
     
   SHELL
   
