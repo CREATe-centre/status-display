@@ -3,7 +3,7 @@
 .project
 .settings
 # Vagrant runtime files
-.vagrant
+.vagrant*
 # Individual configuration file
 vagrant-config.rb
 docker-compose.yml
