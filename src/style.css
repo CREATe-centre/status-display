@@ -1,0 +1,27 @@
+/*
+Theme Name: Status
+Theme URI: http://www.horizon.ac.uk
+Author: Horizon Digital Economy Research
+Author URI: http://www.horizon.ac.uk
+Description: Status Theme
+Version: 1.0
+*/
+
+@CHARSET "UTF-8";
+
+html {
+	background: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(1, 5, 46, 1) 100%);
+	color: white;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.centered {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	padding: 15px;
+	-ms-transform: translateX(-50%) translateY(-50%);
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}

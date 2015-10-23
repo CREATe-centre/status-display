@@ -101,7 +101,8 @@ function MapClass(elementID, tagSelection){
     *
     * See also: <saveCoordinates> <saveFlightPath>
     */
-	this.putDataToMap = function(sourceCoor, coorList, finished = false){
+	this.putDataToMap = function(sourceCoor, coorList, finished){
+		finished = typeof finished !== 'undefined' ? finished : false;
 		if (finished) {
 			self.beingProcessed--;
 		}
