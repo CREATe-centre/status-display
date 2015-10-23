@@ -10,6 +10,9 @@ RUN apt-get update
 RUN apt-get install -y libpng12-dev libjpeg-dev \
   && docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
   && docker-php-ext-install gd
+  
+RUN pecl install oauth \
+  && echo "extension=oauth.so" > /usr/local/etc/php/conf.d/oauth.ini
 
 RUN docker-php-ext-install mysqli
 
@@ -31,7 +34,7 @@ RUN cd /tmp \
   
 VOLUME /var/www/html/wp-content/uploads
   
-COPY src /var/www/html/wp-content/plugins/status
+COPY src /var/www/html/wp-content/themes/status
 COPY .htaccess /var/www/html/
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 

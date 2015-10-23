@@ -16,7 +16,7 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", inline: <<-SHELL
     
     apt-get update
-    apt-get install -y php5-cli php-pear php5-mysql git
+    apt-get install -y php5-cli php-pear php5-mysql git mysql-client 
     if [ ! -e "/usr/local/bin/phpunit" ]; then
       curl -sSL -O https://phar.phpunit.de/phpunit.phar
       chmod a+x phpunit.phar
@@ -40,7 +40,7 @@ Vagrant.configure(2) do |config|
     
   SHELL
   
-  config.vm.provision "docker" do |d|
+  config.vm.provision "docker", run: "always" do |d|
     
     d.pull_images "mysql"
     
@@ -62,7 +62,7 @@ Vagrant.configure(2) do |config|
         -e WORDPRESS_ADMIN_USER=\"admin\" \
         -e WORDPRESS_ADMIN_PASSWORD=\"password\" \
         -e WORDPRESS_ADMIN_EMAIL=\"root@localhost.localdomain\" \
-        -v /vagrant/src:/var/www/html/wp-content/plugins/status"
+        -v /vagrant/src:/var/www/html/wp-content/themes/status"
     
   end
   
@@ -74,9 +74,12 @@ Vagrant.configure(2) do |config|
     cp /etc/hosts.orig /etc/hosts
     echo "$(docker inspect --format='{{.NetworkSettings.IPAddress}}' mysql) mysql" \
       >> /etc/hosts
-      
     FS_ROOT=$(docker info | grep "Root Dir" | /bin/sed -e 's/^.*:\\s*\\(\\S*\\)\\s*/\\1/')
     WP_CON_ID=$(docker inspect --format='{{.Id}}' wordpress)
+    while [ ! -e "$FS_ROOT/diff/$WP_CON_ID/var/www/html/wp-config.php" ]; do
+      echo "Waiting for WordPress to become ready"
+      sleep 1
+    done
     rm -f /var/www/html/wp-config.php
     cp -f "$FS_ROOT/diff/$WP_CON_ID/var/www/html/wp-config.php" /var/www/html/wp-config.php
     
