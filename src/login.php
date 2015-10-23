@@ -1,9 +1,14 @@
-<?php 
+<?php
+/**
+ * Login page.
+ * @package status
+ */
+
 wp_enqueue_style( 'status_login',
-		get_stylesheet_directory_uri() . '/css/login.css', array( 'status' ), '1.0.0');
+get_stylesheet_directory_uri() . '/css/login.css', array( 'status' ), '1.0.0');
 wp_enqueue_script( 'status_login',
-		get_stylesheet_directory_uri() . '/js/login.js',
-		array( 'jquery' ), '1.0.0', true );
+	get_stylesheet_directory_uri() . '/js/login.js',
+array( 'jquery' ), '1.0.0', true );
 wp_enqueue_script( 'jquery-effects-fade' );
 wp_localize_script( 'status_login', 'status_config', array(
 		'ajaxurl' => admin_url( 'admin-ajax.php' ),

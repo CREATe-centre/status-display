@@ -1,156 +1,156 @@
 @CHARSET "UTF-8";
 
 .logon_image {
-  fill: #3D3D5C;
-  fill-opacity: 0.7;
+	fill: #3D3D5C;
+	fill-opacity: 0.7;
 }
 
 .logon_image:hover {
-  fill: #00004C;
-  fill-opacity: 0.7;
+	fill: 100004C;
+	fill-opacity: 0.7;
 }
 
-@-webkit-keyframes loading_image_anim { 
-	0% { 
-    opacity: 1 
-	} 
-  100% {
-    opacity: 0 
-  }
+@-webkit-keyframes loading_image_anim {
+	0% {
+	opacity: 1
+	}
+	100% {
+	opacity: 0
+	}
 }
 
-@keyframes loading_image_anim { 
-  0% { 
-    opacity: 1 
-  } 
-  100% { 
-    opacity: 0 
-  }
+@keyframes loading_image_anim {
+	0% {
+	opacity: 1
+	}
+	100% {
+	opacity: 0
+	}
 }
 
 .loading_image {
-  top: 50px;
-  left: 50px;
-  position: relative;
-  background: none;
-  width: 128px;
-  height: 128px;
+	top: 50px;
+	left: 50px;
+	position: relative;
+	background: none;
+	width: 128px;
+	height: 128px;
 }
 
 .loading_image > div {
-  top: 0;
-  left: 0;
-  width: 14px;
-  height: 40px;
-  background: #3D3D5C;
-  border-radius: 20px;
-  position: absolute;
+	top: 0;
+	left: 0;
+	width: 14px;
+	height: 40px;
+	background: #3D3D5C;
+	border-radius: 20px;
+	position: absolute;
 }
 
 .loading_image > div:nth-of-type(1) {
-  -webkit-animation: loading_image_anim 1s linear infinite;
-  animation: loading_image_anim 1s linear infinite;
-  -webkit-animation-delay: -0.5s;
-  animation-delay: -0.5s;
-  -webkit-transform: rotate(0deg) translate(0,-60px);
-  transform: rotate(0deg) translate(0,-60px);
+	-webkit-animation: loading_image_anim 1s linear infinite;
+	animation: loading_image_anim 1s linear infinite;
+	-webkit-animation-delay: -0.5s;
+	animation-delay: -0.5s;
+	-webkit-transform: rotate(0deg) translate(0,-60px);
+	transform: rotate(0deg) translate(0,-60px);
 }
 
 .loading_image > div:nth-of-type(2) {
-  -webkit-animation: loading_image_anim 1s linear infinite;
-  animation: loading_image_anim 1s linear infinite;
-  -webkit-animation-delay: -0.4166666666666667s;
-  animation-delay: -0.4166666666666667s;
-  -webkit-transform: rotate(30deg) translate(0,-60px);
-  transform: rotate(30deg) translate(0,-60px);
+	-webkit-animation: loading_image_anim 1s linear infinite;
+	animation: loading_image_anim 1s linear infinite;
+	-webkit-animation-delay: -0.4166666666666667s;
+	animation-delay: -0.4166666666666667s;
+	-webkit-transform: rotate(30deg) translate(0,-60px);
+	transform: rotate(30deg) translate(0,-60px);
 }
 
 .loading_image > div:nth-of-type(3) {
-  -webkit-animation: loading_image_anim 1s linear infinite;
-  animation: loading_image_anim 1s linear infinite;
-  -webkit-animation-delay: -0.33333333333333337s;
-  animation-delay: -0.33333333333333337s;
-  -webkit-transform: rotate(60deg) translate(0,-60px);
-  transform: rotate(60deg) translate(0,-60px);
+	-webkit-animation: loading_image_anim 1s linear infinite;
+	animation: loading_image_anim 1s linear infinite;
+	-webkit-animation-delay: -0.33333333333333337s;
+	animation-delay: -0.33333333333333337s;
+	-webkit-transform: rotate(60deg) translate(0,-60px);
+	transform: rotate(60deg) translate(0,-60px);
 }
 
 .loading_image > div:nth-of-type(4) {
-  -webkit-animation: loading_image_anim 1s linear infinite;
-  animation: loading_image_anim 1s linear infinite;
-  -webkit-animation-delay: -0.25s;
-  animation-delay: -0.25s;
-  -webkit-transform: rotate(90deg) translate(0,-60px);
-  transform: rotate(90deg) translate(0,-60px);
+	-webkit-animation: loading_image_anim 1s linear infinite;
+	animation: loading_image_anim 1s linear infinite;
+	-webkit-animation-delay: -0.25s;
+	animation-delay: -0.25s;
+	-webkit-transform: rotate(90deg) translate(0,-60px);
+	transform: rotate(90deg) translate(0,-60px);
 }
 
 .loading_image > div:nth-of-type(5) {
-  -webkit-animation: loading_image_anim 1s linear infinite;
-  animation: loading_image_anim 1s linear infinite;
-  -webkit-animation-delay: -0.16666666666666669s;
-  animation-delay: -0.16666666666666669s;
-  -webkit-transform: rotate(120deg) translate(0,-60px);
-  transform: rotate(120deg) translate(0,-60px);
+	-webkit-animation: loading_image_anim 1s linear infinite;
+	animation: loading_image_anim 1s linear infinite;
+	-webkit-animation-delay: -0.16666666666666669s;
+	animation-delay: -0.16666666666666669s;
+	-webkit-transform: rotate(120deg) translate(0,-60px);
+	transform: rotate(120deg) translate(0,-60px);
 }
 
 .loading_image > div:nth-of-type(6) {
-  -webkit-animation: loading_image_anim 1s linear infinite;
-  animation: loading_image_anim 1s linear infinite;
-  -webkit-animation-delay: -0.08333333333333331s;
-  animation-delay: -0.08333333333333331s;
-  -webkit-transform: rotate(150deg) translate(0,-60px);
-  transform: rotate(150deg) translate(0,-60px);
+	-webkit-animation: loading_image_anim 1s linear infinite;
+	animation: loading_image_anim 1s linear infinite;
+	-webkit-animation-delay: -0.08333333333333331s;
+	animation-delay: -0.08333333333333331s;
+	-webkit-transform: rotate(150deg) translate(0,-60px);
+	transform: rotate(150deg) translate(0,-60px);
 }
 
 .loading_image > div:nth-of-type(7) {
-  -webkit-animation: loading_image_anim 1s linear infinite;
-  animation: loading_image_anim 1s linear infinite;
-  -webkit-animation-delay: 0s;
-  animation-delay: 0s;
-  -webkit-transform: rotate(180deg) translate(0,-60px);
-  transform: rotate(180deg) translate(0,-60px);
+	-webkit-animation: loading_image_anim 1s linear infinite;
+	animation: loading_image_anim 1s linear infinite;
+	-webkit-animation-delay: 0s;
+	animation-delay: 0s;
+	-webkit-transform: rotate(180deg) translate(0,-60px);
+	transform: rotate(180deg) translate(0,-60px);
 }
 
 .loading_image > div:nth-of-type(8) {
-  -webkit-animation: loading_image_anim 1s linear infinite;
-  animation: loading_image_anim 1s linear infinite;
-  -webkit-animation-delay: 0.08333333333333337s;
-  animation-delay: 0.08333333333333337s;
-  -webkit-transform: rotate(210deg) translate(0,-60px);
-  transform: rotate(210deg) translate(0,-60px);
+	-webkit-animation: loading_image_anim 1s linear infinite;
+	animation: loading_image_anim 1s linear infinite;
+	-webkit-animation-delay: 0.08333333333333337s;
+	animation-delay: 0.08333333333333337s;
+	-webkit-transform: rotate(210deg) translate(0,-60px);
+	transform: rotate(210deg) translate(0,-60px);
 }
 
 .loading_image > div:nth-of-type(9) {
-  -webkit-animation: loading_image_anim 1s linear infinite;
-  animation: loading_image_anim 1s linear infinite;
-  -webkit-animation-delay: 0.16666666666666663s;
-  animation-delay: 0.16666666666666663s;
-  -webkit-transform: rotate(240deg) translate(0,-60px);
-  transform: rotate(240deg) translate(0,-60px);
+	-webkit-animation: loading_image_anim 1s linear infinite;
+	animation: loading_image_anim 1s linear infinite;
+	-webkit-animation-delay: 0.16666666666666663s;
+	animation-delay: 0.16666666666666663s;
+	-webkit-transform: rotate(240deg) translate(0,-60px);
+	transform: rotate(240deg) translate(0,-60px);
 }
 
 .loading_image > div:nth-of-type(10) {
-  -webkit-animation: loading_image_anim 1s linear infinite;
-  animation: loading_image_anim 1s linear infinite;
-  -webkit-animation-delay: 0.25s;
-  animation-delay: 0.25s;
-  -webkit-transform: rotate(270deg) translate(0,-60px);
-  transform: rotate(270deg) translate(0,-60px);
+	-webkit-animation: loading_image_anim 1s linear infinite;
+	animation: loading_image_anim 1s linear infinite;
+	-webkit-animation-delay: 0.25s;
+	animation-delay: 0.25s;
+	-webkit-transform: rotate(270deg) translate(0,-60px);
+	transform: rotate(270deg) translate(0,-60px);
 }
 
 .loading_image > div:nth-of-type(11) {
-  -webkit-animation: loading_image_anim 1s linear infinite;
-  animation: loading_image_anim 1s linear infinite;
-  -webkit-animation-delay: 0.33333333333333337s;
-  animation-delay: 0.33333333333333337s;
-  -webkit-transform: rotate(300deg) translate(0,-60px);
-  transform: rotate(300deg) translate(0,-60px);
+	-webkit-animation: loading_image_anim 1s linear infinite;
+	animation: loading_image_anim 1s linear infinite;
+	-webkit-animation-delay: 0.33333333333333337s;
+	animation-delay: 0.33333333333333337s;
+	-webkit-transform: rotate(300deg) translate(0,-60px);
+	transform: rotate(300deg) translate(0,-60px);
 }
 
 .loading_image > div:nth-of-type(12) {
-  -webkit-animation: loading_image_anim 1s linear infinite;
-  animation: loading_image_anim 1s linear infinite;
-  -webkit-animation-delay: 0.41666666666666663s;
-  animation-delay: 0.41666666666666663s;
-  -webkit-transform: rotate(330deg) translate(0,-60px);
-  transform: rotate(330deg) translate(0,-60px);
+	-webkit-animation: loading_image_anim 1s linear infinite;
+	animation: loading_image_anim 1s linear infinite;
+	-webkit-animation-delay: 0.41666666666666663s;
+	animation-delay: 0.41666666666666663s;
+	-webkit-transform: rotate(330deg) translate(0,-60px);
+	transform: rotate(330deg) translate(0,-60px);
 }

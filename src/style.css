@@ -12,8 +12,8 @@ Version: 1.0
 html {
 	background: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(1, 5, 46, 1) 100%);
 	color: white;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
 }
 
 .centered {

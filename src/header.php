@@ -1,9 +1,16 @@
+<?php
+/**
+ * Common template header.
+ * @package status
+ */
+
+?>
 <!DOCTYPE HTML>
 <html <?php language_attributes(); ?>>
-	<head>
+    <head>
 		<meta charset="<?php bloginfo( 'charset' ); ?>">
-		<title>Status</title>
+        <title>Status</title>
 		<?php wp_head(); ?>
-	</head>
-	<body>
-	
+    </head>
+    <body>
+    

@@ -1,21 +1,26 @@
 <?php
+/**
+ * Display page.
+ * @package status
+ */
+
 $url_prefix = get_stylesheet_directory_uri();
 wp_enqueue_style( 'status_display',
-		$url_prefix . '/css/display.css', array( 'status' ), '1.0.0');
+$url_prefix . '/css/display.css', array( 'status' ), '1.0.0');
 wp_enqueue_script( 'google-maps-api',
-		'https://maps.googleapis.com/maps/api/js?libraries=visualization&'.
-		'sensor=false&key='. GOOGLE_MAPS_API_KEY, array());
+	'https://maps.googleapis.com/maps/api/js?libraries=visualization&sensor=false&key='
+. GOOGLE_MAPS_API_KEY, array());
 wp_enqueue_script( 'google-js-api', 'https://www.google.com/jsapi', array(), '1.0.0' );
 wp_enqueue_script( 'status_userbasic', $url_prefix . '/js/user_basic.js', array(), '1.0.0' );
 wp_enqueue_script( 'status_chart', $url_prefix . '/js/chart.js', array(), '1.0.0' );
-wp_enqueue_script( 'status_map', $url_prefix . '/js/map.js', array(), '1.0.0' );	
+wp_enqueue_script( 'status_map', $url_prefix . '/js/map.js', array(), '1.0.0' );
 wp_enqueue_script( 'status_display',
-		get_stylesheet_directory_uri() . '/js/display.js',
-		array( 'jquery' ), '1.0.0', true );
+	get_stylesheet_directory_uri() . '/js/display.js',
+array( 'jquery' ), '1.0.0', true );
 wp_localize_script( 'status_display', 'status_config', array(
 		'ajaxurl' => admin_url( 'admin-ajax.php' ),
 ));
-get_header(); 
+get_header();
 ?>
 
 <table class="border">
@@ -29,7 +34,7 @@ get_header();
 				<div class="center"><b>RECENT RELATED TWEETS</b></div>
 				<select id="select">
 					<option selected="selected"></option>
-					<option onClick="getRelatedTweetsTree(1,1)">All</option>
+					<option onclick="console.log('selected');getRelatedTweetsTree(1,1)">All</option>
 					<option onClick="getRelatedTweetsTree(2,1)">1 day</option>
 					<option onClick="getRelatedTweetsTree(3,1)">1 week</option>
 					<option onClick="getRelatedTweetsTree(4,1)">2 week</option>
@@ -179,6 +184,7 @@ get_header();
 
 	*/
     function getRelatedTweetsTree(option, page){
+		console.log("getRelatedTweetsTree");
 		currentOption = option;
 		document.getElementById("recordedTweets").innerHTML = "";
 		all = [];
