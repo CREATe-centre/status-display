@@ -37,9 +37,9 @@ get_header();
 					<option onClick="getRelatedTweetsTree(6,1)">1 month</option>
 				</select>
 				<div>
-				<button id="prevPage" type="button" onClick="getRelatedTweetsTree(currentOption, currentPage-1)"><=</button>
+				<button id="prevPage" type="button" onClick="getRelatedTweetsTree(currentOption, currentPage-1)">&lt;=</button>
 				<b id="p">--</b>
-				<button id="nextPage" type="button" onClick="getRelatedTweetsTree(currentOption, currentPage+1)">=></button>
+				<button id="nextPage" type="button" onClick="getRelatedTweetsTree(currentOption, currentPage+1)">=&gt;</button>
 				</div>
 				<div id="recordedTweets" style="height: 600px; overflow: scroll"></div>
 				
@@ -106,7 +106,7 @@ get_header();
 			<getDataFromRestApis>
 	*/
 	function reloadUser(){
-		getDataFromRestApis("user", "21439144", null, null, function(data){
+		getDataFromRestApis("user", null, "dominic_j_price", null, function(data){
 			data = JSON.parse(data);
 			currentUser = new User(data);
 			var content = "<ul><b>Current User</b>";
@@ -144,7 +144,11 @@ get_header();
         	jQuery.ajax(status_config.ajaxurl, {
     	        "type": "post",
     	          "data": {
-    	            "action": "status.getdata"
+    	            "action": "status.getdata",
+    	            "type": type,
+    	            "username": username,
+    	            "id": id,
+    	            "userID": user_id
     	          },
     			"success": function(data) { callback(data); }
     	      });
