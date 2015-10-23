@@ -60,4 +60,28 @@ add_action( 'wp_ajax_status.analysestream' , function () {
 
 	wp_die();
 } );
+
+function get_codebird_instance() {
+	require_once 'codebird.php';
+	global $current_user;
+	\Codebird\Codebird::setConsumerKey( 
+			TWITTER_CONSUMER_KEY,
+			TWITTER_CONSUMER_SECRET );
+	$cb = \Codebird\Codebird::getInstance();
+	$cb->setToken(
+			get_user_meta($current_user->ID, 'oauth_token', true),
+			get_user_meta($current_user->ID, 'oauth_token_secret', true) );
+	return $cb;
+}
+
+add_action( 'wp_ajax_status.get_profile' , function () {
+	global $current_user;
+	$cb = get_codebird_instance();
+	$data = (array) $cb->users_show( array(
+			'screen_name' => $current_user->display_name,
+	) );
+	header('Content-Type: application/json');
+	echo json_encode( $data );
+	wp_die();
+} );
 ?>

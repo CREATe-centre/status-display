@@ -22,12 +22,11 @@ wp_localize_script( 'status_display', 'status_config', array(
 ));
 get_header();
 ?>
+<div id="profile_container">
+</div>
 <table class="border">
 	<tr>
-		<td id="mainProfileContainer" style="min-width: 300px; min-height: 600px" valign="top">
-			<div class="center"><b>CURRENT USER INFO</b></div>
-			<button id="reload" onClick="reloadUser()">Reload User</button>
-			<div id="mainProfile"></div>
+		<td>
 		</td>
 		<td id="recordedTweetsContainer" style="height: 700px" valign="top">
 			<div class="center"><b>RECENT RELATED TWEETS</b></div>

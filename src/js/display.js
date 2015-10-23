@@ -16,35 +16,11 @@ var currentUser = null;
 var currentPage = 1;
 var all = [];
 updatePageNavigation();
-// Initial display user's profile and list all the related tweets.
-reloadUser();
 // Initialize map and chart.
 // MAP SECTION.
 var map = new MapClass( "map-canvas", "information" );
 // CHART SECTION.
 var chart = new ChartClass( 'curve_chart', 'information' );
-
-/*
- * Function: reloadUser
- *
- * get the user profile and display it used function getDataFromRestApis to get
- * user profile
- *
- * See also: <getDataFromRestApis>
- */
-function reloadUser() {
-	getDataFromRestApis("user", null, "dominic_j_price", null, function(data) {
-		data = JSON.parse( data );
-		currentUser = new User( data );
-		var content = "<ul><b>Current User</b>";
-		content += "<li>@" + currentUser.screenName + "</li><li>following: "
-				+ currentUser.friendsCount + "</li><li>follower: "
-				+ currentUser.followersCount + "</li><li>favorites: "
-				+ currentUser.favoritesCount + "</li></ul>";
-
-		document.getElementById( "mainProfile" ).innerHTML = content;
-	});
-}
 
 /*
  * Function: getDataFromRestApis
@@ -501,3 +477,30 @@ function generateInformationTable(array) {
 	content += "</table>";
 	return content;
 }
+
+/* NEW. */
+jQuery(function($) {
+
+	function update_user_profile() {
+		$.ajax( status_config.ajaxurl, {
+			"type" : "post",
+			"data" : {
+				"action" : "status.get_profile"
+			},
+			"success" : function(data) {
+				console.log( data );
+				var details = $("<ul><li>@" + data.screen_name
+					+ "</li><li>Location: " + data.location
+					+ "</li><li>Timezone: " + data.time_zone
+					+ "</li><li>Following: " + data.friends_count
+					+ "</li><li>Followers: " + data.followers_count
+					+ "</li><li>Tweets: " + data.statuses_count
+				+ "</li></ul>");
+				var image = $( "<img src=\"" + data.profile_image_url + "\" />" );
+				$( "#profile_container" ).empty().append( details ).append( image );
+			}
+		});
+	};
+
+	update_user_profile();
+});
