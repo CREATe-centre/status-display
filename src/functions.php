@@ -9,6 +9,10 @@ require_once 'lib/config.php';
 wp_register_style( 'status',
 get_stylesheet_directory_uri() . '/style.css', array(), '1.0.0' );
 
+add_filter( 'show_admin_bar', function() {
+	return false;
+} );
+
 add_filter( 'template_include', function( $template ) {
 	if ( is_user_logged_in() ) {
 		return locate_template( array( 'display.php' ) );

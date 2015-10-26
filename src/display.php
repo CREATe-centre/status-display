@@ -8,11 +8,9 @@ $url_prefix = get_stylesheet_directory_uri();
 wp_enqueue_style( 'status_display',
 $url_prefix . '/css/display.css', array( 'status' ), '1.0.0');
 wp_enqueue_script( 'google-maps-api',
-	'https://maps.googleapis.com/maps/api/js?libraries=visualization&sensor=false&key='
-. GOOGLE_MAPS_API_KEY, array());
-wp_enqueue_script( 'google-js-api', 'https://www.google.com/jsapi', array(), '1.0.0' );
-wp_enqueue_script( 'status_userbasic', $url_prefix . '/js/user_basic.js', array(), '1.0.0' );
-wp_enqueue_script( 'status_chart', $url_prefix . '/js/chart.js', array(), '1.0.0' );
+	'//maps.googleapis.com/maps/api/js?libraries=visualization&sensor=false&key='
+. GOOGLE_MAPS_API_KEY, array(), 'latest' );
+wp_enqueue_script( 'google-js-api', '//www.google.com/jsapi', array(), 'latest' );
 wp_enqueue_script( 'status_map', $url_prefix . '/js/map.js', array(), '1.0.0' );
 wp_enqueue_script( 'status_display',
 	get_stylesheet_directory_uri() . '/js/display.js',
@@ -24,29 +22,10 @@ get_header();
 ?>
 <div id="profile_container">
 </div>
-<table class="border">
-	<tr>
-		<td>
-		</td>
-		<td id="recordedTweetsContainer" style="height: 700px" valign="top">
-			<div class="center"><b>RECENT RELATED TWEETS</b></div>
-			<select id="select" onchange="selectRecentRelated();">
-				<option value="0" selected="selected"></option>
-				<option value="1">All</option>
-				<option value="2">1 day</option>
-				<option value="3">1 week</option>
-				<option value="4">2 week</option>
-				<option value="5">3 week</option>
-				<option value="6">1 month</option>
-			</select>
-			<div>
-				<button id="prevPage" type="button" onClick="getRelatedTweetsTree(currentOption, currentPage-1)">&lt;=</button>
-				<b id="p">--</b>
-				<button id="nextPage" type="button" onClick="getRelatedTweetsTree(currentOption, currentPage+1)">=&gt;</button>
-			</div>
-			<div id="recordedTweets" style="height: 600px; overflow: scroll"></div>	
-		</td>
-	</tr>
+<div class="clear"></div>
+<div id="timeline">	
+</div>
+<!--<table class="border">
 	<tr>
 		<td class="center" colspan="2" style="min-width: 300px; min-height: 600px">
 			<div class="center"><b>INFORMATION</b></div>
@@ -75,5 +54,5 @@ get_header();
 			</div>
 		</td>
 	</tr>	
-</table>
+</table>-->
 <?php get_footer(); ?>

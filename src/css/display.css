@@ -1,1 +1,5 @@
 @CHARSET "UTF-8";
+
+#profile_container div {
+	float: left;
+}

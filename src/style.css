@@ -10,7 +10,7 @@ Version: 1.0
 @CHARSET "UTF-8";
 
 html {
-	background: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(1, 5, 46, 1) 100%);
+	background: linear-gradient(#ffffff 0%, #7f7f7f 100%);
 	color: white;
 	background-repeat: no-repeat;
 	background-attachment: fixed;
