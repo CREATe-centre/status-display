@@ -28,7 +28,6 @@ Vagrant.configure(2) do |config|
         https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git \
         wpcs
     fi
-    rm $(pwd)/wpcs/WordPress/Sniffs/VIP/AdminBarRemovalSniff.php
     phpcs --config-set installed_paths $(pwd)/wpcs
     if [ ! -e /var/www/html ]; then
       mkdir -p /var/www/html
