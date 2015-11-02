@@ -23,8 +23,8 @@ add_action( 'parse_request', function( $wp ) {
 			wp_die();
 		}
 		$oauth = new OAuth(
-			TWITTER_CONSUMER_KEY,
-		TWITTER_CONSUMER_SECRET);
+			get_option( 'status-twitter-oauth-consumer-key' ),
+		get_option( 'status-twitter-oauth-consumer-secret' ));
 		$oauth->setToken(
 			$oauth_params['oauth_token'],
 		$oauth_params['oauth_token_secret'] );
@@ -44,8 +44,8 @@ add_action( 'parse_request', function( $wp ) {
 			$uid = wp_create_user( $name, $pw, $name );
 			$user = get_user_by( 'id', $uid );
 		}
-		update_user_attribute( $user->ID, 'oauth_token', $at['oauth_token'] );
-		update_user_attribute( $user->ID, 'oauth_token_secret', $at['oauth_token_secret'] );
+		update_user_meta( $user->ID, 'oauth_token', $at['oauth_token'] );
+		update_user_meta( $user->ID, 'oauth_token_secret', $at['oauth_token_secret'] );
 		wp_set_current_user( $user->ID, $user->user_login );
 		wp_set_auth_cookie( $user->ID );
 	}
@@ -53,8 +53,8 @@ add_action( 'parse_request', function( $wp ) {
 
 add_action( 'wp_ajax_nopriv_status.login' , function () {
 	$oauth = new OAuth(
-		TWITTER_CONSUMER_KEY,
-	TWITTER_CONSUMER_SECRET);
+		get_option( 'status-twitter-oauth-consumer-key' ),
+	get_option( 'status-twitter-oauth-consumer-secret' ));
 	$r = $oauth->getRequestToken(
 		'https://api.twitter.com/oauth/request_token',
 	site_url());

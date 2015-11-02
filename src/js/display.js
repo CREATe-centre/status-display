@@ -7,7 +7,7 @@
 jQuery(function($) {
 
 	// User Profile section.
-	function update_user_profile() {
+	(function () {
 		$.ajax( status_config.ajaxurl, {
 			"type" : "post",
 			"data" : {
@@ -22,27 +22,59 @@ jQuery(function($) {
 					+ "</li><li>Followers: " + data.followers_count
 					+ "</li><li>Tweets: " + data.statuses_count
 				+ "</li></ul></div>");
-				$( "#profile_container" ).empty().append( image ).append( details );
+				$( "#profile_container" ).empty().append( image )
+					.append( details ).toggle( "fade", {}, 300 );
+			}
+		});
+	}) ();
+
+	var display_single_tweet = function(tweet) {
+		$( "#timeline" ).children().fadeTo( 300, 0.2 );
+		$.ajax(status_config.ajaxurl, {
+			"type" : "post",
+			"data" : {
+				"action" : "status.get_retweets",
+				"tweet_id" : tweet.id_str,
+				"verify" : status_config.verify
+			},
+			"success" : function(data) {
+				var start_date = new Date();
+				$.each( data, function(i, o) {
+					o.date = new Date( Date.parse( o.created_at ) );
+					o.display = function() {
+						display_single_tweet( o );
+					};
+					if (o.date.getTime() < start_date.getTime()) {
+						start_date = o.date;
+					}
+				} );
+				new Timeline( $( "#timeline" ), start_date, data );
+
 			}
 		});
 	};
-	// update_user_profile();
 
 	// Timeline section.
-	function get_tweets() {
+	(function () {
 		$.ajax(status_config.ajaxurl, {
 			"type" : "post",
 			"data" : {
 				"action" : "status.get_tweets"
 			},
 			"success" : function(data) {
-				var tweets = [];
+				var start_date = new Date();
 				$.each( data, function(i, o) {
-
+					o.date = new Date( Date.parse( o.created_at ) );
+					o.display = function() {
+						display_single_tweet( o );
+					};
+					if (o.date.getTime() < start_date.getTime()) {
+						start_date = o.date;
+					}
 				} );
-
+				new Timeline( $( "#timeline" ), start_date, data );
+				$( "#timeline" ).toggle( "fade", {}, 300 );
 			}
 		});
-	}
-	// get_tweets();
+	}) ();
 });

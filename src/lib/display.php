@@ -12,7 +12,7 @@
 function get_param( $name ) {
 	return isset( $_POST['verify'] )
 			&& wp_verify_nonce( sanitize_text_field(
-			wp_unslash( $_POST['verify'] ) ), 'display' )
+			wp_unslash( $_POST['verify'] ) ), 'verify' )
 			&& isset( $_POST[ $name ] )
 	? sanitize_text_field( wp_unslash( $_POST[ $name ] ) )
 	: false;
@@ -26,23 +26,19 @@ function get_codebird_instance() {
 	require_once 'codebird.php';
 	global $current_user;
 	\Codebird\Codebird::setConsumerKey(
-		TWITTER_CONSUMER_KEY,
-	TWITTER_CONSUMER_SECRET );
+		get_option( 'status-twitter-oauth-consumer-key' ),
+	get_option( 'status-twitter-oauth-consumer-secret' ) );
 	$cb = \Codebird\Codebird::getInstance();
 	$cb->setToken(
-		get_user_attribute( $current_user->ID, 'oauth_token' ),
-	get_user_attribute( $current_user->ID, 'oauth_token_secret' ) );
+		get_user_meta( $current_user->ID, 'oauth_token', true ),
+	get_user_meta( $current_user->ID, 'oauth_token_secret', true ) );
 	return $cb;
 }
 
-add_action( 'wp_ajax_status.get_tweets' , function () {
+function get_tweets( $get ) {
 	global $current_user;
 	$cb = get_codebird_instance();
-	$raw = (array) $cb->statuses_userTimeline( array(
-			'screen_name' => $current_user->display_name,
-			'trim_user' => true,
-			'count' => 200,
-	) );
+	$raw = $get( $cb, $current_user );
 	$tweets = array();
 	foreach ( $raw as $key => $val ) {
 		if ( is_int( $key ) ) {
@@ -52,6 +48,28 @@ add_action( 'wp_ajax_status.get_tweets' , function () {
 	header( 'Content-Type: application/json' );
 	echo json_encode( $tweets );
 	wp_die();
+}
+
+add_action( 'wp_ajax_status.get_tweets' , function () {
+	get_tweets( function( $cb, $user ) {
+		return (array) $cb->statuses_userTimeline( array(
+				'screen_name' => $user->display_name,
+				'trim_user' => true,
+				'count' => 200,
+			) );
+	} );
+} );
+
+add_action( 'wp_ajax_status.get_retweets' , function () {
+	$tweet_id = get_param( 'tweet_id' );
+	if ( ! $tweet_id ) {
+		status_header( 400 );
+		wp_die();
+	}
+	get_tweets( function( $cb, $user ) use ( $tweet_id ) {
+		return (array) $cb->statuses_retweets_ID(
+		'id=' . $tweet_id );
+	} );
 } );
 
 add_action( 'wp_ajax_status.get_profile' , function () {

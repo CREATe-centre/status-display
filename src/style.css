@@ -11,9 +11,15 @@ Version: 1.0
 
 html {
 	background: linear-gradient(#ffffff 0%, #7f7f7f 100%);
-	color: white;
 	background-repeat: no-repeat;
 	background-attachment: fixed;
+	font-family: 'Open Sans', sans-serif;
+	font-size: small;
+	height: 100%;
+}
+
+body {
+	height: 95%;'
 }
 
 .centered {
