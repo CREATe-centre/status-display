@@ -62,6 +62,9 @@ Vagrant.configure(2) do |config|
         -e WORDPRESS_ADMIN_USER=\"admin\" \
         -e WORDPRESS_ADMIN_PASSWORD=\"password\" \
         -e WORDPRESS_ADMIN_EMAIL=\"root@localhost.localdomain\" \
+        -e TWITTER_OAUTH_KEY=\"#{DevEnv::TWITTER_OAUTH_KEY}\" \
+        -e TWITTER_OAUTH_SECRET=\"#{DevEnv::TWITTER_OAUTH_SECRET}\" \
+        -e GOOGLE_MAPS_API_KEY=\"#{DevEnv::GOOGLE_MAPS_API_KEY}\" \
         -v /vagrant/src:/var/www/html/wp-content/themes/status"
     
   end

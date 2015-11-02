@@ -83,6 +83,25 @@ if ! $($WP_CLI core is-installed); then
     echo >&2 '  Did you forget to -e WORDPRESS_ADMIN_EMAIL=... ?'
     exit 1
   fi
+  
+  if [ -z "$TWITTER_OAUTH_KEY" ]; then
+    echo >&2 'error: missing required TWITTER_OAUTH_KEY environment variable'
+    echo >&2 '  Did you forget to -e TWITTER_OAUTH_KEY=... ?'
+    exit 1
+  fi
+  
+  if [ -z "$TWITTER_OAUTH_SECRET" ]; then
+    echo >&2 'error: missing required TWITTER_OAUTH_SECRET environment variable'
+    echo >&2 '  Did you forget to -e TWITTER_OAUTH_SECRET=... ?'
+    exit 1
+  fi
+  
+  if [ -z "$GOOGLE_MAPS_API_KEY" ]; then
+    echo >&2 'error: missing required GOOGLE_MAPS_API_KEY environment variable'
+    echo >&2 '  Did you forget to -e GOOGLE_MAPS_API_KEY=... ?'
+    exit 1
+  fi
+  
 	
   $WP_CLI db create
 	
@@ -97,6 +116,9 @@ if ! $($WP_CLI core is-installed); then
   $WP_CLI plugin install \
       https://downloads.wordpress.org/plugin/disable-wordpress-updates.zip --activate
   $WP_CLI plugin delete $($WP_CLI plugin list --status=inactive --field=name)
+  $WP_CLI option add status-twitter-oauth-consumer-key "$TWITTER_OAUTH_KEY"
+  $WP_CLI option add status-twitter-oauth-consumer-secret "$TWITTER_OAUTH_SECRET"
+  $WP_CLI option add status-google-maps-api-key "$GOOGLE_MAPS_API_KEY"
 fi
 
 exec "$@"

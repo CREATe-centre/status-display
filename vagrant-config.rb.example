@@ -2,4 +2,10 @@ module DevEnv
   # Configure a static IP for the Vagrant machine
   # WordPress will be available on this IP
   IP = "192.168.101.10"
+  # Twitter API oAuth key
+  TWITTER_OAUTH_KEY =
+  # Twitter API oAuth secret
+  TWITTER_OAUTH_SECRET =
+  # Google Maps API key
+  GOOGLE_MAPS_API_KEY =
 end
