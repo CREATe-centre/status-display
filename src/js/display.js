@@ -48,7 +48,7 @@ jQuery(function($) {
 						start_date = o.date;
 					}
 				} );
-				new Timeline( $( "#timeline" ), start_date, data );
+				new Timeline( $( "#timeline" ), start_date, data, false );
 
 			}
 		});
@@ -72,7 +72,7 @@ jQuery(function($) {
 						start_date = o.date;
 					}
 				} );
-				new Timeline( $( "#timeline" ), start_date, data );
+				new Timeline( $( "#timeline" ), start_date, data, true );
 				$( "#timeline" ).toggle( "fade", {}, 300 );
 			}
 		});

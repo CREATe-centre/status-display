@@ -1,9 +1,10 @@
-Timeline = function(element, start_date, data) {
+Timeline = function(element, start_date, data, top_level) {
 
 	var self = this;
 	var start = moment( start_date ).subtract( 14, 'days' ).toDate();
 	var end = moment().add( 14, 'days' ).toDate();
 
+	this.element = element;
 	this.chart = element.get( 0 );
 	this.cx = element.width();
 	this.cy = element.height();
@@ -47,6 +48,11 @@ Timeline = function(element, start_date, data) {
 			.on( "zoom", this.redraw() ) );
 
 	this.redraw()();
+
+	jQuery( window ).resize(function() {
+		console.log( "redraw" );
+		self.redraw()();
+	})
 };
 
 Timeline.prototype.update = function() {
@@ -68,30 +74,33 @@ Timeline.prototype.update = function() {
 					// TODO: click for retweets and favourites
 				} );
 			g.append( "text" )
-				.attr( "dy", "1em" )
+				.attr( "dy", "15px" )
 				.attr( "x", radius + 5 )
+				.attr( "y", "-15px" )
 				.text( d.text.length <= 40
 					? d.text
 				: d.text.substring( 0, 37 ) + "..." );
 			g.append( "text" )
-				.attr( "dy", "1em" )
+				.attr( "dy", "15px" )
 				.attr( "x", radius + 5 )
-				.attr( "y", "1em" )
+				.attr( "y", "0px" )
 				.text( "Retweeted: " + d.retweet_count );
 			g.append( "text" )
-				.attr( "dy", "1em" )
+				.attr( "dy", "15px" )
 				.attr( "x", radius + 5 )
-				.attr( "y", "2em" )
+				.attr( "y", "15px" )
 				.text( "Favourited: " + d.favorite_count );
 			g.append( "title" ).text( d.text );
 
 			return g.node();
 		} );
 
+	var count = parseInt( self.size.height / 50 );
+
 	if ( self.rendered ) {
 		tweets.attr( "transform", function( d, i ) {
 			return "translate(" + self.x( d.x ) + ","
-				+ ((i % 10) * 45) + ")";
+				+ ((i % count) * 50) + ")";
 		} );
 	} else {
 		self.rendered = true;
@@ -102,7 +111,7 @@ Timeline.prototype.update = function() {
 		.transition()
 		.attr( "transform", function( d, i ) {
 			return "translate(" + self.x( d.x ) + ","
-				+ ((i % 10) * 45) + ")";
+				+ ((i % count) * 50) + ")";
 		} );
 	}
 
@@ -112,6 +121,23 @@ Timeline.prototype.update = function() {
 Timeline.prototype.redraw = function() {
 	var self = this;
 	return function() {
+
+		self.cx = self.element.width();
+		self.cy = self.element.height();
+		self.size = {
+			"width" : self.cx - self.padding.left - self.padding.right,
+			"height" : self.cy - self.padding.top - self.padding.bottom
+		};
+
+		d3.select( ".timeline" )
+			.attr( "width", self.cx )
+			.attr( "height", self.cy );
+
+		self.x.range( [ 0, self.size.width ] )
+
+		d3.select( "#timeline-canvas" )
+			.attr( "width", self.size.width )
+			.attr( "height", self.size.height );
 
 		var tx = function( d ) {
 			return "translate(" + self.x( d ) + ",0)";
@@ -123,13 +149,17 @@ Timeline.prototype.redraw = function() {
 			.data( self.x.ticks( 10 ), String ) // TODO: date formatting goes here I think
 			.attr( "transform", tx );
 
-		gx.select( "text" ).text( fx );
+		gx.select( "text" ).text( fx ).attr( "y", self.size.height );
 
 		var gxe = gx.enter().insert( "g" )
 			.attr( "class", "x" )
 			.attr( "transform", tx );
 
 		gxe.append( "line" )
+			.attr( "y1", 0 )
+			.attr( "y2", self.size.height );
+
+		gx.select( "line" )
 			.attr( "y1", 0 )
 			.attr( "y2", self.size.height );
 
