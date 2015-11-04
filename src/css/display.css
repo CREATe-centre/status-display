@@ -1,25 +1,29 @@
 @CHARSET "UTF-8";
 
-#profile_container {
-	position: fixed;
-	bottom: 10px;
-	right: 10px;
-	z-index: 999;
+#profile {
+	position: absolute;
+	width: 25%;
+	height: 50%;
+	top: 0px;
+	right: 0px;
 	padding: 5px;
-	border: 1px solid black;
-	border-radius: 3px;
-	background:
-			linear-gradient(
-					rgba(255, 255, 255, 0.75) 0%,
-					rgba(127, 127, 127, 0.75) 100%);
 }
 
-#profile_container div {
+#profile div {
 	float: left;
 }
 
+#map {
+	width: 25%;
+	height: 50%;
+	bottom: 0px;
+	right: 0px;
+	position: absolute;
+	z-index: 999;
+}
+
 #timeline {
-	width: 100%;
+	width: 75%;
 	height: 100%;
 }
 
@@ -29,37 +33,50 @@
 	left: 0px;
 }
 
-#timeline-canvas {
+.timeline-plot {
 	opacity: 0;
+}
+
+circle.close {
+	fill: red;
+	fill-opacity: 0.8;
+	cursor: pointer;
+	stroke: black;
+	stroke-width: 2px;
+}
+
+circle.close:hover {
+	fill: black;
+	stroke: red;
 }
 
 .tweet text, .axis {
 	font-size: 12px;
 }
 
+.tweet text, .tweet rect {
+	cursor: pointer;
+}
+
 .x line {
 	stroke: #ccc;
 }
 
-.tweet circle {
+.tweet rect {
 	fill: white;
-	fill-opacity: 0.2;
-	cursor: pointer;
+	fill-opacity: 0.8;
 	stroke: black;
 	stroke-width: 2px;
 }
 
-.tweet circle:hover {
-	fill: #ff7f0e;
-	stroke: #707f0e;
+.tweet:hover rect {
+	fill: #E5F7FF;
 }
 
-.tweet circle.selected {
-	fill: #ff7f0e;
-	stroke: #ff7f0e;
+.tweet.selected rect {
+	fill: #BEDEFF;
 }
 
-.tweet circle.selected:hover {
-	fill: #ff7f0e;
-	stroke: #ff7f0e;
+.tweet.selected:hover rect {
+	fill: #E5F7FF;
 }

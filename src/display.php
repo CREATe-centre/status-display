@@ -24,14 +24,13 @@ wp_enqueue_script( 'status_map', $url_prefix . '/js/map.js', array(), '1.0.0' );
 wp_enqueue_script( 'status_display',
 	get_stylesheet_directory_uri() . '/js/display.js',
 array( 'jquery' ), '1.0.0', true );
-wp_localize_script( 'status_display', 'status_config', array(
+wp_localize_script( 'status_display', 'statusConfig', array(
 		'ajaxurl' => admin_url( 'admin-ajax.php' ),
 		'verify' => wp_create_nonce( 'verify' ),
 ));
 get_header();
 ?>
-<div id="profile_container" style="display: none;"></div>
-<div class="clear"></div>
-<div id="timeline" style="display: none;">	
-</div>
+<div id="timeline" style="display: none;"></div>
+<div id="profile" style="display: none;"></div>
+<div id="map" style="display: none;"></div>
 <?php get_footer(); ?>
