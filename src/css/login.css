@@ -1,13 +1,13 @@
 @CHARSET "UTF-8";
 
 .logon_image {
-	fill: #3D3D5C;
+	fill: #59323c;
 	fill-opacity: 0.7;
+	filter: url(#blur);
 }
 
 .logon_image:hover {
-	fill: black;
-	fill-opacity: 0.7;
+	fill: #260126;
 }
 
 @-webkit-keyframes loading_image_anim {
@@ -42,7 +42,7 @@
 	left: 0;
 	width: 14px;
 	height: 40px;
-	background: #3D3D5C;
+	background: #59323c;
 	border-radius: 20px;
 	position: absolute;
 }

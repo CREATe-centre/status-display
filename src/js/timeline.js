@@ -1,5 +1,19 @@
 var Status = Status || {};
 
+Status.JS = Status.JS || {};
+
+Status.JS.getRetweets = function( tweet, callback ) {
+	$.ajax(statusConfig.ajaxurl, {
+		"type" : "post",
+		"data" : {
+			"action" : "status.get_retweets",
+			"verify" : statusConfig.verify,
+			"tweet_id" : tweet.id_str
+		},
+		"success" : callback
+	});
+};
+
 Status.HTML = Status.HTML || {};
 
 Status.HTML.renderTweet = function( tweet ) {
@@ -66,6 +80,12 @@ Timeline = function(container, start, tweets) {
 	this.chart = d3.select( container.get( 0 ) )
 		.append( "svg" )
 		.attr( "class", "timeline" );
+
+	this.chart.append( "defs" )
+		.append( "filter" )
+		.attr( "id", "blur" )
+		.append( "feGaussianBlur" )
+		.attr( "stdDeviation", 1 );
 
 	this.canvas = this.chart
 		.append( "g" )

@@ -7,6 +7,7 @@
 	top: 0px;
 	right: 0px;
 	padding: 5px;
+	color: #260126;
 }
 
 #profile div {
@@ -50,6 +51,10 @@ circle.close:hover {
 	stroke: red;
 }
 
+.tweet text {
+	fill: #bfaf80;
+}
+
 .tweet text, .axis {
 	font-size: 12px;
 }
@@ -59,24 +64,29 @@ circle.close:hover {
 }
 
 .x line {
-	stroke: #ccc;
+	stroke: #8c6954;
+}
+
+.x text {
+	fill: #260126;
 }
 
 .tweet rect {
-	fill: white;
+	fill: #59323c;
 	fill-opacity: 0.8;
 	stroke: black;
-	stroke-width: 2px;
+	stroke-width: 0px;
+	filter: url(#blur);
 }
 
 .tweet:hover rect {
-	fill: #E5F7FF;
+	fill: #260126;
+}
+
+.tweet:hover text {
+	fill: #f2eeb3;
 }
 
 .tweet.selected rect {
-	fill: #BEDEFF;
-}
-
-.tweet.selected:hover rect {
-	fill: #E5F7FF;
+	fill: #260126;
 }
