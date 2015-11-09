@@ -39,6 +39,7 @@ function get_tweets( $get ) {
 	global $current_user;
 	$cb = get_codebird_instance();
 	$raw = $get( $cb, $current_user );
+	error_log( print_r( $raw, true ) );
 	$tweets = array();
 	foreach ( $raw as $key => $val ) {
 		if ( is_int( $key ) ) {
@@ -58,6 +59,8 @@ add_action( 'wp_ajax_status.get_tweets' , function () {
 				'count' => 200,
 			) );
 	} );
+	header( 'Content-Type: application/json' );
+	wp_die();
 } );
 
 add_action( 'wp_ajax_status.get_retweets' , function () {
@@ -70,6 +73,17 @@ add_action( 'wp_ajax_status.get_retweets' , function () {
 		return (array) $cb->statuses_retweets_ID(
 		'id=' . $tweet_id );
 	} );
+} );
+
+add_action( 'wp_ajax_status.get_mentions' , function () {
+	get_tweets( function( $cb, $user ) {
+		return (array) $cb->statuses_mentionsTimeline( array(
+			'trim_user' => false,
+			'count' => 200,
+		) );
+	} );
+	header( 'Content-Type: application/json' );
+	wp_die();
 } );
 
 add_action( 'wp_ajax_status.get_profile' , function () {

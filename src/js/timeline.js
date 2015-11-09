@@ -2,8 +2,28 @@ var Status = Status || {};
 
 Status.JS = Status.JS || {};
 
+Status.JS.getTweets = function( callback ) {
+	jQuery.ajax(statusConfig.ajaxurl, {
+		"type" : "post",
+		"data" : {
+			"action" : "status.get_tweets"
+		},
+		"success" : callback
+	});
+};
+
+Status.JS.getMentions = function( callback ) {
+	jQuery.ajax(statusConfig.ajaxurl, {
+		"type" : "post",
+		"data" : {
+			"action" : "status.get_mentions"
+		},
+		"success" : callback
+	});
+};
+
 Status.JS.getRetweets = function( tweet, callback ) {
-	$.ajax(statusConfig.ajaxurl, {
+	jQuery.ajax(statusConfig.ajaxurl, {
 		"type" : "post",
 		"data" : {
 			"action" : "status.get_retweets",
@@ -18,24 +38,36 @@ Status.HTML = Status.HTML || {};
 
 Status.HTML.renderTweetText = function( text ) {
 	return text
-		.replace(/(^|\s)#(\S*)/g, "$1<a href=\"https://twitter.com/hashtag/$2\" target=\"_blank\">#$2</a>")
-		.replace(/(^|\s)http(\S*)/g, "$1<a href=\"http$2\" target=\"_blank\">http$2</a>")
-		.replace(/(^|\s)(@\S*)/g, "$1<b>$2</b>");
+		.replace( /(^|\s)#(\S*)/g, "$1<a href=\"https://twitter.com/hashtag/$2\" target=\"_blank\">#$2</a>" )
+		.replace( /(^|\s)http(\S*)/g, "$1<a href=\"http$2\" target=\"_blank\">http$2</a>" )
+		.replace( /(^|\s)(@\S*)/g, "$1<b>$2</b>" );
 };
+
+Status.HTML.renderTweetDate = function( date ) {
+	var d = moment( date, "ddd MMM DD HH:mm:ss ZZ YYYY" );
+	return d.format( "DD/MM/YY HH:mm:ss (Z)" );
+}
 
 Status.HTML.renderTweet = function( tweet ) {
 	var d = jQuery( document.createElement( "div" ) );
 	d.addClass( "tweet-info" );
-	d.html( "<ul><li><b>Text</b>: " + Status.HTML.renderTweetText( tweet.text )
-		+ "</li><li><b>Date:</b> "
-		+ tweet.created_at + "</li><li><b>Retweeted:</b> "
-		+ tweet.retweet_count + "</li><li><b>Favourited:</b> "
-	+ tweet.favorite_count + "</li>" 
-	+ (tweet.in_reply_to_screen_name 
-			? "<li>Sent in reply to <b>@" 
-					+ tweet.in_reply_to_screen_name +"</b></li>" 
-			: "") 
-	+ "</ul>");
+	if ( tweet.type == "tweet" ) {
+		d.html( "<ul><li><b>Text</b>: " + Status.HTML.renderTweetText( tweet.text )
+			+ "</li><li><b>Date:</b> "
+			+ Status.HTML.renderTweetDate( tweet.created_at ) + "</li><li><b>Retweeted:</b> "
+			+ tweet.retweet_count + "</li><li><b>Favourited:</b> "
+			+ tweet.favorite_count + "</li>"
+			+ (tweet.in_reply_to_screen_name
+				? "<li>Sent in reply to <b>@"
+						+ tweet.in_reply_to_screen_name + "</b></li>"
+				: "")
+		+ "</ul>");
+	} else if ( tweet.type == "mention" ) {
+		d.html( "<ul><li><b>Text</b>: " + Status.HTML.renderTweetText( tweet.text )
+			+ "</li><li><b>Date:</b> "
+			+ Status.HTML.renderTweetDate( tweet.created_at )
+		+ "</li><li>Sent by <b>@" + tweet.user.screen_name + "</b></li></ul>" );
+	}
 	return d;
 };
 
@@ -44,7 +76,7 @@ Status.SVG = Status.SVG || {};
 Status.SVG.renderTweet = function( tweet ) {
 	var radius = 10;
 	var g = d3.select( document.createElementNS( 'http://www.w3.org/2000/svg', 'g' ) )
-		.attr( "class", "tweet" );
+		.attr( "class", tweet.type + " timeline-data" );
 	g.append( "rect" )
 		.attr( "width", "100px" )
 		.attr( "height", "50px" )
@@ -57,16 +89,25 @@ Status.SVG.renderTweet = function( tweet ) {
 		.text( tweet.text.length <= 40
 			? tweet.text
 		: tweet.text.substring( 0, 37 ) + "..." );
-	g.append( "text" )
-		.attr( "dy", "15px" )
-		.attr( "x", "10px" )
-		.attr( "y", "15px" )
-		.text( "Retweeted: " + tweet.retweet_count );
-	g.append( "text" )
-		.attr( "dy", "15px" )
-		.attr( "x", "10px" )
-		.attr( "y", "30px" )
-		.text( "Favourited: " + tweet.favorite_count );
+
+	if ( tweet.type == "tweet" ) {
+		g.append( "text" )
+			.attr( "dy", "15px" )
+			.attr( "x", "10px" )
+			.attr( "y", "15px" )
+			.text( "Retweeted: " + tweet.retweet_count );
+		g.append( "text" )
+			.attr( "dy", "15px" )
+			.attr( "x", "10px" )
+			.attr( "y", "30px" )
+			.text( "Favourited: " + tweet.favorite_count );
+	} else if ( tweet.type == "mention" ) {
+		g.append( "text" )
+			.attr( "dy", "15px" )
+			.attr( "x", "10px" )
+			.attr( "y", "15px" )
+			.text( "Sent by: @" + tweet.user.screen_name );
+	}
 	g.append( "title" ).text( tweet.text );
 	g.on( "click", function( d ) {
 		var s = jQuery( ".selected" ).get( 0 );
@@ -113,7 +154,7 @@ Timeline = function(container, start, tweets) {
 Timeline.prototype.update = function() {
 	var self = this;
 	var tweets = self.canvas
-		.selectAll( "g.tweet" )
+		.selectAll( "g.timeline-data" )
 		.data( self.tweets );
 	tweets.enter().append( Status.SVG.renderTweet )
 		.each( function( d ) {

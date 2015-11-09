@@ -8,7 +8,7 @@ $url_prefix = get_stylesheet_directory_uri();
 wp_enqueue_style( 'status_display',
 $url_prefix . '/css/display.css', array( 'status' ), '1.0.0');
 wp_enqueue_script( 'google-maps-api',
-	'//maps.googleapis.com/maps/api/js?libraries=visualization&sensor=false&key='
+	'//maps.googleapis.com/maps/api/js?libraries=visualization&key='
 . get_option( 'status-google-maps-api-key' ), array(), 'latest' );
 wp_enqueue_script( 'google-js-api', '//www.google.com/jsapi', array(), 'latest' );
 wp_enqueue_script( 'moment-js',

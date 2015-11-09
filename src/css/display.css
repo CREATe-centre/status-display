@@ -6,7 +6,7 @@ hr {
 	border: 0;
 	border-top: 1px solid #260126;
 	margin: 1em 0;
-	padding: 0; 
+	padding: 0;
 }
 
 #profile {
@@ -58,15 +58,15 @@ circle.close:hover {
 	stroke: red;
 }
 
-.tweet text {
+.tweet text, .mention text {
 	fill: #bfaf80;
 }
 
-.tweet text, .axis {
+.tweet text, .mention text, .axis {
 	font-size: 12px;
 }
 
-.tweet text, .tweet rect {
+.tweet text, .tweet rect, .mention text, .mention rect {
 	cursor: pointer;
 }
 
@@ -96,6 +96,26 @@ circle.close:hover {
 
 .tweet.selected rect {
 	fill: #260126;
+}
+
+.mention rect {
+	fill: 1005200;
+	fill-opacity: 0.8;
+	stroke: black;
+	stroke-width: 0px;
+	filter: url(#blur);
+}
+
+.mention:hover rect {
+	fill: 1003600;
+}
+
+.mention:hover text {
+	fill: #f2eeb3;
+}
+
+.mention.selected rect {
+	fill: 1003600;
 }
 
 .tweet-info a:after {

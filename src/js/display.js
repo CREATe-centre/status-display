@@ -30,12 +30,15 @@ jQuery(function($) {
 
 	// Timeline section.
 	(function () {
-		$.ajax(statusConfig.ajaxurl, {
-			"type" : "post",
-			"data" : {
-				"action" : "status.get_tweets"
-			},
-			"success" : function(data) {
+		Status.JS.getTweets( function(tweets) {
+			$.each( tweets, function(i, o) {
+				o.type = "tweet";
+			});
+			Status.JS.getMentions( function(mentions) {
+				$.each( mentions, function(i, o) {
+					o.type = "mention";
+				});
+				var data = tweets.concat( mentions );
 				var start = new Date();
 				$.each( data, function(i, o) {
 					o.date = new Date( Date.parse( o.created_at ) );
@@ -46,8 +49,8 @@ jQuery(function($) {
 				var tl = new Timeline( $( "#timeline" ), start, data, true );
 				$( "#timeline" ).toggle( "fade", {}, 300 );
 				tl.redraw()();
-			}
-		});
+			});
+		})
 	}) ();
 
 	// Map section.
