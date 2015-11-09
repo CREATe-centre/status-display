@@ -6,7 +6,7 @@ hr {
 	border: 0;
 	border-top: 1px solid #260126;
 	margin: 1em 0;
-	padding: 0;
+	padding: 0; 
 }
 
 #profile {
@@ -99,23 +99,23 @@ circle.close:hover {
 }
 
 .mention rect {
-	fill: 1005200;
-	fill-opacity: 0.8;
-	stroke: black;
-	stroke-width: 0px;
-	filter: url(#blur);
+  fill: #005200;
+  fill-opacity: 0.8;
+  stroke: black;
+  stroke-width: 0px;
+  filter: url(#blur);
 }
 
 .mention:hover rect {
-	fill: 1003600;
+  fill: #003600;
 }
 
 .mention:hover text {
-	fill: #f2eeb3;
+  fill: #f2eeb3;
 }
 
 .mention.selected rect {
-	fill: 1003600;
+  fill: #003600;
 }
 
 .tweet-info a:after {
