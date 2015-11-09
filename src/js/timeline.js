@@ -76,7 +76,8 @@ Status.SVG = Status.SVG || {};
 Status.SVG.renderTweet = function( tweet ) {
 	var radius = 10;
 	var g = d3.select( document.createElementNS( 'http://www.w3.org/2000/svg', 'g' ) )
-		.attr( "class", tweet.type + " timeline-data" );
+		.attr( "class", tweet.type + " timeline-data" )
+		.attr( "id", "tweet-" + tweet.id_str );
 	g.append( "rect" )
 		.attr( "width", "100px" )
 		.attr( "height", "50px" )
@@ -115,7 +116,7 @@ Status.SVG.renderTweet = function( tweet ) {
 			d3.select( s ).classed( "selected", false );
 		}
 		g.classed( "selected", true );
-		jQuery( Status ).trigger( "status.tweet.mouseover", d );
+		jQuery( Status ).trigger( "status.tweet.select", d );
 	} );
 	return g.node();
 };
@@ -219,7 +220,7 @@ Timeline.prototype.redraw = function() {
 
 		gx.exit().remove();
 
-		self.chart.call(	d3.behavior.zoom()
+		self.chart.call( d3.behavior.zoom()
 				.x( self.x )
 				.on( "zoom", self.redraw() ) );
 		self.update();

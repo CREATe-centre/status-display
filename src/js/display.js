@@ -6,6 +6,10 @@
 
 jQuery(function($) {
 
+	// Map section.
+	var map = new Map( $, "map" );
+	$( "#map" ).toggle( "fade", {}, 300 );
+
 	// User Profile section.
 	(function () {
 		$.ajax( statusConfig.ajaxurl, {
@@ -29,6 +33,7 @@ jQuery(function($) {
 	}) ();
 
 	// Timeline section.
+	var timeline;
 	(function () {
 		Status.JS.getTweets( function(tweets) {
 			$.each( tweets, function(i, o) {
@@ -46,22 +51,35 @@ jQuery(function($) {
 						start = o.date;
 					}
 				} );
-				var tl = new Timeline( $( "#timeline" ), start, data, true );
+				timeline = new Timeline( $( "#timeline" ), start, data, true );
 				$( "#timeline" ).toggle( "fade", {}, 300 );
-				tl.redraw()();
+				timeline.redraw()();
+				map.displayTweets( data );
 			});
 		})
 	}) ();
 
-	// Map section.
-	(function () {
-		new MapClass( "map", null );
-		$( "#map" ).toggle( "fade", {}, 300 );
-	} ) ();
-
-	$( Status ).bind( "status.tweet.mouseover", function( event, tweet ) {
+	$( Status ).bind( "status.tweet.select", function( event, tweet ) {
 		$( profile ).children( ".tweet-info" ).remove();
 		$( profile ).append( Status.HTML.renderTweet( tweet ) );
-	} )
+	} );
+
+	$( Status ).bind( "status.tweet.map.select" , function( event, tweet ) {
+		$( profile ).children( ".tweet-info" ).remove();
+		$( profile ).append( Status.HTML.renderTweet( tweet ) );
+		var s = $( ".selected" ).get( 0 );
+		if ( s ) {
+			d3.select( s ).classed( "selected", false );
+		}
+		d3.select( $( "#tweet-" + tweet.id_str ).get( 0 ) ).classed( "selected", true );
+		var domain = timeline.x.domain();
+		var range = moment.range( domain[0], domain[1] );
+		var diff = parseInt( range.diff( "milliseconds" ) / 2 );
+		var center = moment( tweet.date );
+		var start = center.clone().subtract( diff, "milliseconds" );
+		var end = center.clone().add( diff, "milliseconds" );
+		timeline.x.domain( [ start.toDate(), end.toDate() ] );
+		timeline.redraw()();
+	} );
 
 });
