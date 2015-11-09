@@ -16,15 +16,28 @@ Status.JS.getRetweets = function( tweet, callback ) {
 
 Status.HTML = Status.HTML || {};
 
+Status.HTML.renderTweetText = function( text ) {
+	return text
+		.replace(/(^|\s)#(\S*)/g, "$1<a href=\"https://twitter.com/hashtag/$2\" target=\"_blank\">#$2</a>")
+		.replace(/(^|\s)http(\S*)/g, "$1<a href=\"http$2\" target=\"_blank\">http$2</a>")
+		.replace(/(^|\s)(@\S*)/g, "$1<b>$2</b>");
+};
+
 Status.HTML.renderTweet = function( tweet ) {
 	var d = jQuery( document.createElement( "div" ) );
 	d.addClass( "tweet-info" );
-	d.html( "<ul><li>Text: " + tweet.text + "</li><li>Date: "
-		+ tweet.created_at + "</li><li>Retweeted: "
-		+ tweet.retweet_count + "</li><li>Favourited: "
-	+ tweet.favorite_count + "</li></ul>");
+	d.html( "<ul><li><b>Text</b>: " + Status.HTML.renderTweetText( tweet.text )
+		+ "</li><li><b>Date:</b> "
+		+ tweet.created_at + "</li><li><b>Retweeted:</b> "
+		+ tweet.retweet_count + "</li><li><b>Favourited:</b> "
+	+ tweet.favorite_count + "</li>" 
+	+ (tweet.in_reply_to_screen_name 
+			? "<li>Sent in reply to <b>@" 
+					+ tweet.in_reply_to_screen_name +"</b></li>" 
+			: "") 
+	+ "</ul>");
 	return d;
-}
+};
 
 Status.SVG = Status.SVG || {};
 
@@ -92,9 +105,6 @@ Timeline = function(container, start, tweets) {
 		.attr( "transform", "translate( "
 		+ this.padding + "," + this.padding + ")" );
 
-	this.plot = this.canvas.append( "rect" )
-		.attr( "class", "timeline-plot" );
-
 	jQuery( window ).resize(function() {
 		self.redraw()();
 	})
@@ -139,10 +149,6 @@ Timeline.prototype.redraw = function() {
 
 		self.x.range( [ 0, width ] )
 
-		self.plot
-			.attr( "width", width )
-			.attr( "height", height );
-
 		var gx = self.canvas.selectAll( "g.x" )
 			.data( self.x.ticks( 10 ), String )
 			.attr( "transform", tx );
@@ -172,7 +178,7 @@ Timeline.prototype.redraw = function() {
 
 		gx.exit().remove();
 
-		self.plot.call(	d3.behavior.zoom()
+		self.chart.call(	d3.behavior.zoom()
 				.x( self.x )
 				.on( "zoom", self.redraw() ) );
 		self.update();

@@ -16,10 +16,32 @@ html {
 	font-family: 'Open Sans', sans-serif;
 	font-size: small;
 	height: 100%;
+	color: #260126;
 }
 
 body {
 	height: 95%;'
+}
+
+a:link {
+  color: #260126;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+a:visited {
+  color: #260126;
+  font-weight: bold;
+}
+
+a:hover {
+  color: #260126;
+  font-weight: bold;
+}
+
+a:active {
+  color: #260126;
+  font-weight: bold;
 }
 
 .centered {

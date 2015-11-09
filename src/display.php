@@ -31,6 +31,8 @@ wp_localize_script( 'status_display', 'statusConfig', array(
 get_header();
 ?>
 <div id="timeline" style="display: none;"></div>
-<div id="profile" style="display: none;"></div>
+<div id="profile" style="display: none;">
+	<hr />
+</div>
 <div id="map" style="display: none;"></div>
 <?php get_footer(); ?>

@@ -1,5 +1,14 @@
 @CHARSET "UTF-8";
 
+hr {
+	display: block;
+	height: 1px;
+	border: 0;
+	border-top: 1px solid #260126;
+	margin: 1em 0;
+	padding: 0; 
+}
+
 #profile {
 	position: absolute;
 	width: 25%;
@@ -10,8 +19,10 @@
 	color: #260126;
 }
 
-#profile div {
-	float: left;
+#profile div img {
+	position: absolute;
+	right: 10px;
+	top: 10px;
 }
 
 #map {
@@ -32,10 +43,6 @@
 	position: absolute;
 	top: 0px;
 	left: 0px;
-}
-
-.timeline-plot {
-	opacity: 0;
 }
 
 circle.close {
@@ -89,4 +96,12 @@ circle.close:hover {
 
 .tweet.selected rect {
 	fill: #260126;
+}
+
+.tweet-info a:after {
+	background-image: url("../img/external.png");
+	content: "";
+	width: 15px;
+	height: 15px;
+	display: inline-block;
 }

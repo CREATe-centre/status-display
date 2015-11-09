@@ -15,15 +15,15 @@ jQuery(function($) {
 			},
 			"success" : function(data) {
 				var image = $( "<div><img src=\"" + data.profile_image_url + "\" /></div>" );
-				var details = $("<div><ul><li>@" + data.screen_name
-					+ "</li><li>Location: " + data.location
-					+ "</li><li>Timezone: " + data.time_zone
-					+ "</li><li>Following: " + data.friends_count
-					+ "</li><li>Followers: " + data.followers_count
-					+ "</li><li>Tweets: " + data.statuses_count
+				var details = $("<div><ul><li><b>You:</b> @" + data.screen_name
+					+ "</li><li><b>Location:</b> " + data.location
+					+ "</li><li><b>Timezone:</b> " + data.time_zone
+					+ "</li><li><b>Following:</b> " + data.friends_count
+					+ "</li><li><b>Followers:</b> " + data.followers_count
+					+ "</li><li><b>Tweets:</b> " + data.statuses_count
 				+ "</li></ul></div>");
-				$( "#profile" ).empty().append( image )
-					.append( details ).toggle( "fade", {}, 300 );
+				$( "#profile" ).prepend( image )
+					.prepend( details ).toggle( "fade", {}, 300 );
 			}
 		});
 	}) ();
