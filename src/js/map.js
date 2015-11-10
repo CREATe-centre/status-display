@@ -10,12 +10,14 @@ if ( ! google.maps.Polygon.prototype.getBounds ) {
 			}
 		}
 		return bounds;
-	}
+	};
 }
 
-Status.Map = Status.Map || {}
+var Status = Status || {};
 
-Status.Map.getCoordinates = function( $, tweet ) {
+Status.Map = Status.Map || {};
+
+Status.Map.getTweetCoordinates = function( $, tweet ) {
 	if ( tweet.coordinates ) {
 		if ( tweet.coordinates.type == "Point" ) {
 			return new google.maps.LatLng(
@@ -36,10 +38,9 @@ Status.Map.getCoordinates = function( $, tweet ) {
 		return poly.getBounds().getCenter();
 	}
 	return false;
-}
+};
 
-
-function Map( $, elementID ) {
+Status.Map.GoogleMap = function ( $, container ) {
 
 	var self = this;
 	var options = {
@@ -53,14 +54,14 @@ function Map( $, elementID ) {
 	};
 
 	this.$ = $;
-	this.map = new google.maps.Map( document.getElementById( elementID ), options );
-}
+	this.map = new google.maps.Map( container.get( 0 ), options );
+};
 
-Map.prototype.displayTweets = function( tweets ) {
+Status.Map.GoogleMap.prototype.displayTweets = function( tweets ) {
 	var self = this;
 	var bounds = new google.maps.LatLngBounds();
 	this.$.each( tweets, function( i, o ) {
-		var coords = Status.Map.getCoordinates( self.$, o );
+		var coords = Status.Map.getTweetCoordinates( self.$, o );
 		if ( coords ) {
 			bounds.extend( coords );
 			var marker = new google.maps.Marker({
@@ -71,10 +72,10 @@ Map.prototype.displayTweets = function( tweets ) {
 					: o.text.substring( 0, 37 ) + "..."
 				});
 			marker.addListener( 'click', function() {
-				self.$( Status ).trigger( "status.tweet.map.select", o );
+				self.$( Status ).trigger( "status.map.googlemap.tweet-selected", o );
 			} );
 			self.map.setCenter( bounds.getCenter() );
 			self.map.fitBounds( bounds );
 		}
 	});
-}
+};

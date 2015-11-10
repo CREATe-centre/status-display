@@ -39,7 +39,6 @@ function get_tweets( $get ) {
 	global $current_user;
 	$cb = get_codebird_instance();
 	$raw = $get( $cb, $current_user );
-	error_log( print_r( $raw, true ) );
 	$tweets = array();
 	foreach ( $raw as $key => $val ) {
 		if ( is_int( $key ) ) {
@@ -52,11 +51,16 @@ function get_tweets( $get ) {
 }
 
 add_action( 'wp_ajax_status.get_tweets' , function () {
+	$count = get_param( 'count' );
+	if ( ! $count ) {
+		status_header( 400 );
+		wp_die();
+	}
 	get_tweets( function( $cb, $user ) {
 		return (array) $cb->statuses_userTimeline( array(
 				'screen_name' => $user->display_name,
-				'trim_user' => true,
-				'count' => 200,
+				'trim_user' => false,
+				'count' => intval( $count ),
 			) );
 	} );
 	header( 'Content-Type: application/json' );
@@ -65,21 +69,27 @@ add_action( 'wp_ajax_status.get_tweets' , function () {
 
 add_action( 'wp_ajax_status.get_retweets' , function () {
 	$tweet_id = get_param( 'tweet_id' );
-	if ( ! $tweet_id ) {
+	$count = get_param( 'count' );
+	if ( ! $tweet_id || ! $count ) {
 		status_header( 400 );
 		wp_die();
 	}
 	get_tweets( function( $cb, $user ) use ( $tweet_id ) {
 		return (array) $cb->statuses_retweets_ID(
-		'id=' . $tweet_id );
+		'id=' . $tweet_id . '$count=' . $count );
 	} );
 } );
 
 add_action( 'wp_ajax_status.get_mentions' , function () {
+	$count = get_param( 'count' );
+	if ( ! $count ) {
+		status_header( 400 );
+		wp_die();
+	}
 	get_tweets( function( $cb, $user ) {
 		return (array) $cb->statuses_mentionsTimeline( array(
 			'trim_user' => false,
-			'count' => 200,
+			'count' => intval( $count ),
 		) );
 	} );
 	header( 'Content-Type: application/json' );

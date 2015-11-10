@@ -14,34 +14,42 @@ html {
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	font-family: 'Open Sans', sans-serif;
-	font-size: small;
+	font-size: 12px;
 	height: 100%;
 	color: #260126;
 }
 
 body {
-	height: 95%;'
+	height: 95%;
 }
 
 a:link {
-  color: #260126;
-  font-weight: bold;
-  text-decoration: none;
+	color: #260126;
+	font-weight: bold;
+	text-decoration: none;
 }
 
 a:visited {
-  color: #260126;
-  font-weight: bold;
+	color: #260126;
+	font-weight: bold;
 }
 
 a:hover {
-  color: #260126;
-  font-weight: bold;
+	color: #260126;
+	font-weight: bold;
 }
 
 a:active {
-  color: #260126;
-  font-weight: bold;
+	color: #260126;
+	font-weight: bold;
+}
+
+a.external:after {
+	background-image: url("../img/external.png");
+	content: "";
+	width: 15px;
+	height: 15px;
+	display: inline-block;
 }
 
 .centered {
@@ -49,8 +57,6 @@ a:active {
 	top: 50%;
 	left: 50%;
 	padding: 15px;
-	-ms-transform: translateX(-50%) translateY(-50%);
-	-webkit-transform: translate(-50%, -50%);
 	transform: translate(-50%, -50%);
 }
 

@@ -9,7 +9,7 @@ jQuery(function($) {
 		$( ".status_login" ).toggle("fade", {}, 200, function() {
 			$( ".loading_image" ).toggle( "fade", {}, 300 );
 		});
-		jQuery.ajax(status_config.ajaxurl, {
+		$.ajax(status_config.ajaxurl, {
 	        "type": "post",
 			"data": {
 	            "action": "status.login"
