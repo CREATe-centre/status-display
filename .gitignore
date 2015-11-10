@@ -2,9 +2,3 @@
 .buildpath
 .project
 .settings
-# Vagrant runtime files
-.vagrant*
-# Individual configuration file
-vagrant-config.rb
-docker-compose.yml
-src/lib/config.php
