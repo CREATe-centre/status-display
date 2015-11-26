@@ -13,6 +13,9 @@ wp_enqueue_script( 'jquery-effects-fade' );
 wp_localize_script( 'status_login', 'status_config', array(
 		'ajaxurl' => admin_url( 'admin-ajax.php' ),
 ));
+wp_enqueue_script( 'jquery-simplemodal',
+		'//cdnjs.cloudflare.com/ajax/libs/simplemodal/1.4.4/jquery.simplemodal.min.js', 
+array( 'jquery' ), '1.4.4' );
 get_header();
 ?>
 <div class="centered">
@@ -62,4 +65,6 @@ get_header();
 			<div></div>
 		</div>
 </div>
+<div class="about_link"><a href="#">What is this?</a></div>
+<div id="about_page" style="display:none;">This is the about section</div>
 <?php get_footer(); ?>

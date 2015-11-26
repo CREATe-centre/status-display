@@ -28,6 +28,12 @@
 	}
 }
 
+.about_link {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
 .loading_image {
 	top: 50px;
 	left: 50px;
@@ -153,4 +159,34 @@
 	animation-delay: 0.41666666666666663s;
 	-webkit-transform: rotate(330deg) translate(0,-60px);
 	transform: rotate(330deg) translate(0,-60px);
+}
+
+#simplemodal-overlay {
+  background-color: #000;
+}
+
+#simplemodal-container {
+  height: 360px;
+  width: 600px;
+  background: linear-gradient(#f2eeb3 0%, #bfaf80 100%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  border: 4px solid #260126;
+  padding: 12px;
+}
+
+#simplemodal-container .simplemodal-data {
+  padding: 8px;
+}
+
+#simplemodal-container a.modalCloseImg {
+  background: url('../img/x.png') no-repeat;
+  width: 25px;
+  height: 29px;
+  display: inline;
+  z-index: 3200;
+  position: absolute;
+  top: -15px;
+  right: -16px;
+  cursor: pointer;
 }
