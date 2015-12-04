@@ -94,12 +94,12 @@ div.timeline g.timeline-element.mention:hover>text {
 }
 
 div.timeline g.timeline-element.mention>rect {
-	fill: 1005200;
+	fill: #005200;
 }
 
 div.timeline g.timeline-element.mention:hover>rect,
 div.timeline g.timeline-element.mention.selected>rect {
-	fill: 1003600;
+	fill: #003600;
 }
 
 div#tweet-canvas div.controls {
@@ -112,6 +112,6 @@ div#tweet-canvas div.controls {
 g.timeline-link path {
 	fill: none;
 	stroke: #333;
-	stroke-width: 6px;
+	stroke-width: 3px;
 	cursor: default;
 }

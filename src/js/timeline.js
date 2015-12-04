@@ -128,7 +128,7 @@ Status.Timeline.Visualisation.prototype.update = function() {
 		.selectAll( "g.timeline-link" )
 		.data( threaded_tweets );
 	threaded_tweets_data.enter()
-		.append( function( d ) {
+		.insert( function( d ) {
 			var g = d3.select( document.createElementNS( 'http://www.w3.org/2000/svg', 'g' ) )
 				.attr( "class", "timeline-link" );
 			g.append( "path" );
