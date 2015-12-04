@@ -22,6 +22,15 @@ jQuery(function($) {
 
 	new Status.Information.Display( $, $( "#tweet-canvas>.information-panel" ) );
 
+	$( Status ).bind( "status.timeline.visualisation.created" , function( event, timeline ) {
+		$( "div.controls div.zoom-in" ).click(function () {
+			timeline.zoom.scale( 1.1 ).event( timeline.display );
+		});
+		$( "div.controls div.zoom-out" ).click(function () {
+			timeline.zoom.scale( 0.9 ).event( timeline.display );
+		});
+	} );
+
 	(function () {
 		var count = 20;
 		Status.Util.getTweets( $, count, function( tweets ) {

@@ -162,31 +162,31 @@
 }
 
 #simplemodal-overlay {
-  background-color: #000;
+	background-color: 1000;
 }
 
 #simplemodal-container {
-  height: 360px;
-  width: 600px;
-  background: linear-gradient(#f2eeb3 0%, #bfaf80 100%);
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  border: 4px solid #260126;
-  padding: 12px;
+	height: 360px;
+	width: 600px;
+	background: linear-gradient(#f2eeb3 0%, #bfaf80 100%);
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	border: 4px solid #260126;
+	padding: 12px;
 }
 
 #simplemodal-container .simplemodal-data {
-  padding: 8px;
+	padding: 8px;
 }
 
 #simplemodal-container a.modalCloseImg {
-  background: url('../img/x.png') no-repeat;
-  width: 25px;
-  height: 29px;
-  display: inline;
-  z-index: 3200;
-  position: absolute;
-  top: -15px;
-  right: -16px;
-  cursor: pointer;
+	background: url('../img/x.png') no-repeat;
+	width: 25px;
+	height: 29px;
+	display: inline;
+	z-index: 3200;
+	position: absolute;
+	top: -15px;
+	right: -16px;
+	cursor: pointer;
 }

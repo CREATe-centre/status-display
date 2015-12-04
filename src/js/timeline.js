@@ -9,8 +9,19 @@ Status.Timeline.Visualisation = function( $, container, start, tweets ) {
 	this.$ = $;
 	this.container = container;
 	this.tweets = tweets;
+	this.threaded_tweets = [];
 	this.padding = 20;
 	this.maxBoxHeight = 0;
+
+	this.getTweetByID = function( id ) {
+		var found = null;
+		$.each( tweets, function( i, t ) {
+			if ( t.id_str == id ) {
+				found = t;
+			}
+		});
+		return found;
+	};
 
 	this.x = d3.time.scale.utc()
 		.domain( [ start, new Date() ] );
@@ -50,6 +61,8 @@ Status.Timeline.Visualisation = function( $, container, start, tweets ) {
 	$( Status ).bind( "status.timeline.visualisation.tweet-selected" , function( event, tweet ) {
 		selectTweet( tweet );
 	} );
+
+	$( Status ).trigger( "status.timeline.visualisation.created",  self );
 };
 
 Status.Timeline.Visualisation.prototype.renderTweet = function( self, tweet ) {
@@ -90,6 +103,7 @@ Status.Timeline.Visualisation.prototype.update = function() {
 	var tweets = self.canvas
 		.selectAll( "g.timeline-element" )
 		.data( self.tweets );
+	var threaded_tweets = this.threaded_tweets;
 	tweets.enter()
 		.append( function( d ) {
 			return self.renderTweet( self, d );
@@ -106,14 +120,38 @@ Status.Timeline.Visualisation.prototype.update = function() {
 						self.maxBoxHeight = this.getBBox().height;
 					}
 				} );
+			if (d.in_reply_to_status_id_str) {
+				threaded_tweets.push( d );
+			}
 		} );
+	var threaded_tweets_data = self.canvas
+		.selectAll( "g.timeline-link" )
+		.data( threaded_tweets );
+	threaded_tweets_data.enter()
+		.append( function( d ) {
+			var g = d3.select( document.createElementNS( 'http://www.w3.org/2000/svg', 'g' ) )
+				.attr( "class", "timeline-link" );
+			g.append( "path" );
+			return g.node();
+		} );
+
 	var height = self.maxBoxHeight + 5;
 	var count = parseInt( (self.container.height() - (self.padding * 2)) / height );
 	tweets.attr( "transform", function( d, i ) {
+		d.i = i;
 		return "translate(" + self.x( d.date ) + ","
 				+ ((i % count) * height) + ")";
 	} );
 	tweets.exit().remove();
+	threaded_tweets_data.each( function (d, i) {
+		var tt = self.getTweetByID( d.in_reply_to_status_id_str );
+		if ( tt != null ) {
+			d3.select( this ).selectAll( "path" ).attr( "d",
+				"M " + self.x( d.date ) + " " + ((d.i % count) * height) + " L "
+			+ self.x( tt.date ) + " " + ((tt.i % count) * height));
+		}
+	} );
+	threaded_tweets_data.exit().remove();
 }
 
 Status.Timeline.Visualisation.prototype.redraw = function() {
@@ -166,7 +204,7 @@ Status.Timeline.Visualisation.prototype.redraw = function() {
 
 		gx.exit().remove();
 
-		self.display.call( d3.behavior.zoom()
+		self.display.call( ( self.zoom = d3.behavior.zoom() )
 				.x( self.x )
 				.on( "zoom", self.redraw() ) );
 		self.update();

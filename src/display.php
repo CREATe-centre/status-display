@@ -37,6 +37,10 @@ get_header();
 	<div class="profile"></div>
 	<div class="information-panel"></div>
 	<div class="map"></div>
+	<!--<div class="controls">
+		<div class="zoom-in">Zoom In</div>
+		<div class="zoom-out">Zoom Out</div>
+	</div>-->
 </div>
 <div id="retweet-canvas" class="canvas" style="display: none;">
 	<div class="timeline"></div>

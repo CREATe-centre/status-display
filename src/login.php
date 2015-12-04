@@ -14,7 +14,7 @@ wp_localize_script( 'status_login', 'status_config', array(
 		'ajaxurl' => admin_url( 'admin-ajax.php' ),
 ));
 wp_enqueue_script( 'jquery-simplemodal',
-		'//cdnjs.cloudflare.com/ajax/libs/simplemodal/1.4.4/jquery.simplemodal.min.js', 
+	'//cdnjs.cloudflare.com/ajax/libs/simplemodal/1.4.4/jquery.simplemodal.min.js',
 array( 'jquery' ), '1.4.4' );
 get_header();
 ?>
