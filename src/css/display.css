@@ -17,43 +17,23 @@ div.canvas>.map {
 }
 
 div.canvas>.timeline {
-	width: 75%;
+	width: 95%;
 	height: 100%;
+	margin: auto;
 }
 
 div#tweet-canvas {
 
 }
 
-div#tweet-canvas>.profile {
-	position: absolute;
-	width: 25%;
-	height: 25%;
-	top: 0px;
-	right: 0px;
-	padding: 5px;
+div#tweet-canvas .profile {
+	padding-top: 5px;
 }
 
-div#tweet-canvas>.profile .profile-image {
+div#tweet-canvas .profile .profile-image {
 	position: absolute;
 	right: 10px;
 	top: 10px;
-}
-
-div#tweet-canvas>.information-panel {
-	position: absolute;
-	width: 25%;
-	height: 25%;
-	padding: 5px;
-	right: 0px;
-	top: 25%;
-}
-
-div#retweet-canvas {
-	background: linear-gradient(rgba(242, 238, 179, 0.9) 0%,
-	  rgba(191, 175, 128, 0.9) 100%);
-	background-repeat: no-repeat;
-	background-attachment: fixed;
 }
 
 div.timeline g.timeline-element {
@@ -72,46 +52,86 @@ div.timeline g.x text {
 	fill: #260126;
 }
 
-div.timeline g.timeline-element>rect {
+div.timeline g.timeline-element>circle {
 	fill-opacity: 0.8;
 	stroke: black;
 	stroke-width: 0px;
 	filter: url(#blur);
 }
 
-div.timeline g.timeline-element.tweet>rect {
+div.timeline g.timeline-element.TWEET>circle {
 	fill: #59323c;
 }
 
-div.timeline g.timeline-element.tweet:hover>rect,
-div.timeline g.timeline-element.tweet.selected>rect {
-	fill: #260126;
+div.timeline g.timeline-element.TWEET:hover>circle,
+div.timeline g.timeline-element.TWEET.selected>circle {
+	fill: #AA7885;
 }
 
-div.timeline g.timeline-element.tweet:hover>text,
-div.timeline g.timeline-element.mention:hover>text {
-	fill: #f2eeb3;
+div.timeline g.timeline-element.MENTION>circle {
+	fill: #254137;
 }
 
-div.timeline g.timeline-element.mention>rect {
-	fill: #005200;
+div.timeline g.timeline-element.MENTION:hover>circle,
+div.timeline g.timeline-element.MENTION.selected>circle {
+	fill: #597D70;
 }
 
-div.timeline g.timeline-element.mention:hover>rect,
-div.timeline g.timeline-element.mention.selected>rect {
-	fill: #003600;
+div.timeline g.timeline-element.RETWEET>circle {
+  fill: #624537;
 }
 
-div#tweet-canvas div.controls {
-	z-index: 9999999999999999999999999999999999999;
-	position: absolute;
-	top: 0px;
-	left: 0px;
+div.timeline g.timeline-element.RETWEET:hover>circle,
+div.timeline g.timeline-element.RETWEET.selected>circle {
+  fill: #BA9684;
+}
+
+div.timeline g.timeline-element.FRIEND_RETWEET>circle {
+  fill: #401E0E;
+}
+
+div.timeline g.timeline-element.FRIEND_RETWEET:hover>circle,
+div.timeline g.timeline-element.FRIEND_RETWEET.selected>circle {
+  fill: #BA9684;
 }
 
 g.timeline-link path {
 	fill: none;
 	stroke: #333;
-	stroke-width: 3px;
+	stroke-width: 2px;
 	cursor: default;
+	filter: url(#blur);
+}
+
+.TWEET {
+	color: #59323c;
+}
+
+.MENTION {
+  color: #254137;
+}
+
+.RETWEET {
+  color: #624537;
+}
+
+.FRIEND_RETWEET {
+  color: #401E0E;
+}
+
+.legend {
+	font-weight: bold;
+}
+
+.sidebar {
+	padding: 5px;
+	height: 100%;
+	position: fixed;
+  right: 10px;
+  top: 10px; 
+  width: 20%;
+  overflow: auto;
+  background: linear-gradient(rgba(242, 238, 179, 0.8) 0%, rgba(191, 175, 128, 0.8) 90%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }

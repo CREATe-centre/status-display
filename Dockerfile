@@ -11,7 +11,7 @@ RUN apt-get install -y libpng12-dev libjpeg-dev \
   && docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
   && docker-php-ext-install gd
   
-RUN pecl install oauth \
+RUN pecl install oauth-1.2.3 \
   && echo "extension=oauth.so" > /usr/local/etc/php/conf.d/oauth.ini
 
 RUN docker-php-ext-install mysqli

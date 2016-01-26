@@ -43,7 +43,7 @@ Status.Timeline.Visualisation = function( $, container, start, tweets ) {
 
 	function selectTweet( tweet ) {
 		d3.selectAll( ".timeline-element.selected" ).classed( "selected", false );
-		d3.select( "#tweet-" + tweet.id_str ).classed( "selected", true );
+		d3.select( "#tweet-" + tweet.data.id_str ).classed( "selected", true );
 	}
 
 	$( Status ).bind( "status.map.googlemap.tweet-selected" , function( event, tweet ) {
@@ -68,30 +68,14 @@ Status.Timeline.Visualisation = function( $, container, start, tweets ) {
 Status.Timeline.Visualisation.prototype.renderTweet = function( self, tweet ) {
 	var radius = 10;
 	var g = d3.select( document.createElementNS( 'http://www.w3.org/2000/svg', 'g' ) )
-		.attr( "class", tweet.type + " timeline-element" )
-		.attr( "id", "tweet-" + tweet.id_str );
-	g.append( "rect" )
-		.attr( "rx", "10px" )
-		.attr( "ry", "10px" );
-	g.append( "text" )
-		.attr( "x", "10px" )
-		.text( tweet.text.length <= 40
-			? tweet.text
-		: tweet.text.substring( 0, 37 ) + "..." );
+		.attr( "class", tweet.event + " timeline-element" )
+		.attr( "id", "tweet-" + tweet.data.id_str );
+	var max = 45;
+	var radius = max + (max - (max / Math.exp(tweet.incoming_edges.length)));
+	g.append( "circle" )
+		.attr( "r", radius + "px" );
 
-	if ( tweet.type == "tweet" ) {
-		g.append( "text" )
-			.attr( "x", "10px" )
-			.text( "Retweeted: " + tweet.retweet_count );
-		g.append( "text" )
-			.attr( "x", "10px" )
-			.text( "Favourited: " + tweet.favorite_count );
-	} else if ( tweet.type == "mention" ) {
-		g.append( "text" )
-			.attr( "x", "10px" )
-			.text( "Sent by: @" + tweet.user.screen_name );
-	}
-	g.append( "title" ).text( tweet.text );
+	g.append( "title" ).text( tweet.data.text );
 	g.on( "click", function( d ) {
 		self.$( Status ).trigger( "status.timeline.visualisation.tweet-selected", d );
 	} );
@@ -109,12 +93,7 @@ Status.Timeline.Visualisation.prototype.update = function() {
 			return self.renderTweet( self, d );
 		} )
 		.each( function( d ) {
-			d3.select( this ).selectAll( "text" ).each( function( t, i) {
-				d3.select( this ).attr( "dy", this.getBBox().height * ( i + 1 ) );
-			} );
-			d3.select( this ).selectAll( "rect" )
-				.attr( "width", this.getBBox().width + 20 )
-				.attr( "height", this.getBBox().height + 10 )
+			d3.select( this ).selectAll( "circle" )
 				.each( function() {
 					if ( this.getBBox().height > self.maxBoxHeight ) {
 						self.maxBoxHeight = this.getBBox().height;
@@ -167,7 +146,10 @@ Status.Timeline.Visualisation.prototype.redraw = function() {
 			return "translate(" + self.x( d ) + ",0)";
 		};
 
-		var fx = self.x.tickFormat( 10 );
+		var fx = function() {
+			var r =  self.x.tickFormat().apply(null, arguments);
+			return r;
+		}
 
 		self.display
 			.attr( "width", cx )

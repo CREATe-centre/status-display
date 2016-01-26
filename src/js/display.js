@@ -7,32 +7,36 @@
 // Events.
 /* status.map.googlemap.tweet-selected */
 /* status.timeline.visualisation.tweet-selected */
-/* status.information.display.show-retweets */
 
 var Status = Status || {};
 
 jQuery(function($) {
 
-	var map = new Status.Map.GoogleMap( $, $( "#tweet-canvas>.map" ) );
+	/*var map = new Status.Map.GoogleMap( $, $( "#tweet-canvas>.map" ) );*/
 
 	Status.Profile.get( $, function( data ) {
-		$( "#tweet-canvas>.profile" )
+		$( "#tweet-canvas .profile" )
 			.append( Status.Profile.draw( $, data ) );
 	});
 
-	new Status.Information.Display( $, $( "#tweet-canvas>.information-panel" ) );
-
-	$( Status ).bind( "status.timeline.visualisation.created" , function( event, timeline ) {
-		$( "div.controls div.zoom-in" ).click(function () {
-			timeline.zoom.scale( 1.1 ).event( timeline.display );
-		});
-		$( "div.controls div.zoom-out" ).click(function () {
-			timeline.zoom.scale( 0.9 ).event( timeline.display );
-		});
-	} );
+	new Status.Information.Display( $, $( "#tweet-canvas .information-panel" ) );
 
 	(function () {
-		var count = 20;
+		Status.Util.getTimeline( $, function( data ) {
+			var start = new Date();
+			$.each( data, function( i, o ) {
+				o.date = Status.Util.parseCreatedAt( o.created_at );
+				o.incoming_edges = [];
+				o.outgoing_edges = [];
+				if ( o.date.getTime() < start.getTime() ) {
+					start = o.date;
+				}
+			} );
+			(new Status.Timeline.Visualisation(
+				$, $( "#tweet-canvas>.timeline" ),
+			start, data, true )).redraw()();
+		} );
+		/*var count = 20;
 		Status.Util.getTweets( $, count, function( tweets ) {
 			$.each( tweets, function( i, o ) {
 				o.type = "tweet";
@@ -52,9 +56,9 @@ jQuery(function($) {
 				(new Status.Timeline.Visualisation(
 					$, $( "#tweet-canvas>.timeline" ),
 				start, data, true )).redraw()();
-				map.displayTweets( data );
+				//map.displayTweets( data );
 			});
-		})
+		})*/
 	}) ();
 
 });

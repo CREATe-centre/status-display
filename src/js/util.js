@@ -39,6 +39,17 @@ Status.Util.getRetweets = function( $, tweet, count, callback ) {
 	});
 };
 
+Status.Util.getTimeline = function( $, callback ) {
+	$.ajax(statusConfig.ajaxurl, {
+		"type" : "post",
+		"data" : {
+			"action" : "status.get_timeline",
+			"verify" : statusConfig.verify
+		},
+		"success" : callback
+	});
+};
+
 Status.Util.parseCreatedAt = function( createdAt ) {
 	return moment( createdAt, "ddd MMM DD HH:mm:ss ZZ YYYY" ).toDate();
 };

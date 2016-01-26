@@ -76,7 +76,7 @@ add_action( 'admin_menu', function() {
 		'status-options',
 		function() {
 			include 'lib/settings.php';
-		});
+		} );
 } );
 
 add_filter( 'template_include', function( $template ) {

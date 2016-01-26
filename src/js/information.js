@@ -21,6 +21,8 @@ Status.Information.Display.prototype.renderText = function( text ) {
 	return text
 		.replace( /(^|\s)#(\S*)/g,
 		"$1<a href=\"https://twitter.com/hashtag/$2\" target=\"_blank\">#$2</a>" )
+		.replace( /(^|\s)@([a-zA-Z0-9]*)/g,
+		"$1<a href=\"https://twitter.com/$2\" target=\"_blank\">@$2</a>" )
 		.replace( /(^|\s)http(\S*)/g,
 		"$1<a href=\"http$2\" target=\"_blank\">http$2</a>" )
 		.replace( /(^|\s)(@\S*)/g, "$1<b>$2</b>" );
@@ -32,49 +34,57 @@ Status.Information.Display.prototype.renderDate = function( date ) {
 
 Status.Information.Display.prototype.displayNormalTweet = function( tweet ) {
 	var self = this;
-	this.container.html( "<ul><li><b>Text</b>: "
-		+ this.renderText( tweet.text )
+	this.container.html( "<h3>SELECTED NODE</h3><ul><li><b>Type</b>: Tweet</li><li><b>Text</b>: "
+		+ this.renderText( tweet.data.text )
 		+ "</li><li><b>Date:</b> "
 		+ this.renderDate( tweet.date )
-		+ "</li><li><b>Retweeted:</b> "
-		+ tweet.retweet_count
-		+ "</li><li><b>Favourited:</b> "
-		+ tweet.favorite_count
 		+ "</li>"
 		+ (tweet.in_reply_to_screen_name
-				? "<li>Sent in reply to <b>@"
-						+ tweet.in_reply_to_screen_name + "</b></li>"
+				? "<li>Sent in reply to <b><a href=\"https://twitter.com/"
+						+ tweet.in_reply_to_screen_name + "\" target=\"_blank\">@"
+						+ tweet.in_reply_to_screen_name + "</a></b></li>"
 				: "")
 	+ "</ul>");
-
-	if ( tweet.retweet_count && tweet.retweet_count > 0 ) {
-		var a = this.$( document.createElement( "a" ) );
-		a.text( "View retweets" );
-		a.attr( "href", "#" );
-		a.on( "click", function() {
-			self.$( Status ).trigger( "status.information.display.show-retweets", tweet );
-		} );
-		var li = this.$( document.createElement( "li" ) );
-		li.append( a );
-		this.container.children( "ul" ).append( li );
-	}
 };
 
 Status.Information.Display.prototype.displayMention = function( tweet ) {
-	this.container.html( "<ul><li><b>Text</b>: "
-		+ this.renderText( tweet.text )
+	this.container.html( "<h3>SELECTED NODE</h3><ul><li><b>Type</b>: Mention</li><li><b>Text</b>: "
+		+ this.renderText( tweet.data.text )
 		+ "</li><li><b>Date:</b> "
 		+ this.renderDate( tweet.date )
-		+ "</li><li>Sent by <b>@"
-		+ tweet.user.screen_name
-	+ "</b></li></ul>" );
+		+ "</li><li>Sent by <b><a href=\"https://twitter.com/"
+		+ tweet.data.user.screen_name + "\" target=\"_blank\">@"
+		+ tweet.data.user.screen_name
+	+ "</a></b></li></ul>" );
+};
+
+Status.Information.Display.prototype.displayRetweet = function( tweet ) {
+	var type = "Retweet";
+	if( tweet.type == "RETWEET" ) {
+		type = "Retweet";
+	} else if( tweet.type == "RETWEET" ) {
+		type = "Retweet by Friend";
+	}
+	this.container.html( "<h3>SELECTED NODE</h3><ul><li><b>Type</b>: " 
+		+ type + "</li><li><b>Text</b>: "
+		+ this.renderText( tweet.data.text )
+		+ "</li><li><b>Date:</b> "
+		+ this.renderDate( tweet.date )
+		+ "</li><li>Retweeted by <b><a href=\"https://twitter.com/" 
+		+ tweet.data.user.screen_name + "\" target=\"_blank\">@"
+		+ tweet.data.user.screen_name
+	+ "</a></b></li></ul>" );
 };
 
 Status.Information.Display.prototype.displayTweet = function( tweet ) {
 	this.container.empty();
-	if ( tweet.type == "tweet" ) {
+	if ( tweet.event == "TWEET" ) {
 		this.displayNormalTweet( tweet );
-	} else if ( tweet.type == "mention" ) {
+	} else if ( tweet.event == "MENTION" ) {
 		this.displayMention( tweet );
+	} else if ( tweet.event == "RETWEET" || tweet.event == "FRIEND_RETWEET" ) {
+		this.displayRetweet( tweet );
+	} else {
+		console.log("Dont know how to render " + tweet.event);
 	}
 };

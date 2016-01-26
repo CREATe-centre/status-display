@@ -34,16 +34,20 @@ get_header();
 ?>
 <div id="tweet-canvas" class="canvas">
 	<div class="timeline"></div>
-	<div class="profile"></div>
-	<div class="information-panel"></div>
-	<div class="map"></div>
-	<!--<div class="controls">
-		<div class="zoom-in">Zoom In</div>
-		<div class="zoom-out">Zoom Out</div>
-	</div>-->
+	<div class="sidebar">
+		<div class="profile"></div>
+		<div class="legend">
+			<h3>KEY</h3>
+			<ul>
+				<li class="TWEET">Your Tweet</li>
+				<li class="MENTION">Mention</li>
+				<li class="FRIEND_RETWEET">Retweet by a Friend</li>
+				<li class="RETWEET">General Retweet</li>
+			</ul>
+		</div>
+		<div class="information-panel"></div>
+		<div class="map"></div>
+	</div>
 </div>
-<div id="retweet-canvas" class="canvas" style="display: none;">
-	<div class="timeline"></div>
-	<div class="map"></div>
-</div>
+
 <?php get_footer(); ?>

@@ -63,8 +63,6 @@ add_action( 'wp_ajax_status.get_tweets' , function () {
 				'count' => intval( $count ),
 			) );
 	} );
-	header( 'Content-Type: application/json' );
-	wp_die();
 } );
 
 add_action( 'wp_ajax_status.get_retweets' , function () {
@@ -92,7 +90,19 @@ add_action( 'wp_ajax_status.get_mentions' , function () {
 			'count' => intval( $count ),
 		) );
 	} );
+} );
+
+add_action( 'wp_ajax_status.get_timeline', function() {
+	global $current_user;
+	global $wpdb;
 	header( 'Content-Type: application/json' );
+	$results = $wpdb->get_results( $wpdb->prepare( 
+				"SELECT event, data, created_at FROM " . $wpdb->prefix 
+				. "twitter_data WHERE user_id = %d", $current_user->ID ) );
+	foreach ( $results as $result ) {
+		$result->data = json_decode( $result->data );
+	}
+	echo json_encode($results);
 	wp_die();
 } );
 
