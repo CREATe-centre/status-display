@@ -103,20 +103,30 @@ g.timeline-link path {
 	filter: url(#blur);
 }
 
+.legend>ul {
+	list-style-type: none;
+}
+
+.legend-entry {
+  color: white;
+  padding: 3px;
+  text-align: center;
+}
+
 .TWEET {
-	color: #59323c;
+	background-color: #59323c;
 }
 
 .MENTION {
-  color: #254137;
+  background-color: #254137;
 }
 
 .RETWEET {
-  color: #624537;
+  background-color: #624537;
 }
 
 .FRIEND_RETWEET {
-  color: #401E0E;
+  background-color: #401E0E;
 }
 
 .legend {

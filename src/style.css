@@ -58,6 +58,7 @@ a.external:after {
 	left: 50%;
 	padding: 15px;
 	transform: translate(-50%, -50%);
+	text-align: center;
 }
 
 .clear {

@@ -4,6 +4,11 @@
  * @package status
  */
 
+if ( ! empty ( get_query_var( 'oauth_token', null ) ) ) {
+	header('Location: ' . get_site_url() );
+	die();
+}
+
 $url_prefix = get_stylesheet_directory_uri();
 wp_enqueue_style( 'status_display',
 $url_prefix . '/css/display.css', array( 'status' ), '1.0.0');
@@ -36,13 +41,19 @@ get_header();
 	<div class="timeline"></div>
 	<div class="sidebar">
 		<div class="profile"></div>
+		<div class="actions">
+			<h3>Actions</h3>
+			<ul>
+				<li><a href="<?php echo wp_logout_url( home_url() ); ?>">Sign out</a></li>
+			</ul>
+		</div>
 		<div class="legend">
 			<h3>KEY</h3>
 			<ul>
-				<li class="TWEET">Your Tweet</li>
-				<li class="MENTION">Mention</li>
-				<li class="FRIEND_RETWEET">Retweet by a Friend</li>
-				<li class="RETWEET">General Retweet</li>
+				<li class="legend-entry TWEET">Your Tweet</li>
+				<li class="legend-entry MENTION">Mention</li>
+				<li class="legend-entry FRIEND_RETWEET">Retweet by a Friend</li>
+				<li class="legend-entry RETWEET">General Retweet</li>
 			</ul>
 		</div>
 		<div class="information-panel"></div>

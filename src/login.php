@@ -10,6 +10,7 @@ wp_enqueue_script( 'status_login',
 	get_stylesheet_directory_uri() . '/js/login.js',
 array( 'jquery' ), '1.0.0', true );
 wp_enqueue_script( 'jquery-effects-fade' );
+wp_enqueue_script( 'jquery-effects-pulsate' );
 wp_localize_script( 'status_login', 'status_config', array(
 		'ajaxurl' => admin_url( 'admin-ajax.php' ),
 ));
@@ -50,6 +51,9 @@ get_header();
 			</g>
 		</svg>
 	</a>
+	<div class="login_text">
+		<span class="blink">Click above to sign in</span>
+	</div>
 	<div class="loading_image" style="display:none;">
 			<div></div>
 			<div></div>
