@@ -68,9 +68,9 @@ Status.Map.GoogleMap.prototype.displayTweets = function( tweets ) {
 				"map" : self.map,
 				"position" : coords,
 				"title" : o.text.length <= 40
-					? o.text
+				? o.text
 					: o.text.substring( 0, 37 ) + "..."
-				});
+			});
 			marker.addListener( 'click', function() {
 				self.$( Status ).trigger( "status.map.googlemap.tweet-selected", o );
 			} );

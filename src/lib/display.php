@@ -58,10 +58,10 @@ add_action( 'wp_ajax_status.get_tweets' , function () {
 	}
 	get_tweets( function( $cb, $user ) {
 		return (array) $cb->statuses_userTimeline( array(
-				'screen_name' => $user->display_name,
-				'trim_user' => false,
-				'count' => intval( $count ),
-			) );
+			'screen_name' => $user->display_name,
+			'trim_user' => false,
+			'count' => intval( $count ),
+		) );
 	} );
 } );
 
@@ -96,13 +96,13 @@ add_action( 'wp_ajax_status.get_timeline', function() {
 	global $current_user;
 	global $wpdb;
 	header( 'Content-Type: application/json' );
-	$results = $wpdb->get_results( $wpdb->prepare( 
-				"SELECT event, data, created_at FROM " . $wpdb->prefix 
-				. "twitter_data WHERE user_id = %d", $current_user->ID ) );
+	$results = $wpdb->get_results( $wpdb->prepare(
+		'SELECT event, data, created_at FROM ' . $wpdb->prefix
+	. 'twitter_data WHERE user_id = %d', $current_user->ID ) );
 	foreach ( $results as $result ) {
 		$result->data = json_decode( $result->data );
 	}
-	echo json_encode($results);
+	echo json_encode( $results );
 	wp_die();
 } );
 
@@ -110,7 +110,7 @@ add_action( 'wp_ajax_status.get_profile' , function () {
 	global $current_user;
 	$cb = get_codebird_instance();
 	$data = (array) $cb->users_show( array(
-			'screen_name' => $current_user->display_name,
+		'screen_name' => $current_user->display_name,
 	) );
 	header( 'Content-Type: application/json' );
 	echo json_encode( $data );

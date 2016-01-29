@@ -74,9 +74,10 @@ add_action( 'admin_menu', function() {
 		'Status',
 		'manage_options',
 		'status-options',
-		function() {
+		$f = function() {
 			include 'lib/settings.php';
-		} );
+		}
+	);
 } );
 
 add_filter( 'template_include', function( $template ) {
@@ -95,7 +96,11 @@ add_filter( 'query_vars', function( $vars ) {
 
 add_action( 'init', function() {
 	if ( is_user_logged_in() ) {
-		include 'lib/display.php';
+		if ( strpos( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ), 'data.json' ) ) {
+			include 'lib/export.php';
+		} else {
+			include 'lib/display.php';
+		}
 	} else {
 		include 'lib/login.php';
 	}

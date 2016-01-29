@@ -19,5 +19,5 @@ Status.Profile.draw = function( $, data ) {
 		+ "</li><li><b>Followers:</b> " + data.followers_count
 		+ "</li><li><b>Tweets:</b> " + data.statuses_count
 	+ "</li></ul>");
-	return [ $("<h3>YOU</h3>"), image, details ];
+	return [ $( "<h3>YOU</h3>" ), image, details ];
 };

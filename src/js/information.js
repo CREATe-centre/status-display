@@ -60,17 +60,17 @@ Status.Information.Display.prototype.displayMention = function( tweet ) {
 
 Status.Information.Display.prototype.displayRetweet = function( tweet ) {
 	var type = "Retweet";
-	if( tweet.type == "RETWEET" ) {
+	if ( tweet.type == "RETWEET" ) {
 		type = "Retweet";
-	} else if( tweet.type == "RETWEET" ) {
+	} else if ( tweet.type == "RETWEET" ) {
 		type = "Retweet by Friend";
 	}
-	this.container.html( "<h3>SELECTED NODE</h3><ul><li><b>Type</b>: " 
+	this.container.html( "<h3>SELECTED NODE</h3><ul><li><b>Type</b>: "
 		+ type + "</li><li><b>Text</b>: "
 		+ this.renderText( tweet.data.text )
 		+ "</li><li><b>Date:</b> "
 		+ this.renderDate( tweet.date )
-		+ "</li><li>Retweeted by <b><a href=\"https://twitter.com/" 
+		+ "</li><li>Retweeted by <b><a href=\"https://twitter.com/"
 		+ tweet.data.user.screen_name + "\" target=\"_blank\">@"
 		+ tweet.data.user.screen_name
 	+ "</a></b></li></ul>" );
@@ -85,6 +85,6 @@ Status.Information.Display.prototype.displayTweet = function( tweet ) {
 	} else if ( tweet.event == "RETWEET" || tweet.event == "FRIEND_RETWEET" ) {
 		this.displayRetweet( tweet );
 	} else {
-		console.log("Dont know how to render " + tweet.event);
+		console.log( "Dont know how to render " + tweet.event );
 	}
 };

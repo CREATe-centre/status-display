@@ -78,21 +78,21 @@ div.timeline g.timeline-element.MENTION.selected>circle {
 }
 
 div.timeline g.timeline-element.RETWEET>circle {
-  fill: #624537;
+	fill: #624537;
 }
 
 div.timeline g.timeline-element.RETWEET:hover>circle,
 div.timeline g.timeline-element.RETWEET.selected>circle {
-  fill: #BA9684;
+	fill: #BA9684;
 }
 
 div.timeline g.timeline-element.FRIEND_RETWEET>circle {
-  fill: #401E0E;
+	fill: #401E0E;
 }
 
 div.timeline g.timeline-element.FRIEND_RETWEET:hover>circle,
 div.timeline g.timeline-element.FRIEND_RETWEET.selected>circle {
-  fill: #BA9684;
+	fill: #BA9684;
 }
 
 g.timeline-link path {
@@ -108,9 +108,9 @@ g.timeline-link path {
 }
 
 .legend-entry {
-  color: white;
-  padding: 3px;
-  text-align: center;
+	color: white;
+	padding: 3px;
+	text-align: center;
 }
 
 .TWEET {
@@ -118,15 +118,15 @@ g.timeline-link path {
 }
 
 .MENTION {
-  background-color: #254137;
+	background-color: #254137;
 }
 
 .RETWEET {
-  background-color: #624537;
+	background-color: #624537;
 }
 
 .FRIEND_RETWEET {
-  background-color: #401E0E;
+	background-color: #401E0E;
 }
 
 .legend {
@@ -137,11 +137,11 @@ g.timeline-link path {
 	padding: 5px;
 	height: 100%;
 	position: fixed;
-  right: 10px;
-  top: 10px; 
-  width: 20%;
-  overflow: auto;
-  background: linear-gradient(rgba(242, 238, 179, 0.8) 0%, rgba(191, 175, 128, 0.8) 90%);
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+	right: 10px;
+	top: 10px;
+	width: 20%;
+	overflow: auto;
+	background: linear-gradient(rgba(242, 238, 179, 0.8) 0%, rgba(191, 175, 128, 0.8) 90%);
+	background-repeat: no-repeat;
+	background-attachment: fixed;
 }

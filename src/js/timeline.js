@@ -71,7 +71,7 @@ Status.Timeline.Visualisation.prototype.renderTweet = function( self, tweet ) {
 		.attr( "class", tweet.event + " timeline-element" )
 		.attr( "id", "tweet-" + tweet.data.id_str );
 	var max = 45;
-	var radius = max + (max - (max / Math.exp(tweet.incoming_edges.length)));
+	var radius = max + (max - (max / Math.exp( tweet.incoming_edges.length )));
 	g.append( "circle" )
 		.attr( "r", radius + "px" );
 
@@ -147,7 +147,7 @@ Status.Timeline.Visualisation.prototype.redraw = function() {
 		};
 
 		var fx = function() {
-			var r =  self.x.tickFormat().apply(null, arguments);
+			var r = self.x.tickFormat().apply( null, arguments );
 			return r;
 		}
 
@@ -187,8 +187,8 @@ Status.Timeline.Visualisation.prototype.redraw = function() {
 		gx.exit().remove();
 
 		self.display.call( ( self.zoom = d3.behavior.zoom() )
-				.x( self.x )
-				.on( "zoom", self.redraw() ) );
+			.x( self.x )
+		.on( "zoom", self.redraw() ) );
 		self.update();
 	}
 }

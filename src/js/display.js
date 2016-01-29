@@ -11,16 +11,13 @@
 var Status = Status || {};
 
 jQuery(function($) {
-
 	/*var map = new Status.Map.GoogleMap( $, $( "#tweet-canvas>.map" ) );*/
 
 	Status.Profile.get( $, function( data ) {
 		$( "#tweet-canvas .profile" )
 			.append( Status.Profile.draw( $, data ) );
 	});
-
 	new Status.Information.Display( $, $( "#tweet-canvas .information-panel" ) );
-
 	(function () {
 		Status.Util.getTimeline( $, function( data ) {
 			var start = new Date();
@@ -60,5 +57,4 @@ jQuery(function($) {
 			});
 		})*/
 	}) ();
-
 });
