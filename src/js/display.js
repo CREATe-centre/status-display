@@ -23,13 +23,13 @@ jQuery(function($) {
 			var start = new Date();
 			var special_retweet_ids = [];
 			$.each( data, function( i, o ) {
-				o.id = Status.Util.getID(o);
+				o.id = Status.Util.getID( o );
 				o.date = Status.Util.parseCreatedAt( o.created_at );
 				o.incoming_edges = [];
 				o.outgoing_edges = [];
-				if(o.event == "FRIEND_RETWEET" 
+				if (o.event == "FRIEND_RETWEET"
 						|| o.event == "FRIEND_OF_FRIEND_RETWEET") {
-					special_retweet_ids.push(o.data.id);
+					special_retweet_ids.push( o.data.id );
 				}
 				if ( o.date.getTime() < start.getTime() ) {
 					start = o.date;
@@ -37,9 +37,9 @@ jQuery(function($) {
 			} );
 			var timeline_data = [];
 			$.each( data, function( i, o ) {
-				if(!(o.event == "RETWEET" 
-						&& $.inArray(o.data.id, special_retweet_ids))) {
-					timeline_data.push(o);
+				if ( ! (o.event == "RETWEET"
+						&& $.inArray( o.data.id, special_retweet_ids ))) {
+					timeline_data.push( o );
 				}
 			});
 			(new Status.Timeline.Visualisation(
