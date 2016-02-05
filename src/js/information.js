@@ -107,7 +107,28 @@ Status.Information.Display.prototype.displayFavourited = function( tweet ) {
 			+ screen_name + "\" target=\"_blank\">@"
 			+ screen_name
 	+ "</a></b></li></ul>" );
+}
 
+Status.Information.Display.prototype.displayFollowed = function( tweet ) {
+	var text = "";
+	if (tweet.event == "YOU_FOLLOWED") {
+		text = "You started following <b><a href=\"https://twitter.com/"
+				+ tweet.data.followedUserName + "\" target=\"_blank\">@"
+				+ tweet.data.followedUserName
+				+ "</a></b>";
+	} else if (tweet.event == "YOU_UNFOLLOWED") {
+		text = "Your stopped following <b><a href=\"https://twitter.com/"
+				+ tweet.data.unfollowedUserName + "\" target=\"_blank\">@"
+				+ tweet.data.unfollowedUserName
+				+ "</a></b>";
+	} else if (tweet.event == "FOLLOWED_YOU") {
+		text = "<b><a href=\"https://twitter.com/"
+				+ tweet.data.sourceName + "\" target=\"_blank\">@"
+				+ tweet.data.sourceName
+				+ "</a></b> started following you";
+	}
+	this.container.html( "<h3>SELECTED NODE</h3><ul><li>"
+	+ text + "</li></ul>" );
 }
 
 Status.Information.Display.prototype.displayTweet = function( tweet ) {
@@ -126,7 +147,11 @@ Status.Information.Display.prototype.displayTweet = function( tweet ) {
 			|| tweet.event == "UNFAVOURITED_YOU"
 			|| tweet.event == "FAVOURITED_RETWEET") {
 		this.displayFavourited( tweet );
+	} else if (tweet.event == "YOU_FOLLOWED"
+			|| tweet.event == "YOU_UNFOLLOWED"
+			|| tweet.event == "FOLLOWED_YOU") {
+		this.displayFollowed( tweet );
 	} else {
-		console.log( "Dont know how to render " + tweet.event );
+		console.log( "Dont know how to render event type '" + tweet.event + "'" );
 	}
 };

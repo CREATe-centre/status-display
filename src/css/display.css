@@ -149,6 +149,33 @@ div.timeline g.timeline-element.FAVOURITED_RETWEET.selected>circle {
 	fill: #597D70;
 }
 
+div.timeline g.timeline-element.YOU_FOLLOWED>circle {
+	fill: #3F5630;
+}
+
+div.timeline g.timeline-element.YOU_FOLLOWED:hover>circle,
+div.timeline g.timeline-element.YOU_FOLLOWED.selected>circle {
+	fill: #87A374;
+}
+
+div.timeline g.timeline-element.FOLLOWED_YOU>circle {
+	fill: #2E4C1D;
+}
+
+div.timeline g.timeline-element.FOLLOWED_YOU:hover>circle,
+div.timeline g.timeline-element.FOLLOWED_YOU.selected>circle {
+	fill: #87A374;
+}
+
+div.timeline g.timeline-element.YOU_UNFOLLOWED>circle {
+	fill: #021A12;
+}
+
+div.timeline g.timeline-element.YOU_UNFOLLOWED:hover>circle,
+div.timeline g.timeline-element.YOU_UNFOLLOWED.selected>circle {
+	fill: #1E380D;
+}
+
 g.timeline-link path {
 	fill: none;
 	stroke: #333;
@@ -205,6 +232,18 @@ g.timeline-link path {
 
 .FAVOURITED_RETWEET {
 	background-color: #021A12;
+}
+
+.YOU_FOLLOWED {
+	background-color: #3F5630;
+}
+
+.FOLLOWED_YOU {
+	background-color: #2E4C1D;
+}
+
+.YOU_UNFOLLOWED  {
+	background-color: #1E380D;
 }
 
 .legend {

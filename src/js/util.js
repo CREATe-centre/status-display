@@ -72,6 +72,12 @@ Status.Util.getID = function( tweet ) {
 		|| tweet.event == "FAVOURITED_YOU"
 		|| tweet.event == "UNFAVOURITED_YOU") {
 		id_end = tweet.data.status.id_str;
+	} else if (tweet.event == "YOU_FOLLOWED") {
+		id_end = tweet.data.followedUserId;
+	} else if (tweet.event == "YOU_UNFOLLOWED") {
+		id_end = tweet.data.unfollowedUserId;
+	} else if (tweet.event == "FOLLOWED_YOU") {
+		id_end = tweet.data.sourceId;
 	} else {
 		console.log( "Don't know how to generate ID for event '" + tweet.event + "'" );
 	}

@@ -60,6 +60,9 @@ get_header();
         <li class="legend-entry FAVOURITED_YOU">Your Tweet Was Favourited</li>
         <li class="legend-entry UNFAVOURITED_YOU">Your Tweet Was Unfavourited</li>
 				<li class="legend-entry FAVOURITED_RETWEET">Your Retweet Was Favourited</li>
+				<li class="legend-entry YOU_FOLLOWED">You Started Following</li>
+				<li class="legend-entry FOLLOWED_YOU">Started Following You</li>
+				<li class="legend-entry YOU_UNFOLLOWED">You Stopped Following</li>
 			</ul>
 		</div>
 		<div class="profile"></div>
