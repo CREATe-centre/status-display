@@ -43,7 +43,7 @@ Status.Timeline.Visualisation = function( $, container, start, tweets ) {
 
 	function selectTweet( tweet ) {
 		d3.selectAll( ".timeline-element.selected" ).classed( "selected", false );
-		d3.select( "#tweet-" + tweet.data.id_str ).classed( "selected", true );
+		d3.select( "#tweet-" + tweet.id ).classed( "selected", true );
 	}
 
 	$( Status ).bind( "status.map.googlemap.tweet-selected" , function( event, tweet ) {
@@ -69,7 +69,7 @@ Status.Timeline.Visualisation.prototype.renderTweet = function( self, tweet ) {
 	var radius = 10;
 	var g = d3.select( document.createElementNS( 'http://www.w3.org/2000/svg', 'g' ) )
 		.attr( "class", tweet.event + " timeline-element" )
-		.attr( "id", "tweet-" + tweet.data.id_str );
+		.attr( "id", "tweet-" + tweet.id );
 	var max = 45;
 	var radius = max + (max - (max / Math.exp( tweet.incoming_edges.length )));
 	g.append( "circle" )

@@ -40,13 +40,13 @@ get_header();
 <div id="tweet-canvas" class="canvas">
 	<div class="timeline"></div>
 	<div class="sidebar">
-		<div class="profile"></div>
 		<div class="actions">
 			<h3>Actions</h3>
 			<ul>
 				<li><a href="<?php echo esc_url( wp_logout_url( home_url() ) ); ?>">Sign out</a></li>
 			</ul>
 		</div>
+		<div class="information-panel"></div>
 		<div class="legend">
 			<h3>KEY</h3>
 			<ul>
@@ -55,9 +55,14 @@ get_header();
 				<li class="legend-entry RETWEET">General Retweet</li>
 				<li class="legend-entry FRIEND_RETWEET">Retweet by a Friend</li>
 				<li class="legend-entry FRIEND_OF_FRIEND_RETWEET">Retweet by a Friend of a Friend</li>
+				<li class="legend-entry YOU_FAVOURITED">Tweet You Favourited</li>
+        <li class="legend-entry YOU_UNFAVOURITED">Tweet You Unfavourited</li>
+        <li class="legend-entry FAVOURITED_YOU">Your Tweet Was Favourited</li>
+        <li class="legend-entry UNFAVOURITED_YOU">Your Tweet Was Unfavourited</li>
+				<li class="legend-entry FAVOURITED_RETWEET">Your Retweet Was Favourited</li>
 			</ul>
 		</div>
-		<div class="information-panel"></div>
+		<div class="profile"></div>
 		<div class="map"></div>
 	</div>
 </div>

@@ -100,8 +100,53 @@ div.timeline g.timeline-element.FRIEND_OF_FRIEND_RETWEET>circle {
 }
 
 div.timeline g.timeline-element.FRIEND_OF_FRIEND_RETWEET:hover>circle,
-div.timeline g.timeline-element.FFRIEND_OF_FRIEND_RETWEET.selected>circle {
+div.timeline g.timeline-element.FRIEND_OF_FRIEND_RETWEET.selected>circle {
   fill: #BA9684;
+}
+
+div.timeline g.timeline-element.YOU_FAVOURITED>circle {
+  fill: #3E6155;
+}
+
+div.timeline g.timeline-element.YOU_FAVOURITED:hover>circle,
+div.timeline g.timeline-element.YOU_FAVOURITED.selected>circle {
+  fill: #597D70;
+}
+
+div.timeline g.timeline-element.YOU_UNFAVOURITED>circle {
+  fill: #254137;
+}
+
+div.timeline g.timeline-element.YOU_UNFAVOURITED:hover>circle,
+div.timeline g.timeline-element.YOU_UNFAVOURITED.selected>circle {
+  fill: #597D70;
+}
+
+div.timeline g.timeline-element.FAVOURITED_YOU>circle {
+  fill: #163A2D;
+}
+
+div.timeline g.timeline-element.FAVOURITED_YOU:hover>circle,
+div.timeline g.timeline-element.FAVOURITED_YOU.selected>circle {
+  fill: #597D70;
+}
+
+div.timeline g.timeline-element.UNFAVOURITED_YOU>circle {
+  fill: #0A2B1F;
+}
+
+div.timeline g.timeline-element.UNFAVOURITED_YOU:hover>circle,
+div.timeline g.timeline-element.UNFAVOURITED_YOU.selected>circle {
+  fill: #597D70;
+}
+
+div.timeline g.timeline-element.FAVOURITED_RETWEET>circle {
+  fill: #021A12;
+}
+
+div.timeline g.timeline-element.FAVOURITED_RETWEET:hover>circle,
+div.timeline g.timeline-element.FAVOURITED_RETWEET.selected>circle {
+  fill: #597D70;
 }
 
 g.timeline-link path {
@@ -140,6 +185,26 @@ g.timeline-link path {
 
 .FRIEND_OF_FRIEND_RETWEET {
   background-color: #401E0E;
+}
+
+.YOU_FAVOURITED {
+  background-color: #3E6155;
+}
+
+.YOU_UNFAVOURITED {
+  background-color: #254137;
+}
+
+.FAVOURITED_YOU {
+  background-color: #163A2D;
+}
+
+.UNFAVOURITED_YOU {
+  background-color: #0A2B1F;
+}
+
+.FAVOURITED_RETWEET {
+  background-color: #021A12;
 }
 
 .legend {

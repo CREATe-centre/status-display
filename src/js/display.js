@@ -23,6 +23,7 @@ jQuery(function($) {
 			var start = new Date();
 			var special_retweet_ids = [];
 			$.each( data, function( i, o ) {
+				o.id = Status.Util.getID(o);
 				o.date = Status.Util.parseCreatedAt( o.created_at );
 				o.incoming_edges = [];
 				o.outgoing_edges = [];

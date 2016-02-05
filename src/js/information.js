@@ -78,6 +78,38 @@ Status.Information.Display.prototype.displayRetweet = function( tweet ) {
 	+ "</a></b></li></ul>" );
 };
 
+Status.Information.Display.prototype.displayFavourited = function( tweet ) {
+	var type = "Tweet You Favourited";
+	var status = tweet.data.status;
+	var screen_name = "";
+	if(tweet.event == "YOU_FAVOURITED") {
+		type = "Tweet You Favourited";
+		screen_name = tweet.data.targetUserName;
+	} else if(tweet.event == "YOU_UNFAVOURITED") {
+		type = "Tweet You Unfavourited";
+		screen_name = tweet.data.targetUserName;
+	} else if(tweet.event == "FAVOURITED_YOU") {
+		type = "Your Tweet Was Favourited";
+		screen_name = tweet.data.sourceName;
+	} else if(tweet.event == "UNFAVOURITED_YOU") {
+		type = "Your Tweet Was Unfavourited";
+		screen_name = tweet.data.sourceName;
+	} else if(tweet.event == "FAVOURITED_RETWEET") {
+		type = "Your Retweet Was Favourited";
+		screen_name = tweet.data.sourceName;
+	}
+	this.container.html( "<h3>SELECTED NODE</h3><ul><li><b>Type</b>: "
+			+ type + "</li><li><b>Text</b>: "
+			+ this.renderText( status.text )
+			+ "</li><li><b>Date:</b> "
+			+ this.renderDate( tweet.date )
+			+ "</li><li>By <b><a href=\"https://twitter.com/"
+			+ screen_name + "\" target=\"_blank\">@"
+			+ screen_name
+		+ "</a></b></li></ul>" );
+			
+}
+
 Status.Information.Display.prototype.displayTweet = function( tweet ) {
 	this.container.empty();
 	if ( tweet.event == "TWEET" ) {
@@ -88,6 +120,12 @@ Status.Information.Display.prototype.displayTweet = function( tweet ) {
 			|| tweet.event == "FRIEND_RETWEET" 
 			|| tweet.event == "FRIEND_OF_FRIEND_RETWEET" ) {
 		this.displayRetweet( tweet );
+	} else if ( tweet.event == "YOU_FAVOURITED" 
+			|| tweet.event == "YOU_UNFAVOURITED"
+			|| tweet.event == "FAVOURITED_YOU" 
+			|| tweet.event == "UNFAVOURITED_YOU" 
+			|| tweet.event == "FAVOURITED_RETWEET") {
+		this.displayFavourited( tweet );
 	} else {
 		console.log( "Dont know how to render " + tweet.event );
 	}
