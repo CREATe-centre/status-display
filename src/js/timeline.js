@@ -119,7 +119,7 @@ Status.Timeline.Visualisation.prototype.update = function() {
 	tweets.attr( "transform", function( d, i ) {
 		d.i = i;
 		return "translate(" + self.x( d.date ) + ","
-				+ ((i % count) * height) + ")";
+				+ ((i % count) * height + 30) + ")";
 	} );
 	tweets.exit().remove();
 	threaded_tweets_data.each( function (d, i) {

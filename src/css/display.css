@@ -69,12 +69,12 @@ div.timeline g.timeline-element.TWEET.selected>circle {
 }
 
 div.timeline g.timeline-element.MENTION>circle {
-	fill: #254137;
+	fill: #3A0D18;
 }
 
 div.timeline g.timeline-element.MENTION:hover>circle,
 div.timeline g.timeline-element.MENTION.selected>circle {
-	fill: #597D70;
+	fill: #AA7885;
 }
 
 div.timeline g.timeline-element.RETWEET>circle {
@@ -87,12 +87,21 @@ div.timeline g.timeline-element.RETWEET.selected>circle {
 }
 
 div.timeline g.timeline-element.FRIEND_RETWEET>circle {
-	fill: #401E0E;
+	fill: #573221;
 }
 
 div.timeline g.timeline-element.FRIEND_RETWEET:hover>circle,
 div.timeline g.timeline-element.FRIEND_RETWEET.selected>circle {
 	fill: #BA9684;
+}
+
+div.timeline g.timeline-element.FRIEND_OF_FRIEND_RETWEET>circle {
+  fill: #401E0E;
+}
+
+div.timeline g.timeline-element.FRIEND_OF_FRIEND_RETWEET:hover>circle,
+div.timeline g.timeline-element.FFRIEND_OF_FRIEND_RETWEET.selected>circle {
+  fill: #BA9684;
 }
 
 g.timeline-link path {
@@ -118,7 +127,7 @@ g.timeline-link path {
 }
 
 .MENTION {
-	background-color: #254137;
+	background-color: #3A0D18;
 }
 
 .RETWEET {
@@ -126,7 +135,11 @@ g.timeline-link path {
 }
 
 .FRIEND_RETWEET {
-	background-color: #401E0E;
+	background-color: #573221;
+}
+
+.FRIEND_OF_FRIEND_RETWEET {
+  background-color: #401E0E;
 }
 
 .legend {

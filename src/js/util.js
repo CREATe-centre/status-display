@@ -51,5 +51,9 @@ Status.Util.getTimeline = function( $, callback ) {
 };
 
 Status.Util.parseCreatedAt = function( createdAt ) {
+	return moment( createdAt, "YYYY-MM-DD HH:mm:ss" ).toDate();
+};
+
+Status.Util.parseTwitterCreatedAt = function( createdAt ) {
 	return moment( createdAt, "ddd MMM DD HH:mm:ss ZZ YYYY" ).toDate();
 };

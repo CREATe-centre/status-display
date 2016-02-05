@@ -60,10 +60,12 @@ Status.Information.Display.prototype.displayMention = function( tweet ) {
 
 Status.Information.Display.prototype.displayRetweet = function( tweet ) {
 	var type = "Retweet";
-	if ( tweet.type == "RETWEET" ) {
+	if ( tweet.event == "RETWEET" ) {
 		type = "Retweet";
-	} else if ( tweet.type == "RETWEET" ) {
+	} else if ( tweet.event == "FRIEND_RETWEET" ) {
 		type = "Retweet by Friend";
+	} else if ( tweet.event == "FRIEND_OF_FRIEND_RETWEET" ) {
+		type = "Retweet by Friend of a Friend";
 	}
 	this.container.html( "<h3>SELECTED NODE</h3><ul><li><b>Type</b>: "
 		+ type + "</li><li><b>Text</b>: "
@@ -82,7 +84,9 @@ Status.Information.Display.prototype.displayTweet = function( tweet ) {
 		this.displayNormalTweet( tweet );
 	} else if ( tweet.event == "MENTION" ) {
 		this.displayMention( tweet );
-	} else if ( tweet.event == "RETWEET" || tweet.event == "FRIEND_RETWEET" ) {
+	} else if ( tweet.event == "RETWEET" 
+			|| tweet.event == "FRIEND_RETWEET" 
+			|| tweet.event == "FRIEND_OF_FRIEND_RETWEET" ) {
 		this.displayRetweet( tweet );
 	} else {
 		console.log( "Dont know how to render " + tweet.event );

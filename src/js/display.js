@@ -21,40 +21,29 @@ jQuery(function($) {
 	(function () {
 		Status.Util.getTimeline( $, function( data ) {
 			var start = new Date();
+			var special_retweet_ids = [];
 			$.each( data, function( i, o ) {
 				o.date = Status.Util.parseCreatedAt( o.created_at );
 				o.incoming_edges = [];
 				o.outgoing_edges = [];
+				if(o.event == "FRIEND_RETWEET" 
+						|| o.event == "FRIEND_OF_FRIEND_RETWEET") {
+					special_retweet_ids.push(o.data.id);
+				}
 				if ( o.date.getTime() < start.getTime() ) {
 					start = o.date;
 				}
 			} );
+			var timeline_data = [];
+			$.each( data, function( i, o ) {
+				if(!(o.event == "RETWEET" 
+						&& $.inArray(o.data.id, special_retweet_ids))) {
+					timeline_data.push(o);
+				}
+			});
 			(new Status.Timeline.Visualisation(
 				$, $( "#tweet-canvas>.timeline" ),
-			start, data, true )).redraw()();
+			start, timeline_data, true )).redraw()();
 		} );
-		/*var count = 20;
-		Status.Util.getTweets( $, count, function( tweets ) {
-			$.each( tweets, function( i, o ) {
-				o.type = "tweet";
-			});
-			Status.Util.getMentions( $, count, function( mentions ) {
-				$.each( mentions, function( i, o ) {
-					o.type = "mention";
-				});
-				var data = tweets.concat( mentions );
-				var start = new Date();
-				$.each( data, function( i, o ) {
-					o.date = Status.Util.parseCreatedAt( o.created_at );
-					if ( o.date.getTime() < start.getTime() ) {
-						start = o.date;
-					}
-				} );
-				(new Status.Timeline.Visualisation(
-					$, $( "#tweet-canvas>.timeline" ),
-				start, data, true )).redraw()();
-				//map.displayTweets( data );
-			});
-		})*/
 	}) ();
 });

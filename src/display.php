@@ -52,8 +52,9 @@ get_header();
 			<ul>
 				<li class="legend-entry TWEET">Your Tweet</li>
 				<li class="legend-entry MENTION">Mention</li>
-				<li class="legend-entry FRIEND_RETWEET">Retweet by a Friend</li>
 				<li class="legend-entry RETWEET">General Retweet</li>
+				<li class="legend-entry FRIEND_RETWEET">Retweet by a Friend</li>
+				<li class="legend-entry FRIEND_OF_FRIEND_RETWEET">Retweet by a Friend of a Friend</li>
 			</ul>
 		</div>
 		<div class="information-panel"></div>
