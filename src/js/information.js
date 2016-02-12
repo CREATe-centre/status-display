@@ -131,6 +131,23 @@ Status.Information.Display.prototype.displayFollowed = function( tweet ) {
 	+ text + "</li></ul>" );
 }
 
+Status.Information.Display.prototype.displayQuotedTweet = function( tweet ) {
+	console.log(tweet);
+	var type = "Quoted Tweet";
+	var text = "";
+	
+	this.container.html( "<h3>SELECTED NODE</h3><ul><li><b>Type</b>: "
+			+ type + "</li><li><b>Text</b>: "
+			+ this.renderText( tweet.data.status.text )
+			+ "</li><li><b>Quoted Text</b>: " 
+			+ this.renderText( tweet.data.status.quoted_status.text ) + "</li><li><b>Date:</b> "
+			+ this.renderDate( tweet.date )
+			+ "</li><li>Quoted by <b><a href=\"https://twitter.com/"
+			+ tweet.data.sourceName + "\" target=\"_blank\">@"
+			+ tweet.data.sourceName
+		+ "</a></b></li></ul>" );
+}
+
 Status.Information.Display.prototype.displayTweet = function( tweet ) {
 	this.container.empty();
 	if ( tweet.event == "TWEET" ) {
@@ -151,6 +168,8 @@ Status.Information.Display.prototype.displayTweet = function( tweet ) {
 			|| tweet.event == "YOU_UNFOLLOWED"
 			|| tweet.event == "FOLLOWED_YOU") {
 		this.displayFollowed( tweet );
+	} else if (tweet.event == "QUOTED_TWEET") {
+		this.displayQuotedTweet( tweet );
 	} else {
 		console.log( "Dont know how to render event type '" + tweet.event + "'" );
 	}

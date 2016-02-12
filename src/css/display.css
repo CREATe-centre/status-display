@@ -77,6 +77,15 @@ div.timeline g.timeline-element.MENTION.selected>circle {
 	fill: #AA7885;
 }
 
+div.timeline g.timeline-element.QUOTED_TWEET>circle {
+  fill: #4F1E2A;
+}
+
+div.timeline g.timeline-element.QUOTED_TWEET:hover>circle,
+div.timeline g.timeline-element.QUOTED_TWEET.selected>circle {
+  fill: #AA7885;
+}
+
 div.timeline g.timeline-element.RETWEET>circle {
 	fill: #624537;
 }
@@ -200,6 +209,10 @@ g.timeline-link path {
 
 .MENTION {
 	background-color: #3A0D18;
+}
+
+.QUOTED_TWEET {
+  background-color: #4F1E2A;
 }
 
 .RETWEET {

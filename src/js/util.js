@@ -78,8 +78,33 @@ Status.Util.getID = function( tweet ) {
 		id_end = tweet.data.unfollowedUserId;
 	} else if (tweet.event == "FOLLOWED_YOU") {
 		id_end = tweet.data.sourceId;
+	} else if (tweet.event == "QUOTED_TWEET") {
+		id_end = tweet.data.sourceId + "-" + tweet.data.status.id_str;
+	} else if (tweet.event == "RETWEETED_RETWEET") {
+		id_end = tweet.data.sourceId + "-" + tweet.data.status.id_str;
 	} else {
 		console.log( "Don't know how to generate ID for event '" + tweet.event + "'" );
 	}
 	return tweet.event + "-" + id_end;
+}
+
+Status.Util.getEventTypeDesc = function( eventType ) {
+	switch(eventType) {
+	case "TWEET": return "Tweet";
+	case "MENTION": return "Mention";
+	case "RETWEET": return "General Retweet";
+	case "FRIEND_RETWEET": return "Retweet by a Friend";
+	case "FRIEND_OF_FRIEND_RETWEET": return "Retweet by a Friend of a Friend";
+	case "FAVOURITED_RETWEET": return "";
+	case "YOU_FAVOURITED": return "Tweet You Favourited";
+	case "YOU_UNFAVOURITED": return "Tweet You Unfavourited";
+	case "FAVOURITED_YOU": return "Your Tweet Was Favourited";
+	case "UNFAVOURITED_YOU": return "Your Tweet Was Unfavourited";
+	case "YOU_FOLLOWED": return "You Started Following";
+	case "YOU_UNFOLLOWED": return "You Stopped Following";
+	case "FOLLOWED_YOU": return "Started Following You";
+	case "QUOTED_TWEET": return "Quoted Tweet";
+	case "FAVOURITED_RETWEET": return "Your Retweet Was Favourited";
+	default: return "";
+	}
 }
