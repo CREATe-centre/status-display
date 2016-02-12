@@ -1,3 +1,9 @@
+/**
+ * Twitter profile functions.
+
+ * @package status
+ */
+
 var Status = Status || {};
 
 Status.Profile = Status.Profile || {};

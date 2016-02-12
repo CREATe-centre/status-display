@@ -1,6 +1,7 @@
 <?php
 /**
  * WordPress function file.
+
  * @package status
  */
 

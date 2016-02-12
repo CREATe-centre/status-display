@@ -1,5 +1,6 @@
 /**
  * Login page Javascript functions.
+
  * @package status
  */
 

@@ -37,7 +37,7 @@ jQuery(function($) {
 			} );
 			var timeline_data = [];
 			$.each( data, function( i, o ) {
-				if ( (! (o.event == "RETWEET"
+				if ( ( ! (o.event == "RETWEET"
 						&& $.inArray( o.data.id, special_retweet_ids )))
 						&& o.event != "RETWEETED_RETWEET") {
 					timeline_data.push( o );

@@ -1,3 +1,9 @@
+/**
+ * Utility functions.
+
+ * @package status
+ */
+
 var Status = Status || {};
 
 Status.Util = Status.Util || {};
@@ -89,22 +95,22 @@ Status.Util.getID = function( tweet ) {
 }
 
 Status.Util.getEventTypeDesc = function( eventType ) {
-	switch(eventType) {
-	case "TWEET": return "Tweet";
-	case "MENTION": return "Mention";
-	case "RETWEET": return "General Retweet";
-	case "FRIEND_RETWEET": return "Retweet by a Friend";
-	case "FRIEND_OF_FRIEND_RETWEET": return "Retweet by a Friend of a Friend";
-	case "FAVOURITED_RETWEET": return "";
-	case "YOU_FAVOURITED": return "Tweet You Favourited";
-	case "YOU_UNFAVOURITED": return "Tweet You Unfavourited";
-	case "FAVOURITED_YOU": return "Your Tweet Was Favourited";
-	case "UNFAVOURITED_YOU": return "Your Tweet Was Unfavourited";
-	case "YOU_FOLLOWED": return "You Started Following";
-	case "YOU_UNFOLLOWED": return "You Stopped Following";
-	case "FOLLOWED_YOU": return "Started Following You";
-	case "QUOTED_TWEET": return "Quoted Tweet";
-	case "FAVOURITED_RETWEET": return "Your Retweet Was Favourited";
-	default: return "";
+	switch ( eventType ) {
+		case "TWEET": return "Tweet";
+		case "MENTION": return "Mention";
+		case "RETWEET": return "General Retweet";
+		case "FRIEND_RETWEET": return "Retweet by a Friend";
+		case "FRIEND_OF_FRIEND_RETWEET": return "Retweet by a Friend of a Friend";
+		case "FAVOURITED_RETWEET": return "";
+		case "YOU_FAVOURITED": return "Tweet You Favourited";
+		case "YOU_UNFAVOURITED": return "Tweet You Unfavourited";
+		case "FAVOURITED_YOU": return "Your Tweet Was Favourited";
+		case "UNFAVOURITED_YOU": return "Your Tweet Was Unfavourited";
+		case "YOU_FOLLOWED": return "You Started Following";
+		case "YOU_UNFOLLOWED": return "You Stopped Following";
+		case "FOLLOWED_YOU": return "Started Following You";
+		case "QUOTED_TWEET": return "Quoted Tweet";
+		case "FAVOURITED_RETWEET": return "Your Retweet Was Favourited";
+		default: return "";
 	}
 }

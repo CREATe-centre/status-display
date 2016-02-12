@@ -1,3 +1,11 @@
+<?php
+/**
+ * Settings menu page.
+
+ * @package status
+ */
+
+?>
 <div>
 	<h1>Status Settings</h1>
 	<form action="options.php" method="post">

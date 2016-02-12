@@ -1,6 +1,7 @@
 <?php
 /**
  * Display page.
+
  * @package status
  */
 
@@ -44,6 +45,8 @@ get_header();
 			<h3>Actions</h3>
 			<ul>
 				<li><a href="<?php echo esc_url( wp_logout_url( home_url() ) ); ?>">Sign out</a></li>
+				<li><a href="<?php echo esc_url( site_url( '/data.json.bz2' ) ); ?>"
+				    title="Use this to download your Twitter data into a plain text file.  The text of your tweets will be stored, including any linked URLs, along with data from your Twitter user profile and location information, if this is enabled on the device you tweet from.  Tweets and user data of other people who have mentioned you in a tweet, or retweeted or favourited one of your tweets, will also be included.">Export my data</a></li>
 			</ul>
 		</div>
 		<div class="information-panel"></div>

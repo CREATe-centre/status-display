@@ -1,3 +1,9 @@
+/**
+ * Timeline rendering functions.
+
+ * @package status
+ */
+
 var Status = Status || {};
 
 Status.Timeline = Status.Timeline || {};
@@ -75,7 +81,7 @@ Status.Timeline.Visualisation.prototype.renderTweet = function( self, tweet ) {
 	g.append( "circle" )
 		.attr( "r", radius + "px" );
 
-	g.append( "title" ).text( Status.Util.getEventTypeDesc(tweet.event) );
+	g.append( "title" ).text( Status.Util.getEventTypeDesc( tweet.event ) );
 	g.on( "click", function( d ) {
 		self.$( Status ).trigger( "status.timeline.visualisation.tweet-selected", d );
 	} );

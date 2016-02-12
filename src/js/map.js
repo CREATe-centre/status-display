@@ -1,3 +1,9 @@
+/**
+ * Javascript map functions.
+
+ * @package status
+ */
+
 if ( ! google.maps.Polygon.prototype.getBounds ) {
 	google.maps.Polygon.prototype.getBounds = function( latLng ) {
 		var bounds = new google.maps.LatLngBounds();

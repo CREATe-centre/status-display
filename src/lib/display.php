@@ -1,11 +1,13 @@
 <?php
 /**
  * Display page functions.
+
  * @package status
  */
 
 /**
  * Extract a POST parameter.
+
  * @param string $name Parameter name.
  * @return mixed the parameter, or false if non-existant
  */
@@ -20,6 +22,7 @@ function get_param( $name ) {
 
 /**
  * Returns an initialized Codebird instance.
+
  * @return mixed initialized Codebird instance
  */
 function get_codebird_instance() {
@@ -35,6 +38,11 @@ function get_codebird_instance() {
 	return $cb;
 }
 
+/**
+ * Gets tweets from Twitter.
+
+ * @param mixed $get Callback function.
+ */
 function get_tweets( $get ) {
 	global $current_user;
 	$cb = get_codebird_instance();

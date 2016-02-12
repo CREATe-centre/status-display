@@ -1,6 +1,7 @@
 <?php
 /**
  * Common template header.
+
  * @package status
  */
 
