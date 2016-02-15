@@ -5,9 +5,8 @@ ENV WORDPRESS_SHA1 1e9046b584d4eaebac9e1f7292ca7003bfc8ffd7
 
 RUN a2enmod rewrite
 
-RUN apt-get update
-
-RUN apt-get install -y libpng12-dev libjpeg-dev libbz2-dev \
+RUN apt-get update 
+  && apt-get install -y libpng12-dev libjpeg-dev libbz2-dev \
   && docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
   && docker-php-ext-install gd
   
