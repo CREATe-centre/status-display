@@ -16,6 +16,8 @@ RUN pecl install oauth-1.2.3 \
 
 RUN docker-php-ext-install mysqli
 
+RUN docker-php-ext-install bz2
+
 RUN apt-get install -y mysql-client
 
 RUN rm -rf /var/lib/apt/lists/*
