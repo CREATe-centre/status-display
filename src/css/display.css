@@ -155,7 +155,7 @@ div.timeline g.timeline-element.YOU_UNFOLLOWED.selected>circle {
 }
 
 g.timeline-link path {
-	fill: none;
+	fill: black;
 	stroke: #333;
 	stroke-width: 2px;
 	cursor: default;

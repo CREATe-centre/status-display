@@ -72,15 +72,10 @@ Status.Timeline.Visualisation = function( $, container, start, tweets ) {
 };
 
 Status.Timeline.Visualisation.prototype.renderTweet = function( self, tweet ) {
-	var radius = 10;
 	var g = d3.select( document.createElementNS( 'http://www.w3.org/2000/svg', 'g' ) )
 		.attr( "class", tweet.event + " timeline-element" )
 		.attr( "id", "tweet-" + tweet.id );
-	var max = 45;
-	var radius = max + (max - (max / Math.exp( tweet.incoming_edges.length )));
-	g.append( "circle" )
-		.attr( "r", radius + "px" );
-
+	g.append( "circle" );
 	g.append( "title" ).text( Status.Util.getEventTypeDesc( tweet.event ) );
 	g.on( "click", function( d ) {
 		self.$( Status ).trigger( "status.timeline.visualisation.tweet-selected", d );
@@ -90,6 +85,8 @@ Status.Timeline.Visualisation.prototype.renderTweet = function( self, tweet ) {
 
 Status.Timeline.Visualisation.prototype.update = function() {
 	var self = this;
+	var offset = 30;
+	var radius = Math.floor( ( self.container.height() - offset ) / 32 );
 	var tweets = self.canvas
 		.selectAll( "g.timeline-element" )
 		.data( self.tweets );
@@ -99,12 +96,6 @@ Status.Timeline.Visualisation.prototype.update = function() {
 			return self.renderTweet( self, d );
 		} )
 		.each( function( d ) {
-			d3.select( this ).selectAll( "circle" )
-				.each( function() {
-					if ( this.getBBox().height > self.maxBoxHeight ) {
-						self.maxBoxHeight = this.getBBox().height;
-					}
-				} );
 			if (d.in_reply_to_status_id_str) {
 				threaded_tweets.push( d );
 			}
@@ -120,12 +111,32 @@ Status.Timeline.Visualisation.prototype.update = function() {
 			return g.node();
 		} );
 
-	var height = self.maxBoxHeight + 5;
-	var count = parseInt( (self.container.height() - (self.padding * 2)) / height );
+	var height = radius * 2;
+	var tweet_types = [ "TWEET",
+	                    "MENTION",
+	                    "QUOTED_TWEET",
+	                    "RETWEET",
+	                    "FRIEND_RETWEET",
+	                    "FRIEND_OF_FRIEND_RETWEET",
+	                    "YOU_FAVOURITED",
+	                    "YOU_UNFAVOURITED",
+	                    "FAVOURITED_YOU",
+	                    "UNFAVOURITED_YOU",
+	                    "FAVOURITED_RETWEET",
+	                    "YOU_FOLLOWED",
+	                    "FOLLOWED_YOU",
+	                    "YOU_UNFOLLOWED",
+	                    "BLOCK",
+	                    "UNBLOCK" ];
 	tweets.attr( "transform", function( d, i ) {
 		d.i = i;
+		var y = tweet_types.indexOf( d.event );
 		return "translate(" + self.x( d.date ) + ","
-				+ ((i % count) * height + 30) + ")";
+			+ (y * height + offset) + ")";
+	} ).each(function( d, i ) {
+		d3.select( this ).select( "circle" ).attr( "r", function() {
+			return radius + "px";
+		} );
 	} );
 	tweets.exit().remove();
 	threaded_tweets_data.each( function (d, i) {
