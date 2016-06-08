@@ -60,129 +60,98 @@ div.timeline g.timeline-element>circle {
 }
 
 div.timeline g.timeline-element.TWEET>circle {
-	fill: #59323c;
-}
-
-div.timeline g.timeline-element.TWEET:hover>circle,
-div.timeline g.timeline-element.TWEET.selected>circle {
-	fill: #AA7885;
+	fill: #57c6e4;
 }
 
 div.timeline g.timeline-element.MENTION>circle {
-	fill: #3A0D18;
-}
-
-div.timeline g.timeline-element.MENTION:hover>circle,
-div.timeline g.timeline-element.MENTION.selected>circle {
-	fill: #AA7885;
+	fill: #eacf96;
 }
 
 div.timeline g.timeline-element.QUOTED_TWEET>circle {
-	fill: #4F1E2A;
-}
-
-div.timeline g.timeline-element.QUOTED_TWEET:hover>circle,
-div.timeline g.timeline-element.QUOTED_TWEET.selected>circle {
-	fill: #AA7885;
+	fill: #9cbdec;
 }
 
 div.timeline g.timeline-element.RETWEET>circle {
-	fill: #624537;
-}
-
-div.timeline g.timeline-element.RETWEET:hover>circle,
-div.timeline g.timeline-element.RETWEET.selected>circle {
-	fill: #BA9684;
+	fill: #b1bf81;
 }
 
 div.timeline g.timeline-element.FRIEND_RETWEET>circle {
-	fill: #573221;
-}
-
-div.timeline g.timeline-element.FRIEND_RETWEET:hover>circle,
-div.timeline g.timeline-element.FRIEND_RETWEET.selected>circle {
-	fill: #BA9684;
+	fill: #e7aada;
 }
 
 div.timeline g.timeline-element.FRIEND_OF_FRIEND_RETWEET>circle {
-	fill: #401E0E;
-}
-
-div.timeline g.timeline-element.FRIEND_OF_FRIEND_RETWEET:hover>circle,
-div.timeline g.timeline-element.FRIEND_OF_FRIEND_RETWEET.selected>circle {
-	fill: #BA9684;
+	fill: #93ead4;
 }
 
 div.timeline g.timeline-element.YOU_FAVOURITED>circle {
-	fill: #3E6155;
-}
-
-div.timeline g.timeline-element.YOU_FAVOURITED:hover>circle,
-div.timeline g.timeline-element.YOU_FAVOURITED.selected>circle {
-	fill: #597D70;
+	fill: #edaab4;
 }
 
 div.timeline g.timeline-element.YOU_UNFAVOURITED>circle {
-	fill: #254137;
-}
-
-div.timeline g.timeline-element.YOU_UNFAVOURITED:hover>circle,
-div.timeline g.timeline-element.YOU_UNFAVOURITED.selected>circle {
-	fill: #597D70;
+	fill: #6ad9df;
 }
 
 div.timeline g.timeline-element.FAVOURITED_YOU>circle {
-	fill: #163A2D;
-}
-
-div.timeline g.timeline-element.FAVOURITED_YOU:hover>circle,
-div.timeline g.timeline-element.FAVOURITED_YOU.selected>circle {
-	fill: #597D70;
+	fill: #e7b393;
 }
 
 div.timeline g.timeline-element.UNFAVOURITED_YOU>circle {
-	fill: #0A2B1F;
-}
-
-div.timeline g.timeline-element.UNFAVOURITED_YOU:hover>circle,
-div.timeline g.timeline-element.UNFAVOURITED_YOU.selected>circle {
-	fill: #597D70;
+	fill: #9ddef2;
 }
 
 div.timeline g.timeline-element.FAVOURITED_RETWEET>circle {
-	fill: #021A12;
-}
-
-div.timeline g.timeline-element.FAVOURITED_RETWEET:hover>circle,
-div.timeline g.timeline-element.FAVOURITED_RETWEET.selected>circle {
-	fill: #597D70;
+	fill: #deeaaf;
 }
 
 div.timeline g.timeline-element.YOU_FOLLOWED>circle {
-	fill: #3F5630;
-}
-
-div.timeline g.timeline-element.YOU_FOLLOWED:hover>circle,
-div.timeline g.timeline-element.YOU_FOLLOWED.selected>circle {
-	fill: #87A374;
+	fill: #d0b8e5;
 }
 
 div.timeline g.timeline-element.FOLLOWED_YOU>circle {
-	fill: #2E4C1D;
-}
-
-div.timeline g.timeline-element.FOLLOWED_YOU:hover>circle,
-div.timeline g.timeline-element.FOLLOWED_YOU.selected>circle {
-	fill: #87A374;
+	fill: #94c89f;
 }
 
 div.timeline g.timeline-element.YOU_UNFOLLOWED>circle {
-	fill: #021A12;
+	fill: #cec7a1;
 }
 
+div.timeline g.timeline-element.BLOCK>circle {
+    fill: #91cec7;
+}
+
+div.timeline g.timeline-element.UNBLOCK>circle {
+    fill: #bfecc1;
+}
+
+div.timeline g.timeline-element.TWEET:hover>circle,
+div.timeline g.timeline-element.TWEET.selected>circle,
+div.timeline g.timeline-element.MENTION:hover>circle,
+div.timeline g.timeline-element.MENTION.selected>circle,
+div.timeline g.timeline-element.QUOTED_TWEET:hover>circle,
+div.timeline g.timeline-element.QUOTED_TWEET.selected>circle,
+div.timeline g.timeline-element.RETWEET:hover>circle,
+div.timeline g.timeline-element.RETWEET.selected>circle,
+div.timeline g.timeline-element.FRIEND_RETWEET:hover>circle,
+div.timeline g.timeline-element.FRIEND_RETWEET.selected>circle,
+div.timeline g.timeline-element.FRIEND_OF_FRIEND_RETWEET:hover>circle,
+div.timeline g.timeline-element.FRIEND_OF_FRIEND_RETWEET.selected>circle,
+div.timeline g.timeline-element.YOU_FAVOURITED:hover>circle,
+div.timeline g.timeline-element.YOU_FAVOURITED.selected>circle,
+div.timeline g.timeline-element.YOU_UNFAVOURITED:hover>circle,
+div.timeline g.timeline-element.YOU_UNFAVOURITED.selected>circle,
+div.timeline g.timeline-element.FAVOURITED_YOU:hover>circle,
+div.timeline g.timeline-element.FAVOURITED_YOU.selected>circle,
+div.timeline g.timeline-element.UNFAVOURITED_YOU:hover>circle,
+div.timeline g.timeline-element.UNFAVOURITED_YOU.selected>circle,
+div.timeline g.timeline-element.FAVOURITED_RETWEET:hover>circle,
+div.timeline g.timeline-element.FAVOURITED_RETWEET.selected>circle,
+div.timeline g.timeline-element.YOU_FOLLOWED:hover>circle,
+div.timeline g.timeline-element.YOU_FOLLOWED.selected>circle,
+div.timeline g.timeline-element.FOLLOWED_YOU:hover>circle,
+div.timeline g.timeline-element.FOLLOWED_YOU.selected>circle,
 div.timeline g.timeline-element.YOU_UNFOLLOWED:hover>circle,
 div.timeline g.timeline-element.YOU_UNFOLLOWED.selected>circle {
-	fill: #1E380D;
+    fill: #000000;
 }
 
 g.timeline-link path {
@@ -200,63 +169,89 @@ g.timeline-link path {
 .legend-entry {
 	color: white;
 	padding: 3px;
-	text-align: center;
+	padding-left: 10px;
+	text-align: left;
+	cursor: pointer;
 }
 
 .TWEET {
-	background-color: #59323c;
+	background-color: #57c6e4;
+	color: #000000;
 }
 
 .MENTION {
-	background-color: #3A0D18;
+	background-color: #eacf96;
+	color: #000000;
 }
 
 .QUOTED_TWEET {
-	background-color: #4F1E2A;
+	background-color: #9cbdec;
+	color: #000000;
 }
 
 .RETWEET {
-	background-color: #624537;
+	background-color: #b1bf81;
+	color: #000000;
 }
 
 .FRIEND_RETWEET {
-	background-color: #573221;
+	background-color: #e7aada;
+	color: #000000;
 }
 
 .FRIEND_OF_FRIEND_RETWEET {
-	background-color: #401E0E;
+	background-color: #93ead4;
+	color: #000000;
 }
 
 .YOU_FAVOURITED {
-	background-color: #3E6155;
+	background-color: #edaab4;
+	color: #000000;
 }
 
 .YOU_UNFAVOURITED {
-	background-color: #254137;
+	background-color: #6ad9df;
+	color: #000000;
 }
 
 .FAVOURITED_YOU {
-	background-color: #163A2D;
+	background-color: #e7b393;
+	color: #000000;
 }
 
 .UNFAVOURITED_YOU {
-	background-color: #0A2B1F;
+	background-color: #9ddef2;
+	color: #000000;
 }
 
 .FAVOURITED_RETWEET {
-	background-color: #021A12;
+	background-color: #deeaaf;
+	color: #000000;
 }
 
 .YOU_FOLLOWED {
-	background-color: #3F5630;
+	background-color: #d0b8e5;
+	color: #000000;
 }
 
 .FOLLOWED_YOU {
-	background-color: #2E4C1D;
+	background-color: #94c89f;
+	color: #000000;
 }
 
 .YOU_UNFOLLOWED  {
-	background-color: #1E380D;
+	background-color: #cec7a1;
+	color: #000000;
+}
+
+.BLOCK {
+    background-color: #91cec7;
+    color: #000000;
+}
+
+.UNBLOCK  {
+    background-color: #bfecc1;
+    color: #000000;
 }
 
 .legend {
@@ -268,10 +263,10 @@ g.timeline-link path {
 	height: 100%;
 	position: fixed;
 	right: 10px;
-	top: 10px;
+	top: 0px;
 	width: 20%;
 	overflow: auto;
-	background: linear-gradient(rgba(242, 238, 179, 0.8) 0%, rgba(191, 175, 128, 0.8) 90%);
+	background: linear-gradient(rgba(255, 255, 255, 0.8) 0%, rgba(224, 224, 224, 0.8) 90%);
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 }

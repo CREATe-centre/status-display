@@ -88,10 +88,14 @@ Status.Util.getID = function( tweet ) {
 		id_end = tweet.data.sourceId + "-" + tweet.data.status.id_str;
 	} else if (tweet.event == "RETWEETED_RETWEET") {
 		id_end = tweet.data.sourceId + "-" + tweet.data.status.id_str;
+	} else if (tweet.event == "BLOCK") {
+		id_end = tweet.data.sourceId + "-" + tweet.data.blockedUserId;
+	} else if (tweet.event == "UNBLOCK") {
+		id_end = tweet.data.sourceId + "-" + tweet.data.unblockedUserId;
 	} else {
 		console.log( "Don't know how to generate ID for event '" + tweet.event + "'" );
 	}
-	return tweet.event + "-" + id_end;
+	return tweet.event + "-" + id_end + "-" + tweet.db_id;
 }
 
 Status.Util.getEventTypeDesc = function( eventType ) {
@@ -111,6 +115,8 @@ Status.Util.getEventTypeDesc = function( eventType ) {
 		case "FOLLOWED_YOU": return "Started Following You";
 		case "QUOTED_TWEET": return "Quoted Tweet";
 		case "FAVOURITED_RETWEET": return "Your Retweet Was Favourited";
+		case "BLOCK": return "You blocked a user";
+		case "UNBLOCK": return "You unblocked a user";
 		default: return "";
 	}
 }

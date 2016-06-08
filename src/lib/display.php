@@ -105,7 +105,7 @@ add_action( 'wp_ajax_status.get_timeline', function() {
 	global $wpdb;
 	header( 'Content-Type: application/json' );
 	$results = $wpdb->get_results( $wpdb->prepare(
-		'SELECT event, data, created_at FROM ' . $wpdb->prefix
+		'SELECT ID as db_id, event, data, created_at FROM ' . $wpdb->prefix
 	. 'twitter_data WHERE user_id = %d', $current_user->ID ) );
 	foreach ( $results as $result ) {
 		$result->data = json_decode( $result->data );

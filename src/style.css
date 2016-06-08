@@ -10,11 +10,11 @@ Version: 1.0
 @CHARSET "UTF-8";
 
 html {
-	background: linear-gradient(#f2eeb3 0%, #bfaf80 100%);
+	background: linear-gradient(#ffffff 0%, #E0E0E0 100%);
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	font-family: 'Open Sans', sans-serif;
-	font-size: 14px;
+	font-size: 12px;
 	height: 100%;
 	color: #260126;
 }

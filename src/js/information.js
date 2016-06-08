@@ -151,6 +151,22 @@ Status.Information.Display.prototype.displayQuotedTweet = function( tweet ) {
 	+ "</a></b></li></ul>" );
 }
 
+Status.Information.Display.prototype.displayBlock = function( tweet ) {
+	var type = "Block";
+	this.container.html( "<h3>SELECTED NODE</h3><ul><li><b>Type</b>: "
+		+ type + "</li><li>You blocked "
+		+ this.renderText( "@" + tweet.data.blockedUserName )
+		+ "</li></ul>" );
+}
+
+Status.Information.Display.prototype.displayUnblock = function( tweet ) {
+	var type = "Block";
+	this.container.html( "<h3>SELECTED NODE</h3><ul><li><b>Type</b>: "
+		+ type + "</li><li>You unblocked "
+		+ this.renderText( "@" + tweet.data.unblockedUserName )
+		+ "</li></ul>" );
+}
+
 Status.Information.Display.prototype.displayTweet = function( tweet ) {
 	this.container.empty();
 	if ( tweet.event == "TWEET" ) {
@@ -173,7 +189,11 @@ Status.Information.Display.prototype.displayTweet = function( tweet ) {
 		this.displayFollowed( tweet );
 	} else if (tweet.event == "QUOTED_TWEET") {
 		this.displayQuotedTweet( tweet );
+	} else if (tweet.event == "BLOCK") {
+		this.displayBlock( tweet );
+	} else if (tweet.event == "UNBLOCK") {
+		this.displayUnblock( tweet );
 	} else {
-		console.log( "Dont know how to render event type '" + tweet.event + "'" );
+		console.log( "Don't know how to render event type '" + tweet.event + "'" );
 	}
 };

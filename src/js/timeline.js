@@ -151,20 +151,38 @@ Status.Timeline.Visualisation.prototype.redraw = function() {
 		var tx = function( d ) {
 			return "translate(" + self.x( d ) + ",0)";
 		};
-
+		
 		var fx = function() {
-			var r = self.x.tickFormat().apply( null, arguments );
-			return r;
+			//var r = self.x.tickFormat().apply( null, arguments );
+			//return r;
+			var date = arguments[0];
+			var format = d3.time.format;
+			var formatMillisecond = format("%d/%m/%y %H:%M:%S"),
+				formatSecond = format("%d/%m/%y %H:%M:%S"),
+				formatMinute = format("%d/%m/%y %H:%M:%S"),
+				formatHour = format("%d/%m/%y %H:%M"),
+				formatDay = format("%d/%m/%y"),
+				formatWeek = format("%d/%m/%y"),
+				formatMonth = format("%B %Y"),
+				formatYear = format("%Y");
+			return (d3.time.second.utc(date) < date ? formatMillisecond
+			        : d3.time.minute.utc(date) < date ? formatSecond
+			        : d3.time.hour.utc(date) < date ? formatMinute
+			        : d3.time.day.utc(date) < date ? formatHour
+			        : d3.time.month.utc(date) < date ? 
+			        		(d3.time.week.utc(date) < date ? formatDay : formatWeek)
+			        : d3.time.year.utc(date) < date ? formatMonth
+			        : formatYear)(date);
 		}
 
 		self.display
 			.attr( "width", cx )
 			.attr( "height", cy );
 
-		self.x.range( [ 0, width ] )
-
+		self.x.range( [ 0, width ] );		
+		
 		var gx = self.canvas.selectAll( "g.x" )
-			.data( self.x.ticks( 10 ), String )
+			.data( self.x.ticks( 5 ), String )
 			.attr( "transform", tx );
 
 		gx.select( "text" )
