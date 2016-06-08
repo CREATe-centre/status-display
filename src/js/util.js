@@ -120,3 +120,20 @@ Status.Util.getEventTypeDesc = function( eventType ) {
 		default: return "";
 	}
 }
+
+Status.Util.TWEET_TYPES = [ "TWEET",
+	"MENTION",
+	"QUOTED_TWEET",
+	"RETWEET",
+	"FRIEND_RETWEET",
+	"FRIEND_OF_FRIEND_RETWEET",
+	"YOU_FAVOURITED",
+	"YOU_UNFAVOURITED",
+	"FAVOURITED_YOU",
+	"UNFAVOURITED_YOU",
+	"FAVOURITED_RETWEET",
+	"YOU_FOLLOWED",
+	"FOLLOWED_YOU",
+	"YOU_UNFOLLOWED",
+	"BLOCK",
+	"UNBLOCK" ];

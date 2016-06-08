@@ -26,7 +26,6 @@ wp_enqueue_script( 'd3',
 '//cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js', array(), '3.5.6' );
 wp_enqueue_script( 'status_profile', $url_prefix . '/js/profile.js', array(), '1.0.0' );
 wp_enqueue_script( 'status_timeline', $url_prefix . '/js/timeline.js', array(), '1.0.0' );
-wp_enqueue_script( 'status_map', $url_prefix . '/js/map.js', array(), '1.0.0' );
 wp_enqueue_script( 'status_util', $url_prefix . '/js/util.js', array(), '1.0.0' );
 wp_enqueue_script( 'status_information', $url_prefix . '/js/information.js', array(), '1.0.0' );
 wp_enqueue_script( 'status_display',
@@ -119,8 +118,6 @@ get_header();
 			</ul>
 		</div>
 		<div class="information-panel"></div>
-		<div class="profile"></div>
-		<div class="map"></div>
 	</div>
 </div>
 <!-- <div>What does this do?

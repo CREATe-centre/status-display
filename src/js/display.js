@@ -11,7 +11,6 @@
 var Status = Status || {};
 
 jQuery(function($) {
-	/*var map = new Status.Map.GoogleMap( $, $( "#tweet-canvas>.map" ) );*/
 
 	$( ".legend-entry" ).click( function( e ) {
 		var type = $( this ).data( "type" );
@@ -19,10 +18,6 @@ jQuery(function($) {
 		$( this ).children( "input" ).prop( "checked", ! $( this ).children( "input" ).prop( "checked" ) );
 	});
 
-	/*Status.Profile.get( $, function( data ) {
-		$( "#tweet-canvas .profile" )
-			.append( Status.Profile.draw( $, data ) );
-	});*/
 	new Status.Information.Display( $, $( "#tweet-canvas .information-panel" ) );
 	(function () {
 		Status.Util.getTimeline( $, function( data ) {
