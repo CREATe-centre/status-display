@@ -72,18 +72,18 @@ get_header();
 					<input type="checkbox" checked="checked" />
 					<span>Tweet You Favourited</span>
 				</li>
-        		<li class="legend-entry YOU_UNFAVOURITED" data-type="YOU_UNFAVOURITED">
-        			<input type="checkbox" checked="checked" />
-        			<span>Tweet You Unfavourited</span>
-        		</li>
-        		<li class="legend-entry FAVOURITED_YOU" data-type="FAVOURITED_YOU">
-        			<input type="checkbox" checked="checked" />
-        			<span>Your Tweet Was Favourited</span>
-        		</li>
-        		<li class="legend-entry UNFAVOURITED_YOU" data-type="UNFAVOURITED_YOU">
-        			<input type="checkbox" checked="checked" />
-        			<span>Your Tweet Was Unfavourited</span>
-        		</li>
+				<li class="legend-entry YOU_UNFAVOURITED" data-type="YOU_UNFAVOURITED">
+					<input type="checkbox" checked="checked" />
+					<span>Tweet You Unfavourited</span>
+				</li>
+				<li class="legend-entry FAVOURITED_YOU" data-type="FAVOURITED_YOU">
+					<input type="checkbox" checked="checked" />
+					<span>Your Tweet Was Favourited</span>
+				</li>
+				<li class="legend-entry UNFAVOURITED_YOU" data-type="UNFAVOURITED_YOU">
+				<input type="checkbox" checked="checked" />
+					<span>Your Tweet Was Unfavourited</span>
+				</li>
 				<li class="legend-entry FAVOURITED_RETWEET" data-type="FAVOURITED_RETWEET">
 					<input type="checkbox" checked="checked" />
 					<span>Your Retweet Was Favourited</span>

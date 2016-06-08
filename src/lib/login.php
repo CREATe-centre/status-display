@@ -1,7 +1,13 @@
 <?php
 /**
  * Login page functions.
+ *
+ * @package status
+ */
 
+/**
+ * Login page functions.
+ *
  * @package status
  */
 

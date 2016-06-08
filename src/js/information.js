@@ -156,7 +156,7 @@ Status.Information.Display.prototype.displayBlock = function( tweet ) {
 	this.container.html( "<h3>SELECTED NODE</h3><ul><li><b>Type</b>: "
 		+ type + "</li><li>You blocked "
 		+ this.renderText( "@" + tweet.data.blockedUserName )
-		+ "</li></ul>" );
+	+ "</li></ul>" );
 }
 
 Status.Information.Display.prototype.displayUnblock = function( tweet ) {
@@ -164,7 +164,7 @@ Status.Information.Display.prototype.displayUnblock = function( tweet ) {
 	this.container.html( "<h3>SELECTED NODE</h3><ul><li><b>Type</b>: "
 		+ type + "</li><li>You unblocked "
 		+ this.renderText( "@" + tweet.data.unblockedUserName )
-		+ "</li></ul>" );
+	+ "</li></ul>" );
 }
 
 Status.Information.Display.prototype.displayTweet = function( tweet ) {

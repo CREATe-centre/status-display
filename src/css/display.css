@@ -116,11 +116,11 @@ div.timeline g.timeline-element.YOU_UNFOLLOWED>circle {
 }
 
 div.timeline g.timeline-element.BLOCK>circle {
-    fill: #91cec7;
+	fill: #91cec7;
 }
 
 div.timeline g.timeline-element.UNBLOCK>circle {
-    fill: #bfecc1;
+	fill: #bfecc1;
 }
 
 div.timeline g.timeline-element.TWEET:hover>circle,
@@ -151,7 +151,7 @@ div.timeline g.timeline-element.FOLLOWED_YOU:hover>circle,
 div.timeline g.timeline-element.FOLLOWED_YOU.selected>circle,
 div.timeline g.timeline-element.YOU_UNFOLLOWED:hover>circle,
 div.timeline g.timeline-element.YOU_UNFOLLOWED.selected>circle {
-    fill: #000000;
+	fill: #000000;
 }
 
 g.timeline-link path {
@@ -245,13 +245,13 @@ g.timeline-link path {
 }
 
 .BLOCK {
-    background-color: #91cec7;
-    color: #000000;
+	background-color: #91cec7;
+	color: #000000;
 }
 
 .UNBLOCK  {
-    background-color: #bfecc1;
-    color: #000000;
+	background-color: #bfecc1;
+	color: #000000;
 }
 
 .legend {
