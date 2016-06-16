@@ -46,7 +46,7 @@ jQuery(function($) {
 				var el = $( ".legend-entry." + e + " span" );
 				el.text( el.text() + " (" + tweet_type_counts[e] + ")" );
 			}
-			
+
 			(new Status.Timeline.Visualisation(
 				$, $( "#tweet-canvas>.timeline" ),
 			start, timeline_data, data.links )).redraw()();

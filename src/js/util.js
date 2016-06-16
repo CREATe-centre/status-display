@@ -65,8 +65,8 @@ Status.Util.parseTwitterCreatedAt = function( createdAt ) {
 };
 
 Status.Util.getID = function( tweet ) {
-	if( tweet.db_id ) {
-		return "tweet-data-node-" + String(tweet.db_id);
+	if ( tweet.db_id ) {
+		return "tweet-data-node-" + String( tweet.db_id );
 	} else {
 		return "tweet-data-node-" + tweet.toString();
 	}

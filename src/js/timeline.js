@@ -34,7 +34,7 @@ Status.Timeline.Visualisation = function( $, container, start, tweets, links ) {
 		.append( "g" )
 		.attr( "transform", "translate( "
 		+ this.padding + "," + this.padding + ")" );
-	
+
 	this.getTweetByID = function( id ) {
 		return $.grep( tweets, function( t, i ) {
 			return t.db_id === id;
@@ -94,7 +94,7 @@ Status.Timeline.Visualisation.prototype.update = function() {
 	var offset = 30;
 	var radius = Math.floor( ( self.container.height() - offset ) / 32 );
 	var height = radius * 2;
-	
+
 	var links = self.canvas
 		.selectAll( "g.link" )
 		.data( self.links );
@@ -103,11 +103,11 @@ Status.Timeline.Visualisation.prototype.update = function() {
 			return self.renderLink( d );
 		} );
 	links.each( function( d, i ) {
-		var ft = self.getTweetByID(d.from_id);
+		var ft = self.getTweetByID( d.from_id );
 		if ( ft.length == 0 ) {
 			return;
 		}
-		var tt = self.getTweetByID(d.to_id);
+		var tt = self.getTweetByID( d.to_id );
 		if ( tt.length == 0 ) {
 			return;
 		}
@@ -116,11 +116,11 @@ Status.Timeline.Visualisation.prototype.update = function() {
 		var fy = Status.Util.TWEET_TYPES.indexOf( ft.event );
 		var ty = Status.Util.TWEET_TYPES.indexOf( tt.event );
 		d3.select( this ).select( "line" )
-			.attr( "x1", self.x(ft.date) ).attr( "y1", (fy * height + offset) )
-			.attr( "x2", self.x(tt.date) ).attr( "y2", (ty * height + offset) );
+			.attr( "x1", self.x( ft.date ) ).attr( "y1", fy * height + offset )
+			.attr( "x2", self.x( tt.date ) ).attr( "y2", ty * height + offset );
 	} );
 	links.exit().remove();
-	
+
 	var tweets = self.canvas
 		.selectAll( "g.timeline-element" )
 		.data( self.tweets );

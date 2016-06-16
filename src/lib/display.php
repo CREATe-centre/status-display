@@ -113,9 +113,9 @@ add_action( 'wp_ajax_status.get_timeline', function() {
 	$links = $wpdb->get_results( $wpdb->prepare(
 		'SELECT ID as id, from_id, to_id FROM ' . $wpdb->prefix
 	. 'twitter_data_links WHERE user_id = %d', $current_user->ID ) );
-	echo json_encode( array (
-			"events" => $events,
-			"links" => $links,
+	echo json_encode( array(
+			'events' => $events,
+			'links' => $links,
 	) );
 	wp_die();
 } );
