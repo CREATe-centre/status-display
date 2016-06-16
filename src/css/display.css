@@ -132,7 +132,11 @@ div.timeline g.timeline-element.YOU_FOLLOWED.selected>circle,
 div.timeline g.timeline-element.FOLLOWED_YOU:hover>circle,
 div.timeline g.timeline-element.FOLLOWED_YOU.selected>circle,
 div.timeline g.timeline-element.YOU_UNFOLLOWED:hover>circle,
-div.timeline g.timeline-element.YOU_UNFOLLOWED.selected>circle {
+div.timeline g.timeline-element.YOU_UNFOLLOWED.selected>circle,
+div.timeline g.timeline-element.BLOCK:hover>circle,
+div.timeline g.timeline-element.BLOCK.selected>circle,
+div.timeline g.timeline-element.UNBLOCK:hover>circle,
+div.timeline g.timeline-element.UNBLOCK.selected>circle {
 	fill: #000000;
 }
 
@@ -145,7 +149,6 @@ div.timeline g.timeline-element.YOU_UNFOLLOWED.selected>circle {
 	padding: 3px;
 	padding-left: 10px;
 	text-align: left;
-	cursor: pointer;
 }
 
 .TWEET {
@@ -238,9 +241,14 @@ div.timeline g.timeline-element.YOU_UNFOLLOWED.selected>circle {
 	position: fixed;
 	right: 10px;
 	top: 0px;
-	width: 20%;
+	width: 18%;
 	overflow: auto;
 	background: linear-gradient(rgba(255, 255, 255, 0.8) 0%, rgba(224, 224, 224, 0.8) 90%);
 	background-repeat: no-repeat;
 	background-attachment: fixed;
+}
+
+.link line {
+	stroke: #57c6e4;
+	stroke-width: 1;
 }

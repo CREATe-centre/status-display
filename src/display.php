@@ -44,67 +44,51 @@ get_header();
 			<h3>KEY</h3>
 			<ul>
 				<li class="legend-entry TWEET" data-type="TWEET">
-					<input type="checkbox" checked="checked" />
 					<span>Your Tweet</span>
 				</li>
 				<li class="legend-entry MENTION" data-type="MENTION">
-					<input type="checkbox" checked="checked" />
 					<span>Mention</span>
 				</li>
 				<li class="legend-entry QUOTED_TWEET" data-type="QUOTED_TWEET">
-					<input type="checkbox" checked="checked" />
 					<span>Quoted Tweet</span>
 				</li>
 				<li class="legend-entry RETWEET" data-type="RETWEET">
-					<input type="checkbox" checked="checked" />
 					<span>General Retweet</span>
 				</li>
 				<li class="legend-entry FRIEND_RETWEET" data-type="FRIEND_RETWEET">
-					<input type="checkbox" checked="checked" />
 					<span>Retweet by a Friend</span>
 				</li>
 				<li class="legend-entry FRIEND_OF_FRIEND_RETWEET" data-type="FRIEND_OF_FRIEND_RETWEET">
-					<input type="checkbox" checked="checked" />
 					<span>Retweet by a Friend of a Friend</span>
 				</li>
 				<li class="legend-entry YOU_FAVOURITED" data-type="YOU_FAVOURITED">
-					<input type="checkbox" checked="checked" />
 					<span>Tweet You Favourited</span>
 				</li>
 				<li class="legend-entry YOU_UNFAVOURITED" data-type="YOU_UNFAVOURITED">
-					<input type="checkbox" checked="checked" />
 					<span>Tweet You Unfavourited</span>
 				</li>
 				<li class="legend-entry FAVOURITED_YOU" data-type="FAVOURITED_YOU">
-					<input type="checkbox" checked="checked" />
 					<span>Your Tweet Was Favourited</span>
 				</li>
 				<li class="legend-entry UNFAVOURITED_YOU" data-type="UNFAVOURITED_YOU">
-				<input type="checkbox" checked="checked" />
 					<span>Your Tweet Was Unfavourited</span>
 				</li>
 				<li class="legend-entry FAVOURITED_RETWEET" data-type="FAVOURITED_RETWEET">
-					<input type="checkbox" checked="checked" />
 					<span>Your Retweet Was Favourited</span>
 				</li>
 				<li class="legend-entry YOU_FOLLOWED" data-type="YOU_FOLLOWED">
-					<input type="checkbox" checked="checked" />
 					<span>You Started Following</span>
 				</li>
 				<li class="legend-entry FOLLOWED_YOU" data-type="FOLLOWED_YOU">
-					<input type="checkbox" checked="checked" />
 					<span>Started Following You</span>
 				</li>
 				<li class="legend-entry YOU_UNFOLLOWED" data-type="YOU_UNFOLLOWED">
-					<input type="checkbox" checked="checked" />
 					<span>You Stopped Following</span>
 				</li>
 				<li class="legend-entry BLOCK" data-type="BLOCK">
-					<input type="checkbox" checked="checked" />
 					<span>You Blocked a User</span>
 				</li>
 				<li class="legend-entry UNBLOCK" data-type="UNBLOCK">
-					<input type="checkbox" checked="checked" />
 					<span>You Unblocked a User</span>
 				</li>
 			</ul>

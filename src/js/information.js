@@ -160,7 +160,7 @@ Status.Information.Display.prototype.displayBlock = function( tweet ) {
 }
 
 Status.Information.Display.prototype.displayUnblock = function( tweet ) {
-	var type = "Block";
+	var type = "Unblock";
 	this.container.html( "<h3>SELECTED NODE</h3><ul><li><b>Type</b>: "
 		+ type + "</li><li>You unblocked "
 		+ this.renderText( "@" + tweet.data.unblockedUserName )

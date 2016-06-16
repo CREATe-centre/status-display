@@ -65,37 +65,11 @@ Status.Util.parseTwitterCreatedAt = function( createdAt ) {
 };
 
 Status.Util.getID = function( tweet ) {
-	var id_end = "";
-	if (tweet.event == "TWEET"
-		|| tweet.event == "MENTION"
-		|| tweet.event == "RETWEET"
-		|| tweet.event == "FRIEND_RETWEET"
-		|| tweet.event == "FRIEND_OF_FRIEND_RETWEET"
-		|| tweet.event == "FAVOURITED_RETWEET") {
-		id_end = tweet.data.id_str;
-	} else if (tweet.event == "YOU_FAVOURITED"
-		|| tweet.event == "YOU_UNFAVOURITED"
-		|| tweet.event == "FAVOURITED_YOU"
-		|| tweet.event == "UNFAVOURITED_YOU") {
-		id_end = tweet.data.status.id_str;
-	} else if (tweet.event == "YOU_FOLLOWED") {
-		id_end = tweet.data.followedUserId;
-	} else if (tweet.event == "YOU_UNFOLLOWED") {
-		id_end = tweet.data.unfollowedUserId;
-	} else if (tweet.event == "FOLLOWED_YOU") {
-		id_end = tweet.data.sourceId;
-	} else if (tweet.event == "QUOTED_TWEET") {
-		id_end = tweet.data.sourceId + "-" + tweet.data.status.id_str;
-	} else if (tweet.event == "RETWEETED_RETWEET") {
-		id_end = tweet.data.sourceId + "-" + tweet.data.status.id_str;
-	} else if (tweet.event == "BLOCK") {
-		id_end = tweet.data.sourceId + "-" + tweet.data.blockedUserId;
-	} else if (tweet.event == "UNBLOCK") {
-		id_end = tweet.data.sourceId + "-" + tweet.data.unblockedUserId;
+	if( tweet.db_id ) {
+		return "tweet-data-node-" + String(tweet.db_id);
 	} else {
-		console.log( "Don't know how to generate ID for event '" + tweet.event + "'" );
+		return "tweet-data-node-" + tweet.toString();
 	}
-	return tweet.event + "-" + id_end + "-" + tweet.db_id;
 }
 
 Status.Util.getEventTypeDesc = function( eventType ) {
@@ -121,7 +95,7 @@ Status.Util.getEventTypeDesc = function( eventType ) {
 	}
 }
 
-Status.Util.TWEET_TYPES = [ "TWEET",
+Status.Util.TWEET_TYPES = [
 	"MENTION",
 	"QUOTED_TWEET",
 	"RETWEET",
@@ -129,6 +103,7 @@ Status.Util.TWEET_TYPES = [ "TWEET",
 	"FRIEND_OF_FRIEND_RETWEET",
 	"YOU_FAVOURITED",
 	"YOU_UNFAVOURITED",
+	"TWEET",
 	"FAVOURITED_YOU",
 	"UNFAVOURITED_YOU",
 	"FAVOURITED_RETWEET",

@@ -104,13 +104,19 @@ add_action( 'wp_ajax_status.get_timeline', function() {
 	global $current_user;
 	global $wpdb;
 	header( 'Content-Type: application/json' );
-	$results = $wpdb->get_results( $wpdb->prepare(
+	$events = $wpdb->get_results( $wpdb->prepare(
 		'SELECT ID as db_id, event, data, created_at FROM ' . $wpdb->prefix
 	. 'twitter_data WHERE user_id = %d', $current_user->ID ) );
-	foreach ( $results as $result ) {
-		$result->data = json_decode( $result->data );
+	foreach ( $events as $event ) {
+		$event->data = json_decode( $event->data );
 	}
-	echo json_encode( $results );
+	$links = $wpdb->get_results( $wpdb->prepare(
+		'SELECT ID as id, from_id, to_id FROM ' . $wpdb->prefix
+	. 'twitter_data_links WHERE user_id = %d', $current_user->ID ) );
+	echo json_encode( array (
+			"events" => $events,
+			"links" => $links,
+	) );
 	wp_die();
 } );
 
