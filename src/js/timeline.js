@@ -18,6 +18,7 @@ Status.Timeline.Visualisation = function( $, container, start, tweets, links ) {
 	this.links = links;
 	this.padding = 20;
 	this.maxBoxHeight = 0;
+	this.renderer = new Status.Information.Display();
 
 	this.x = d3.time.scale.utc()
 		.domain( [ start, new Date() ] );
@@ -42,14 +43,9 @@ Status.Timeline.Visualisation = function( $, container, start, tweets, links ) {
 	}
 
 	$( window ).resize( self.redraw() );
-
-	function selectTweet( tweet ) {
-		d3.selectAll( ".timeline-element.selected" ).classed( "selected", false );
-		d3.select( "#" + tweet.id ).classed( "selected", true );
-	}
-
+	
 	$( Status ).bind( "status.timeline.visualisation.tweet-selected" , function( event, node, tweet ) {
-		selectTweet( tweet );
+		
 	} );
 
 	$( Status ).trigger( "status.timeline.visualisation.created",  self );
@@ -74,6 +70,44 @@ Status.Timeline.Visualisation.prototype.renderLink = function( link ) {
 		.attr( "class", "link" )
 		.attr( "id", "link-" + link.id );
 	g.append( "line" );
+	return g.node();
+};
+
+Status.Timeline.Visualisation.prototype.renderInformation = function( tweet ) {
+	var self = this;
+	var g = self.canvas.append("g");
+	g.attr("class", tweet.event + " information-display");
+	var width = 148;
+	var height = 133;
+	var coords = "M6,2"
+	+ "h" + width
+	+ "c3.252,0,6,2.748,6,6"
+	+ "v" + height
+	+ "c0,3.252-2.748,6-6,6"
+	+ "H25.442"
+	+ "L15.74," + (24.673 + height)
+	+ "C 15.546, " + ( 24.885 + height ) + ", 15.276, " + ( 25 + height ) + ", 15, " + ( 25 + height )
+	+ "c -0.121, 0 -0.243 -0.022 -0.361 -0.067"
+	+ "C14.254," + ( 24.784 + height ) + ",14," + ( 24.143 + height ) + ",14," + ( 24 + height )
+	+ "V" + ( height + 14 )
+	+ "H6c-3.252,0-6-2.748-6-6"
+	+ "L0,8"
+	+ "C0,4.748,2.748,2,6,2"
+	+ "z";
+	var path = g.append("path")
+		.attr("d", coords);
+	var fo = g.append("foreignObject");
+	fo.html(self.renderer.createTweet(tweet));
+	g.style("visibility", "hidden");
+	self.$( Status ).bind( "status.timeline.visualisation.tweet-selected" , function( event, node, t ) {
+		if ( t.id == tweet.id ) {
+			if ( g.style("visibility") == "hidden" ) {
+				g.style("visibility", "visible");
+			} else {
+				g.style("visibility", "hidden");
+			}
+		}
+	} );
 	return g.node();
 };
 
@@ -126,6 +160,21 @@ Status.Timeline.Visualisation.prototype.update = function() {
 		} );
 	} );
 	tweets.exit().remove();
+	
+	var information = self.canvas
+		.selectAll( "g.information-display" )
+		.data( self.tweets );
+	information.enter()
+		.append( function( d ) {
+			return self.renderInformation( d );
+		} )
+	information.attr( "transform", function( d, i ) {
+		var y = Status.Util.TWEET_TYPES.indexOf( d.event );
+		return "translate(" + self.x( d.date ) + ","
+			+ (y * height + offset) + ")";
+	} )
+	information.exit().remove();
+	
 	self.$( Status ).trigger( "status.timeline.visualisation.updated", [ self, height, radius ] );
 }
 

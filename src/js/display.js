@@ -52,7 +52,7 @@ jQuery(function($) {
 							"height" : height + "px"
 						} )
 						$( ".sidebar" ).css( {
-							"top" : ( ( 30 - radius ) + 20 ) + "px"
+							"top" : ( ( 30 - radius ) + timeline.padding ) + "px"
 						} )
 				}
 			);

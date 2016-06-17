@@ -34,74 +34,91 @@ div.timeline g.x text {
 	fill: #260126;
 }
 
-div.timeline g.timeline-element>circle {
+div.timeline g.timeline-element>circle,
+div.timeline g.information-display>path {
 	fill-opacity: 0.8;
 	stroke: black;
 	stroke-width: 0px;
 	filter: url(#blur);
 }
 
-div.timeline g.timeline-element.TWEET>circle {
+div.timeline g.timeline-element.TWEET>circle,
+div.timeline g.information-display.TWEET>path {
 	fill: #57c6e4;
 }
 
-div.timeline g.timeline-element.MENTION>circle {
+div.timeline g.timeline-element.MENTION>circle,
+div.timeline g.information-display.MENTION>path {
 	fill: #eacf96;
 }
 
-div.timeline g.timeline-element.QUOTED_TWEET>circle {
+div.timeline g.timeline-element.QUOTED_TWEET>circle,
+div.timeline g.information-display.QUOTED_TWEET>path {
 	fill: #9cbdec;
 }
 
-div.timeline g.timeline-element.RETWEET>circle {
+div.timeline g.timeline-element.RETWEET>circle,
+div.timeline g.information-display.RETWEET>path {
 	fill: #b1bf81;
 }
 
-div.timeline g.timeline-element.FRIEND_RETWEET>circle {
+div.timeline g.timeline-element.FRIEND_RETWEET>circle,
+div.timeline g.information-display.FRIEND_RETWEET>path {
 	fill: #e7aada;
 }
 
-div.timeline g.timeline-element.FRIEND_OF_FRIEND_RETWEET>circle {
+div.timeline g.timeline-element.FRIEND_OF_FRIEND_RETWEET>circle,
+div.timeline g.information-display.FRIEND_OF_FRIEND_RETWEET>path {
 	fill: #93ead4;
 }
 
-div.timeline g.timeline-element.YOU_FAVOURITED>circle {
+div.timeline g.timeline-element.YOU_FAVOURITED>circle,
+div.timeline g.information-display.YOU_FAVOURITED>path {
 	fill: #edaab4;
 }
 
-div.timeline g.timeline-element.YOU_UNFAVOURITED>circle {
+div.timeline g.timeline-element.YOU_UNFAVOURITED>circle,
+div.timeline g.information-display.YOU_UNFAVOURITED>path {
 	fill: #6ad9df;
 }
 
-div.timeline g.timeline-element.FAVOURITED_YOU>circle {
+div.timeline g.timeline-element.FAVOURITED_YOU>circle,
+div.timeline g.information-display.FAVOURITED_YOU>path {
 	fill: #e7b393;
 }
 
-div.timeline g.timeline-element.UNFAVOURITED_YOU>circle {
+div.timeline g.timeline-element.UNFAVOURITED_YOU>circle,
+div.timeline g.information-display.UNFAVOURITED_YOU>path {
 	fill: #9ddef2;
 }
 
-div.timeline g.timeline-element.FAVOURITED_RETWEET>circle {
+div.timeline g.timeline-element.FAVOURITED_RETWEET>circle,
+div.timeline g.information-display.FAVOURITED_RETWEET>path {
 	fill: #deeaaf;
 }
 
-div.timeline g.timeline-element.YOU_FOLLOWED>circle {
+div.timeline g.timeline-element.YOU_FOLLOWED>circle,
+div.timeline g.information-display.YOU_FOLLOWED>path {
 	fill: #d0b8e5;
 }
 
-div.timeline g.timeline-element.FOLLOWED_YOU>circle {
+div.timeline g.timeline-element.FOLLOWED_YOU>circle,
+div.timeline g.information-display.FOLLOWED_YOU>path {
 	fill: #94c89f;
 }
 
-div.timeline g.timeline-element.YOU_UNFOLLOWED>circle {
+div.timeline g.timeline-element.YOU_UNFOLLOWED>circle,
+div.timeline g.information-display.YOU_UNFOLLOWED>path {
 	fill: #cec7a1;
 }
 
-div.timeline g.timeline-element.BLOCK>circle {
+div.timeline g.timeline-element.BLOCK>circle,
+div.timeline g.information-display.BLOCK>path {
 	fill: #91cec7;
 }
 
-div.timeline g.timeline-element.UNBLOCK>circle {
+div.timeline g.timeline-element.UNBLOCK>circle,
+div.timeline g.information-display.UNBLOCK>path {
 	fill: #bfecc1;
 }
 
@@ -257,4 +274,10 @@ div.actions {
 	position: absolute;
 	top: 2px;
 	right: 2px;
+}
+
+div.information-display {
+	width: 400px;
+	padding: 0px;
+	margin: 0px;
 }
