@@ -11,7 +11,6 @@ var Status = Status || {};
 
 jQuery(function($) {
 
-	new Status.Information.Display( $, $( "#tweet-canvas .information-panel" ) );
 	(function () {
 		Status.Util.getTimeline( $, function( data ) {
 			var tweet_type_counts = new Array();
@@ -46,6 +45,17 @@ jQuery(function($) {
 				var el = $( ".legend-entry." + e + " span" );
 				el.text( el.text() + " (" + tweet_type_counts[e] + ")" );
 			}
+
+			$( Status ).bind( "status.timeline.visualisation.updated",
+				function( event, timeline, height, radius) {
+						$( ".legend-entry" ).css( {
+							"height" : height + "px"
+						} )
+						$( ".sidebar" ).css( {
+							"top" : ( ( 30 - radius ) + 20 ) + "px"
+						} )
+				}
+			);
 
 			(new Status.Timeline.Visualisation(
 				$, $( "#tweet-canvas>.timeline" ),

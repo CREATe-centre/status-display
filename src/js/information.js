@@ -17,10 +17,6 @@ Status.Information.Display = function( $, container ) {
 	$( Status ).bind( "status.timeline.visualisation.tweet-selected", function( event, tweet ) {
 		self.displayTweet( tweet );
 	} );
-	$( Status ).bind( "status.map.googlemap.tweet-selected", function( event, tweet ) {
-		self.displayTweet( tweet );
-	} );
-
 };
 
 Status.Information.Display.prototype.renderText = function( text ) {
@@ -123,7 +119,7 @@ Status.Information.Display.prototype.displayFollowed = function( tweet ) {
 				+ tweet.data.followedUserName
 				+ "</a></b>";
 	} else if (tweet.event == "YOU_UNFOLLOWED") {
-		text = "Your stopped following <b><a href=\"https://twitter.com/"
+		text = "You stopped following <b><a href=\"https://twitter.com/"
 				+ tweet.data.unfollowedUserName + "\" target=\"_blank\">@"
 				+ tweet.data.unfollowedUserName
 				+ "</a></b>";

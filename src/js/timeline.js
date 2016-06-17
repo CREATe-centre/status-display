@@ -48,19 +48,7 @@ Status.Timeline.Visualisation = function( $, container, start, tweets, links ) {
 		d3.select( "#" + tweet.id ).classed( "selected", true );
 	}
 
-	$( Status ).bind( "status.map.googlemap.tweet-selected" , function( event, tweet ) {
-		selectTweet( tweet );
-		var domain = self.x.domain();
-		var range = moment.range( domain[0], domain[1] );
-		var diff = parseInt( range.diff( "milliseconds" ) / 2 );
-		var center = moment( tweet.date );
-		var start = center.clone().subtract( diff, "milliseconds" );
-		var end = center.clone().add( diff, "milliseconds" );
-		self.x.domain( [ start.toDate(), end.toDate() ] );
-		self.redraw()();
-	} );
-
-	$( Status ).bind( "status.timeline.visualisation.tweet-selected" , function( event, tweet ) {
+	$( Status ).bind( "status.timeline.visualisation.tweet-selected" , function( event, node, tweet ) {
 		selectTweet( tweet );
 	} );
 
@@ -75,7 +63,7 @@ Status.Timeline.Visualisation.prototype.renderTweet = function( tweet ) {
 	g.append( "circle" );
 	g.append( "title" ).text( Status.Util.getEventTypeDesc( tweet.event ) );
 	g.on( "click", function( d ) {
-		self.$( Status ).trigger( "status.timeline.visualisation.tweet-selected", d );
+		self.$( Status ).trigger( "status.timeline.visualisation.tweet-selected", [ this, d ] );
 	} );
 	return g.node();
 };
@@ -138,6 +126,7 @@ Status.Timeline.Visualisation.prototype.update = function() {
 		} );
 	} );
 	tweets.exit().remove();
+	self.$( Status ).trigger( "status.timeline.visualisation.updated", [ self, height, radius ] );
 }
 
 Status.Timeline.Visualisation.prototype.redraw = function() {

@@ -10,7 +10,7 @@ div.canvas {
 
 div.canvas>.timeline {
 	width: 95%;
-	height: 100%;
+	height: 99%;
 	margin: auto;
 }
 
@@ -140,94 +140,83 @@ div.timeline g.timeline-element.UNBLOCK.selected>circle {
 	fill: #000000;
 }
 
-.legend>ul {
-	list-style-type: none;
-}
-
-.legend-entry {
-	color: white;
-	padding: 3px;
-	padding-left: 10px;
-	text-align: left;
-}
-
 .TWEET {
-	background-color: #57c6e4;
+	background-color: rgba(87,198,228, 0.8);
 	color: #000000;
 }
 
 .MENTION {
-	background-color: #eacf96;
+	background-color: rgba(234,207,150, 0.8);
 	color: #000000;
 }
 
 .QUOTED_TWEET {
-	background-color: #9cbdec;
+	background-color: rgba(156,189,236, 0.8);
 	color: #000000;
 }
 
 .RETWEET {
-	background-color: #b1bf81;
+	background-color: rgba(177,191,129, 0.8);
 	color: #000000;
 }
 
 .FRIEND_RETWEET {
-	background-color: #e7aada;
+	background-color: rgba(231,170,218, 0.8);
 	color: #000000;
 }
 
 .FRIEND_OF_FRIEND_RETWEET {
-	background-color: #93ead4;
+	background-color: rgba(147,234,212, 0.8);
 	color: #000000;
 }
 
 .YOU_FAVOURITED {
-	background-color: #edaab4;
+	background-color: rgba(237,170,180, 0.8);
 	color: #000000;
 }
 
 .YOU_UNFAVOURITED {
-	background-color: #6ad9df;
+	background-color: rgba(106,217,223, 0.8);
 	color: #000000;
 }
 
 .FAVOURITED_YOU {
-	background-color: #e7b393;
+	background-color: rgba(231,179,147, 0.8);
 	color: #000000;
 }
 
 .UNFAVOURITED_YOU {
-	background-color: #9ddef2;
+	background-color: rgba(157,222,242, 0.8);
 	color: #000000;
 }
 
 .FAVOURITED_RETWEET {
-	background-color: #deeaaf;
+	background-color: rgba(222,234,175, 0.8);
 	color: #000000;
 }
 
 .YOU_FOLLOWED {
-	background-color: #d0b8e5;
+	background-color: rgba(208,184,229, 0.8);
 	color: #000000;
 }
 
 .FOLLOWED_YOU {
-	background-color: #94c89f;
+	background-color: rgba(148,200,159, 0.8);
 	color: #000000;
 }
 
 .YOU_UNFOLLOWED  {
-	background-color: #cec7a1;
+	background-color: rgba(206,199,161, 0.8);
 	color: #000000;
 }
 
 .BLOCK {
-	background-color: #91cec7;
+	background-color: rgba(145,206,199, 0.8);
 	color: #000000;
 }
 
 .UNBLOCK  {
-	background-color: #bfecc1;
+	background-color: rgba(191,236,193, 0.8);
 	color: #000000;
 }
 
@@ -236,19 +225,36 @@ div.timeline g.timeline-element.UNBLOCK.selected>circle {
 }
 
 .sidebar {
-	padding: 5px;
+	padding: 0px;
+	margin: 0px;
 	height: 100%;
 	position: fixed;
-	right: 10px;
-	top: 0px;
-	width: 18%;
-	overflow: auto;
-	background: linear-gradient(rgba(255, 255, 255, 0.8) 0%, rgba(224, 224, 224, 0.8) 90%);
-	background-repeat: no-repeat;
-	background-attachment: fixed;
+	left: 0px;
+	top: 20px;
+	width: 15%;
+	overflow: none;
+}
+
+.legend ul {
+	list-style-type: none;
+	height: 100%;
+	width: 100%;
+}
+
+.legend-entry {
+	padding-left: 10px;
+	text-align: left;
+	height: 6%;
+	width: 100%;
 }
 
 .link line {
 	stroke: #57c6e4;
 	stroke-width: 1;
+}
+
+div.actions {
+	position: absolute;
+	top: 2px;
+	right: 2px;
 }

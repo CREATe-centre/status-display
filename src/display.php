@@ -39,74 +39,60 @@ get_header();
 ?>
 <div id="tweet-canvas" class="canvas">
 	<div class="timeline"></div>
-	<div class="sidebar">
-		<div class="legend">
-			<h3>KEY</h3>
-			<ul>
-				<li class="legend-entry TWEET" data-type="TWEET">
-					<span>Your Tweet</span>
-				</li>
-				<li class="legend-entry MENTION" data-type="MENTION">
-					<span>Mention</span>
-				</li>
-				<li class="legend-entry QUOTED_TWEET" data-type="QUOTED_TWEET">
-					<span>Quoted Tweet</span>
-				</li>
-				<li class="legend-entry RETWEET" data-type="RETWEET">
-					<span>General Retweet</span>
-				</li>
-				<li class="legend-entry FRIEND_RETWEET" data-type="FRIEND_RETWEET">
-					<span>Retweet by a Friend</span>
-				</li>
-				<li class="legend-entry FRIEND_OF_FRIEND_RETWEET" data-type="FRIEND_OF_FRIEND_RETWEET">
-					<span>Retweet by a Friend of a Friend</span>
-				</li>
-				<li class="legend-entry YOU_FAVOURITED" data-type="YOU_FAVOURITED">
-					<span>Tweet You Favourited</span>
-				</li>
-				<li class="legend-entry YOU_UNFAVOURITED" data-type="YOU_UNFAVOURITED">
-					<span>Tweet You Unfavourited</span>
-				</li>
-				<li class="legend-entry FAVOURITED_YOU" data-type="FAVOURITED_YOU">
-					<span>Your Tweet Was Favourited</span>
-				</li>
-				<li class="legend-entry UNFAVOURITED_YOU" data-type="UNFAVOURITED_YOU">
-					<span>Your Tweet Was Unfavourited</span>
-				</li>
-				<li class="legend-entry FAVOURITED_RETWEET" data-type="FAVOURITED_RETWEET">
-					<span>Your Retweet Was Favourited</span>
-				</li>
-				<li class="legend-entry YOU_FOLLOWED" data-type="YOU_FOLLOWED">
-					<span>You Started Following</span>
-				</li>
-				<li class="legend-entry FOLLOWED_YOU" data-type="FOLLOWED_YOU">
-					<span>Started Following You</span>
-				</li>
-				<li class="legend-entry YOU_UNFOLLOWED" data-type="YOU_UNFOLLOWED">
-					<span>You Stopped Following</span>
-				</li>
-				<li class="legend-entry BLOCK" data-type="BLOCK">
-					<span>You Blocked a User</span>
-				</li>
-				<li class="legend-entry UNBLOCK" data-type="UNBLOCK">
-					<span>You Unblocked a User</span>
-				</li>
-			</ul>
-		</div>
-		<div class="actions">
-			<h3>Actions</h3>
-			<ul>
-				<li><a href="<?php echo esc_url( wp_logout_url( home_url() ) ); ?>">Sign out</a></li>
-				<li><a href="<?php echo esc_url( site_url( '/data.json.bz2' ) ); ?>"
-				    title="Use this to download your Twitter data into a plain text file.  The text of your tweets will be stored, including any linked URLs, along with data from your Twitter user profile and location information, if this is enabled on the device you tweet from.  Tweets and user data of other people who have mentioned you in a tweet, or retweeted or favourited one of your tweets, will also be included.">Export my data</a></li>
-			</ul>
-		</div>
-		<div class="information-panel"></div>
-	</div>
+	<ul class="sidebar legend">
+		<li class="legend-entry FOLLOWED_YOU" data-type="FOLLOWED_YOU">
+			<span>Started Following You</span>
+		</li>
+		<li class="legend-entry YOU_UNFAVOURITED" data-type="YOU_UNFAVOURITED">
+			<span>Tweet You Unfavourited</span>
+		</li>
+		<li class="legend-entry YOU_FAVOURITED" data-type="YOU_FAVOURITED">
+			<span>Tweet You Favourited</span>
+		</li>
+		<li class="legend-entry UNFAVOURITED_YOU" data-type="UNFAVOURITED_YOU">
+			<span>Your Tweet Was Unfavourited</span>
+		</li>
+		<li class="legend-entry FAVOURITED_YOU" data-type="FAVOURITED_YOU">
+			<span>Your Tweet Was Favourited</span>
+		</li>
+		<li class="legend-entry FAVOURITED_RETWEET" data-type="FAVOURITED_RETWEET">
+			<span>Your Retweet Was Favourited</span>
+		</li>
+		<li class="legend-entry QUOTED_TWEET" data-type="QUOTED_TWEET">
+			<span>Quoted Tweet</span>
+		</li>		
+		<li class="legend-entry TWEET" data-type="TWEET">
+			<span>Your Tweet</span>
+		</li>
+		<li class="legend-entry MENTION" data-type="MENTION">
+			<span>Mention</span>
+		</li>
+		<li class="legend-entry FRIEND_RETWEET" data-type="FRIEND_RETWEET">
+			<span>Retweet by a Friend</span>
+		</li>
+		<li class="legend-entry FRIEND_OF_FRIEND_RETWEET" data-type="FRIEND_OF_FRIEND_RETWEET">
+			<span>Retweet by a Friend of a Friend</span>
+		</li><li class="legend-entry RETWEET" data-type="RETWEET">
+			<span>General Retweet</span>
+		</li>
+		<li class="legend-entry YOU_FOLLOWED" data-type="YOU_FOLLOWED">
+			<span>You Started Following</span>
+		</li>
+		<li class="legend-entry YOU_UNFOLLOWED" data-type="YOU_UNFOLLOWED">
+			<span>You Stopped Following</span>
+		</li>
+		<li class="legend-entry BLOCK" data-type="BLOCK">
+			<span>You Blocked a User</span>
+		</li>
+		<li class="legend-entry UNBLOCK" data-type="UNBLOCK">
+			<span>You Unblocked a User</span>
+		</li>
+	</ul>
+	<div class="actions">
+		<a href="<?php echo esc_url( wp_logout_url( home_url() ) ); ?>">
+			<img src="<?php bloginfo( 'stylesheet_directory' ); ?>/img/logout.png" 
+					alt="Sign out" title="Sign out" />
+		</a>
+	</div>	
 </div>
-<!-- <div>What does this do?
-
-Use this button to download your Twitter data into a plain text file.  The text of your tweets will be stored, including any linked URLs, along with data from your Twitter user profile and location information, if this is enabled on the device you tweet from.  Tweets and user data of other people who have mentioned you in a tweet, or retweeted or favourited one of your tweets, will also be included.
-</div> -->
-
 <?php get_footer(); ?>
