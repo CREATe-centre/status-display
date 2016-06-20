@@ -37,16 +37,12 @@ Status.Timeline.Visualisation = function( $, container, start, tweets, links ) {
 		+ this.padding + "," + this.padding + ")" );
 
 	this.getTweetByID = function( id ) {
-		return $.grep( tweets, function( t, i ) {
+		return $.grep( self.tweets, function( t, i ) {
 			return t.db_id === id;
 		} );
 	}
 
 	$( window ).resize( self.redraw() );
-	
-	$( Status ).bind( "status.timeline.visualisation.tweet-selected" , function( event, node, tweet ) {
-		
-	} );
 
 	$( Status ).trigger( "status.timeline.visualisation.created",  self );
 };
@@ -66,8 +62,13 @@ Status.Timeline.Visualisation.prototype.renderTweet = function( tweet ) {
 
 Status.Timeline.Visualisation.prototype.renderLink = function( link ) {
 	var self = this;
+	var t = self.getTweetByID( link.to_id );
+	var extra_class = "";
+	if ( t.length > 0 ) {
+		extra_class = " " + t[0].event;
+	}
 	var g = d3.select( document.createElementNS( 'http://www.w3.org/2000/svg', 'g' ) )
-		.attr( "class", "link" )
+		.attr( "class", "link" + extra_class )
 		.attr( "id", "link-" + link.id );
 	g.append( "line" );
 	return g.node();
@@ -75,36 +76,33 @@ Status.Timeline.Visualisation.prototype.renderLink = function( link ) {
 
 Status.Timeline.Visualisation.prototype.renderInformation = function( tweet ) {
 	var self = this;
-	var g = self.canvas.append("g");
-	g.attr("class", tweet.event + " information-display");
-	var width = 148;
-	var height = 133;
-	var coords = "M6,2"
-	+ "h" + width
-	+ "c3.252,0,6,2.748,6,6"
-	+ "v" + height
-	+ "c0,3.252-2.748,6-6,6"
-	+ "H25.442"
-	+ "L15.74," + (24.673 + height)
+	var g = self.canvas.append( "g" );
+	g.attr( "class", tweet.event + " information-display" );
+	var path = g.append( "path" );
+	var fo = g.append( "foreignObject" );
+	fo.html( self.renderer.createTweet( tweet ) );
+	var div = self.$( fo[0][0] ).children();
+	var width = div.actual( "width" );
+	var height = div.actual( "height" );
+	var coords = "M6,2h"
+	+ width
+	+ "c3.252,0,6,2.748,6,6v"
+	+ height
+	+ "c0,3.252-2.748,6-6,6H25.442L15.74,"
+	+ ( 24.673 + height )
 	+ "C 15.546, " + ( 24.885 + height ) + ", 15.276, " + ( 25 + height ) + ", 15, " + ( 25 + height )
-	+ "c -0.121, 0 -0.243 -0.022 -0.361 -0.067"
-	+ "C14.254," + ( 24.784 + height ) + ",14," + ( 24.143 + height ) + ",14," + ( 24 + height )
+	+ "c -0.121, 0 -0.243 -0.022 -0.361 -0.067C14.254,"
+	+ ( 24.784 + height ) + ",14," + ( 24.143 + height ) + ",14," + ( 24 + height )
 	+ "V" + ( height + 14 )
-	+ "H6c-3.252,0-6-2.748-6-6"
-	+ "L0,8"
-	+ "C0,4.748,2.748,2,6,2"
-	+ "z";
-	var path = g.append("path")
-		.attr("d", coords);
-	var fo = g.append("foreignObject");
-	fo.html(self.renderer.createTweet(tweet));
-	g.style("visibility", "hidden");
+	+ "H6c-3.252,0-6-2.748-6-6L0,8C0,4.748,2.748,2,6,2z";
+	path.attr( "d", coords )
+	g.style( "visibility", "hidden" );
 	self.$( Status ).bind( "status.timeline.visualisation.tweet-selected" , function( event, node, t ) {
 		if ( t.id == tweet.id ) {
-			if ( g.style("visibility") == "hidden" ) {
-				g.style("visibility", "visible");
+			if ( g.style( "visibility" ) == "hidden" ) {
+				g.style( "visibility", "visible" );
 			} else {
-				g.style("visibility", "hidden");
+				g.style( "visibility", "hidden" );
 			}
 		}
 	} );
@@ -160,7 +158,7 @@ Status.Timeline.Visualisation.prototype.update = function() {
 		} );
 	} );
 	tweets.exit().remove();
-	
+
 	var information = self.canvas
 		.selectAll( "g.information-display" )
 		.data( self.tweets );
@@ -169,12 +167,13 @@ Status.Timeline.Visualisation.prototype.update = function() {
 			return self.renderInformation( d );
 		} )
 	information.attr( "transform", function( d, i ) {
+		var bbox = this.getBBox();
 		var y = Status.Util.TWEET_TYPES.indexOf( d.event );
 		return "translate(" + self.x( d.date ) + ","
-			+ (y * height + offset) + ")";
+			+ (y * height + offset - bbox.height - ( radius / 2 ) + 10) + ")";
 	} )
 	information.exit().remove();
-	
+
 	self.$( Status ).trigger( "status.timeline.visualisation.updated", [ self, height, radius ] );
 }
 

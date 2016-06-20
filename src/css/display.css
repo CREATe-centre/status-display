@@ -270,6 +270,50 @@ div.timeline g.timeline-element.UNBLOCK.selected>circle {
 	stroke-width: 1;
 }
 
+div.timeline g.link.TWEET>line {
+	stroke: #57c6e4;
+}
+
+div.timeline g.link.MENTION>line {
+	stroke: #eacf96;
+}
+
+div.timeline g.link.QUOTED_TWEET>line {
+	stroke: #9cbdec;
+}
+
+div.timeline g.link.RETWEET>line {
+	stroke: #b1bf81;
+}
+
+div.timeline g.link.FRIEND_RETWEET>line {
+	stroke: #e7aada;
+}
+
+div.timeline g.link.FRIEND_OF_FRIEND_RETWEET>line {
+	stroke: #93ead4;
+}
+
+div.timeline g.link.YOU_FAVOURITED>line {
+	stroke: #edaab4;
+}
+
+div.timeline g.link.YOU_UNFAVOURITED>line {
+	stroke: #6ad9df;
+}
+
+div.timeline g.link.FAVOURITED_YOU>line {
+	stroke: #e7b393;
+}
+
+div.timeline g.link.UNFAVOURITED_YOU>line {
+	stroke: #9ddef2;
+}
+
+div.timeline g.link.FAVOURITED_RETWEET>line {
+	stroke: #deeaaf;
+}
+
 div.actions {
 	position: absolute;
 	top: 2px;
