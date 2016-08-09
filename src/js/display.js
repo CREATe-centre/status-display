@@ -57,6 +57,16 @@ jQuery(function($) {
 				}
 			);
 
+			$( "#action-upload" ).click( function() {
+				$( "#upload-form" ).modal({onOpen: function (dialog) {
+					dialog.overlay.fadeIn('fast', function () {
+						dialog.container.fadeIn('fast', function () {
+							dialog.data.fadeIn( 'fast' );
+						});
+					});
+				}});
+			} );
+
 			(new Status.Timeline.Visualisation(
 				$, $( "#tweet-canvas>.timeline" ),
 			start, timeline_data, data.links )).redraw()();

@@ -37,6 +37,18 @@ Status.Information.Display.prototype.createNormalTweet = function( tweet ) {
 						+ tweet.in_reply_to_screen_name + "\" target=\"_blank\">@"
 						+ tweet.in_reply_to_screen_name + "</a></b></li>"
 				: "")
+		+ ( tweet.analytics == null ? ""
+				: "<li><b>Impressions:</b> " + tweet.analytics.impressions + "</li><li><b>Engagements:</b> "
+				+ tweet.analytics.engagements + "</li><li><b>Engagement rate:</b> "
+				+ ( ( tweet.analytics.engagements / tweet.analytics.impressions) * 100 ).toFixed( 2 ) + "%</li><li><b>Retweets:</b> "
+				+ tweet.analytics.retweets + "</li><li><b>Replies:</b> "
+				+ tweet.analytics.replies + "</li><li><b>Likes:</b> "
+				+ tweet.analytics.likes + "</li><li><b>User profile clicks:</b> "
+				+ tweet.analytics.user_profile_clicks + "</li><li><b>URL clicks:</b> "
+				+ tweet.analytics.url_clicks + "</li><li><b>Hashtag clicks:</b> "
+				+ tweet.analytics.hashtag_clicks + "</li><li><b>Detail expands:</b> "
+				+ tweet.analytics.detail_expands + "</li><li><b>Permalink clicks:</b> "
+				+ tweet.analytics.permalink_clicks + "</li>")
 	+ "</ul></div>";
 };
 

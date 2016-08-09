@@ -161,36 +161,6 @@
 	transform: rotate(330deg) translate(0,-60px);
 }
 
-#simplemodal-overlay {
-	background-color: 1000;
-}
-
-#simplemodal-container {
-	height: 360px;
-	width: 600px;
-	background: linear-gradient(rgba(255, 255, 255, 0.8) 0%, rgba(224, 224, 224, 0.8) 90%);
-	background-repeat: no-repeat;
-	background-attachment: fixed;
-	border: 4px solid #260126;
-	padding: 12px;
-}
-
-#simplemodal-container .simplemodal-data {
-	padding: 8px;
-}
-
-#simplemodal-container a.modalCloseImg {
-	background: url('../img/x.png') no-repeat;
-	width: 25px;
-	height: 29px;
-	display: inline;
-	z-index: 3200;
-	position: absolute;
-	top: 6px;
-	right: 4px;
-	cursor: pointer;
-}
-
 .login_text {
 	cursor: default;
 	font-weight: bold;

@@ -109,6 +109,9 @@ add_action( 'wp_ajax_status.get_timeline', function() {
 	. 'twitter_data WHERE user_id = %d', $current_user->ID ) );
 	foreach ( $events as $event ) {
 		$event->data = json_decode( $event->data );
+		$event->analytics = $wpdb->get_row( $wpdb->prepare(
+			'SELECT * FROM ' . $wpdb->prefix
+		. 'twitter_analytics WHERE status_id = %d', $event->db_id ) );
 	}
 	$links = $wpdb->get_results( $wpdb->prepare(
 		'SELECT ID as id, from_id, to_id FROM ' . $wpdb->prefix

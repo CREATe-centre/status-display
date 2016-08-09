@@ -31,6 +31,11 @@ wp_enqueue_script( 'status_timeline', $url_prefix . '/js/timeline.js', array(), 
 wp_enqueue_script( 'status_util', $url_prefix . '/js/util.js', array(), '1.0.0' );
 wp_enqueue_script( 'status_information', $url_prefix . '/js/information.js',
 array( 'jquery-actual' ), '1.0.0' );
+wp_enqueue_script( 'jquery-effects-fade' );
+wp_enqueue_script( 'jquery-effects-pulsate' );
+wp_enqueue_script( 'jquery-simplemodal',
+	'//cdnjs.cloudflare.com/ajax/libs/simplemodal/1.4.4/jquery.simplemodal.min.js',
+array( 'jquery' ), '1.4.4' );
 wp_enqueue_script( 'status_display',
 	get_stylesheet_directory_uri() . '/js/display.js',
 array( 'jquery' ), '1.0.0', true );
@@ -92,10 +97,20 @@ get_header();
 		</li>
 	</ul>
 	<div class="actions">
+		<a href="#" id="action-upload">
+			<img src="<?php bloginfo( 'stylesheet_directory' ); ?>/img/upload.png" 
+					alt="Upload analytics" title="Upload analytics" />
+		</a>
 		<a href="<?php echo esc_url( wp_logout_url( home_url() ) ); ?>">
 			<img src="<?php bloginfo( 'stylesheet_directory' ); ?>/img/logout.png" 
 					alt="Sign out" title="Sign out" />
 		</a>
 	</div>	
+</div>
+<div id="upload-form" style="display: none;">
+	<form action="analytics.php" method="post" enctype="multipart/form-data">
+		<input type="file" name="data" />
+		<input type="submit" value="Submit" />
+	</form>
 </div>
 <?php get_footer(); ?>

@@ -99,6 +99,10 @@ add_action( 'init', function() {
 	if ( is_user_logged_in() ) {
 		if ( strpos( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ), 'data.json' ) ) {
 			include 'lib/export.php';
+		} else if ( strpos( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ), 'analytics.php' )
+				&& isset( $_FILES['data'] ) ) {
+			include 'lib/import.php';
+			include 'lib/display.php';
 		} else {
 			include 'lib/display.php';
 		}
