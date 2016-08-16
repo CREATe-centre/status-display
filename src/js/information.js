@@ -121,7 +121,7 @@ Status.Information.Display.prototype.createFollowed = function( tweet ) {
 }
 
 Status.Information.Display.prototype.createQuotedTweet = function( tweet ) {
-	return "<div class=\"information-display\"><ul><li><li><b>Text</b>: "
+	return "<div class=\"information-display\"><ul><li><b>Text</b>: "
 		+ this.renderText( tweet.data.status.text )
 		+ "</li><li><b>Quoted Text</b>: "
 		+ this.renderText( tweet.data.status.quoted_status.text ) + "</li><li><b>Date:</b> "

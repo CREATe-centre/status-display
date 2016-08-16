@@ -260,9 +260,11 @@ div.timeline g.timeline-element.UNBLOCK.selected>circle {
 
 .legend-entry {
 	padding-left: 10px;
+	padding-right: 15px;
 	text-align: left;
 	height: 6%;
 	width: 100%;
+	border-radius: 0px 50px 50px 0px;
 }
 
 .link line {

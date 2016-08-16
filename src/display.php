@@ -13,6 +13,8 @@ if ( ! empty( get_query_var( 'oauth_token', null ) ) ) {
 $url_prefix = get_stylesheet_directory_uri();
 wp_enqueue_style( 'status_display',
 $url_prefix . '/css/display.css', array( 'status' ), '1.0.0');
+wp_enqueue_style( 'bootstrap-tour',
+'//cdnjs.cloudflare.com/ajax/libs/bootstrap-tour/0.11.0/css/bootstrap-tour-standalone.min.css', array( 'status' ), '0.11.0');
 wp_enqueue_script( 'google-maps-api',
 	'//maps.googleapis.com/maps/api/js?libraries=visualization&key='
 . get_option( 'status-google-maps-api-key' ), array(), 'latest' );
@@ -39,6 +41,8 @@ array( 'jquery' ), '1.4.4' );
 wp_enqueue_script( 'status_display',
 	get_stylesheet_directory_uri() . '/js/display.js',
 array( 'jquery' ), '1.0.0', true );
+wp_enqueue_script( 'bootstrap-tour',
+'//cdnjs.cloudflare.com/ajax/libs/bootstrap-tour/0.11.0/js/bootstrap-tour-standalone.min.js', array( 'jquery' ), '0.11.0' );
 wp_localize_script( 'status_display', 'statusConfig', array(
 		'ajaxurl' => admin_url( 'admin-ajax.php' ),
 		'verify' => wp_create_nonce( 'verify' ),
@@ -97,20 +101,32 @@ get_header();
 		</li>
 	</ul>
 	<div class="actions">
+		<a href="#" id="action-help">
+			<img src="<?php bloginfo( 'stylesheet_directory' ); ?>/img/help.png" 
+					alt="Help" title="Help" />
+		</a>
+		<br />
 		<a href="#" id="action-upload">
 			<img src="<?php bloginfo( 'stylesheet_directory' ); ?>/img/upload.png" 
-					alt="Upload analytics" title="Upload analytics" />
+					alt="Upload analytics" title="Upload Twitter analytics file" />
 		</a>
-		<a href="<?php echo esc_url( wp_logout_url( home_url() ) ); ?>">
+		<br />
+		<a id="action-logout" href="<?php echo esc_url( wp_logout_url( home_url() ) ); ?>">
 			<img src="<?php bloginfo( 'stylesheet_directory' ); ?>/img/logout.png" 
 					alt="Sign out" title="Sign out" />
 		</a>
 	</div>	
 </div>
 <div id="upload-form" style="display: none;">
+	<h2>Upload Analytics Data</h2>
+	<p>
+		You can add extra analytics data to the timeline by uploading 
+		data exported from <a class="external" target="_blank" 
+				href="https://analytics.twitter.com">https://analytics.twitter.com</a>.
+	</p>
 	<form action="analytics.php" method="post" enctype="multipart/form-data">
 		<input type="file" name="data" />
-		<input type="submit" value="Submit" />
+		<input type="submit" value="Upload" />
 	</form>
 </div>
 <?php get_footer(); ?>

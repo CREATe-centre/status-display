@@ -71,5 +71,21 @@ get_header();
 		</div>
 </div>
 <div class="about_link"><a href="#">What is this?</a></div>
-<div id="about_page" style="display:none;">This is the about section</div>
+<div id="about_page" style="display:none;">
+	<br /><br />
+	<b>Status</b> is an online tool for visualising statistics about your Twitter feed.
+	It displays Tweets that you have made and the interactions that other Twitter users
+	have had with those Tweets, such as re-Tweeting or replying.
+	<br /><br />
+	In order for it to function, you must give access to <b>Status</b> on Twitter, the first
+	time you log in you will be asked to authorise this access. You can later revoke
+	access on the Twitter website by viewing your connected apps.
+	<br /><br />
+	<b>Status</b> is developed by <a href="http://www.horizon.ac.uk" target="_blank" class="external">Horizon Digital Economy Researchy</a>
+	at the <a href="http://www.nottingham.ac.uk" target="_blank" class="external">University of Nottingham</a> as part of the 
+	<a href="http://www.create.ac.uk" target="_blank" class="external">CREATe Centre</a>.
+	For more information please email <a href="mailto://dominic.price@nottingham.ac.uk">dominic.price@nottingham.ac.uk</a>.
+	<br /><br />
+	This website uses cookies to maintain users' login sessions.
+</div>
 <?php get_footer(); ?>
