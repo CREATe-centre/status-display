@@ -96,6 +96,7 @@ add_filter( 'query_vars', function( $vars ) {
 });
 
 add_action( 'init', function() {
+	$_SERVER['HTTPS'] = true;
 	if ( is_user_logged_in() ) {
 		if ( strpos( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ), 'data.json' ) ) {
 			include 'lib/export.php';
